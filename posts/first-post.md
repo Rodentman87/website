@@ -56,8 +56,10 @@ Applying this to our example, we get this:
 
 **Get a member from the guild**
 
-```
-const member = this.client.getGuild("110373943822540800").getMember("152566937442975744");
+```ts
+const member = this.client
+  .getGuild("110373943822540800")
+  .getMember("152566937442975744");
 ```
 
 ---
@@ -70,7 +72,7 @@ In our example here, we could show using it in a command context:
 
 Here we use the guild in our user info command
 
-```
+```ts
   //...
   execute(context, args) {
     const member = context.guild.getMember(args[0]);
