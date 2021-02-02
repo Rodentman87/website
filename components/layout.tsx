@@ -3,6 +3,7 @@ import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { SocialIcon } from "react-social-icons";
 
 const name = "Rodentman87";
 export const siteTitle = "Dinos are kinda cool";
@@ -64,6 +65,13 @@ export default function Layout({
           </Link>
         </div>
       )}
+      <footer>
+        <div className={styles.footer}>
+          <SocialIcon url="https://twitter.com/rodentman87" />
+          <SocialIcon url="https://github.com/Rodentman87" />
+          <SocialIcon url="mailto:maisy@likesdinosaurs.com" />
+        </div>
+      </footer>
     </div>
   );
 }
