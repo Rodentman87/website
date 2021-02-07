@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
-import { getAllPostIds, getPostData } from "../../lib/posts";
+import { getAllPostIds, getPostData } from "../../../lib/posts";
 import Date from "../../components/date";
 import utilStyles from "../../styles/utils.module.css";
 import { motion } from "framer-motion";
@@ -18,12 +18,9 @@ export default function FirstPost({ postData }) {
         >
           {postData.title}
         </motion.h1>
-        <motion.div
-          layoutId={`date-${postData.id}`}
-          className={utilStyles.lightText}
-        >
+        <div className={utilStyles.lightText}>
           <Date dateString={postData.date} />
-        </motion.div>
+        </div>
         <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </article>
     </Layout>

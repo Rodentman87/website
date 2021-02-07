@@ -8,6 +8,17 @@ import { SocialIcon } from "react-social-icons";
 const name = "Rodentman87";
 export const siteTitle = "Dinos are kinda cool";
 
+const item = {
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.2,
+    },
+  }),
+  hidden: { opacity: 0, y: -50 },
+};
+
 export default function Layout({
   children,
   home,
@@ -66,11 +77,21 @@ export default function Layout({
         </div>
       )}
       <footer>
-        <div className={styles.footer}>
-          <SocialIcon url="https://twitter.com/rodentman87" />
-          <SocialIcon url="https://github.com/Rodentman87" />
-          <SocialIcon url="mailto:maisy@likesdinosaurs.com" />
-        </div>
+        <motion.div
+          className={styles.footer}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={item} custom={0}>
+            <SocialIcon url="https://twitter.com/rodentman87" />
+          </motion.div>
+          <motion.div variants={item} custom={1}>
+            <SocialIcon url="https://github.com/Rodentman87" />
+          </motion.div>
+          <motion.div variants={item} custom={2}>
+            <SocialIcon url="mailto:maisy@likesdinosaurs.com" />
+          </motion.div>
+        </motion.div>
       </footer>
     </div>
   );
