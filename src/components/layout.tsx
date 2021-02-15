@@ -43,6 +43,8 @@ export default function Layout({
               src="/craig.svg"
               className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
               alt={name}
+              width={144}
+              height={144}
             />
             <motion.h1 layoutId="headername" className={utilStyles.heading2Xl}>
               {name}
@@ -57,6 +59,8 @@ export default function Layout({
                   src="/craig.svg"
                   className={`${styles.headerImage} ${utilStyles.borderCircle}`}
                   alt={name}
+                  width={108}
+                  height={108}
                 />
               </a>
             </Link>
