@@ -31,7 +31,7 @@ Start each page with a small explanation of what it is. Is this an object that r
 
 Lets try an example with an imaginary project, we'll say that this is an API wrapper for [Discord's API](https://discord.com/developers/docs/intro) written in TypeScript and right now we're writing the docs page for the Guild object.
 
-```
+```txt
 A Guild represents a server and stores all the Channels, Roles, and Members of that server within it.
 ```
 
@@ -58,8 +58,8 @@ Applying this to our example, we get this:
 
 ```ts
 const member = this.client
-  .getGuild("110373943822540800")
-  .getMember("152566937442975744");
+	.getGuild("110373943822540800")
+	.getMember("152566937442975744");
 ```
 
 ---

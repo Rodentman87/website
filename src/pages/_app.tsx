@@ -3,9 +3,9 @@ import "../styles/global.css";
 import { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <AnimateSharedLayout>
-      <Component {...pageProps} />
-    </AnimateSharedLayout>
-  );
+	return (
+		<AnimateSharedLayout type="switch">
+			<Component {...pageProps} />
+		</AnimateSharedLayout>
+	);
 }

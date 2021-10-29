@@ -1,27 +1,72 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  line-height: 1.6;
-  font-size: 18px;
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	line-height: 1.6;
+	font-size: 18px;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 a {
-  color: #0070f3;
-  text-decoration: none;
+	color: #0070f3;
+	text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 img {
-  max-width: 100%;
-  display: block;
+	max-width: 100%;
+	display: block;
+}
+
+blockquote {
+	border-left: black solid 4px;
+	margin: 0;
+	padding: 0 1em;
+}
+
+.jargon-term {
+	text-decoration: underline dotted #228be6;
+}
+
+.jargon-term::after {
+	content: "?";
+	font-weight: bold;
+	display: inline-block;
+	transform: translate(0, -0.5em);
+	font-size: 75%;
+	color: #228be6;
+	margin-left: 3px;
+}
+
+.jargon-term:hover {
+	position: relative;
+	text-decoration: none;
+	cursor: help;
+}
+
+.jargon-term .jargon-info {
+	display: none;
+}
+
+.jargon-term:hover .jargon-info {
+	display: block;
+	position: absolute;
+	top: 1.5em;
+	left: 0;
+	background: #f8f8f8;
+	border: 1px solid #dcdcdc;
+	padding: 1rem;
+	border-radius: 4px;
+	font-size: 90%;
+	min-width: 250px;
+	max-width: 450px;
+	z-index: 1;
 }
