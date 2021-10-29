@@ -36,6 +36,7 @@ export default function Layout({
 				<meta name="description" content="Maisy's personal website." />
 				<meta property="og:image" content={`/craig.svg`} />
 				<meta name="og:title" content={siteTitle} />
+				<meta name="og:color" content="#FDF6E3" />
 				<meta name="twitter:card" content="summary_large_image" />
 			</Head>
 			<header className={home ? styles.header : styles.headerPost}>
