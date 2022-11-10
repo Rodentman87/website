@@ -34,7 +34,7 @@ export default function FirstPost({ content, metadata }) {
 				<meta name="og:author:last_name" content="Dinosaur" />
 				<meta name="og:author:username" content="rodentman87" />
 				<meta name="og:author:gender" content="female" />
-				<meta name="twitter:card" content="summary" />
+				<meta name="twitter:card" content="summary_large_image" />
 				<meta name="twitter:site" content="@rodentman87" />
 				<meta name="twitter:title" content={metadata.title} />
 				<meta name="twitter:description" content={metadata.description} />

@@ -15,7 +15,7 @@ export default async function (req: NextRequest) {
 			: "My default title";
 
 		const hasDescription = searchParams.has("description");
-		const description = hasTitle
+		const description = hasDescription
 			? searchParams.get("description")?.slice(0, 100)
 			: "My default description";
 
