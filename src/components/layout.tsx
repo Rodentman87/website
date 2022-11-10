@@ -33,9 +33,7 @@ export default function Layout({
 		<div className={styles.container}>
 			<Head>
 				<link rel="icon" href="/favicon.ico" />
-				<meta name="og:title" content={siteTitle} />
 				<meta name="og:color" content="#FDF6E3" />
-				<meta name="twitter:card" content="summary_large_image" />
 			</Head>
 			<header className={home ? styles.header : styles.headerPost}>
 				{home ? (

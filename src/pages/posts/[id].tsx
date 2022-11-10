@@ -22,6 +22,10 @@ export default function FirstPost({ postData }) {
 				<meta name="og:author:last_name" content="Dinosaur" />
 				<meta name="og:author:username" content="rodentman87" />
 				<meta name="og:author:gender" content="female" />
+				<meta name="twitter:card" content="summary" />
+				<meta name="twitter:site" content="@rodentman87" />
+				<meta name="twitter:title" content={postData.title} />
+				<meta name="twitter:description" content={postData.description} />
 				<link
 					rel="stylesheet"
 					href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/solarized-light.min.css"

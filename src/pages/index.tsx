@@ -71,6 +71,9 @@ export default function Home({ allPostsData }) {
 		<Layout home>
 			<Head>
 				<title>{siteTitle}</title>
+				<meta name="og:title" content={siteTitle} />
+				<meta name="twitter:site" content="@rodentman87" />
+				<meta name="twitter:title" content={siteTitle} />
 			</Head>
 			<section className={utilStyles.headingMd}>
 				<p>Hi, my name is Maisy and I do stuff sometimes</p>
