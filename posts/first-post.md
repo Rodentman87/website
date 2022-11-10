@@ -1,5 +1,6 @@
 ---
 title: "Docs, where can we do better?"
+description: "My personal approach to writing docs, mainly aimed at frameworks and the like."
 date: "2021-01-30"
 ---
 

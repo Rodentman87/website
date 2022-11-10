@@ -2,7 +2,7 @@ import Head from "next/head";
 import { BsPinAngleFill } from "react-icons/bs";
 import Layout from "../../components/layout";
 import { getAllPostIds, getPostData } from "../../../lib/posts";
-import Date from "../../components/date";
+import DateDisplay from "../../components/date";
 import utilStyles from "../../styles/utils.module.css";
 import { motion } from "framer-motion";
 
@@ -11,6 +11,17 @@ export default function FirstPost({ postData }) {
 		<Layout>
 			<Head>
 				<title>{postData.title}</title>
+				<meta name="og:title" content={postData.title} />
+				<meta name="og:description" content={postData.description} />
+				<meta name="og:type" content="article" />
+				<meta
+					name="og:published_time"
+					content={new Date(postData.date).toISOString()}
+				/>
+				<meta name="og:author:first_name" content="Maisy" />
+				<meta name="og:author:last_name" content="Dinosaur" />
+				<meta name="og:author:username" content="rodentman87" />
+				<meta name="og:author:gender" content="female" />
 				<link
 					rel="stylesheet"
 					href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/solarized-light.min.css"
@@ -25,7 +36,7 @@ export default function FirstPost({ postData }) {
 				</motion.h1>
 
 				<div className={utilStyles.lightText}>
-					<Date dateString={postData.date} />
+					<DateDisplay dateString={postData.date} />
 					{postData.pinned == true ? (
 						<motion.div
 							layoutId={`pin-${postData.id}`}

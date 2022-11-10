@@ -1,5 +1,6 @@
 ---
 title: "Fun with Types"
+description: "Making hilarious things with no emitted code"
 date: "2022-11-08"
 ---
 

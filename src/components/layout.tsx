@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { SocialIcon } from "react-social-icons";
 
-const name = "Rodentman87";
+const name = "Maisy Dinosaur";
 export const siteTitle = "Dinos are kinda cool";
 
 const item = {
@@ -33,8 +33,6 @@ export default function Layout({
 		<div className={styles.container}>
 			<Head>
 				<link rel="icon" href="/favicon.ico" />
-				<meta name="description" content="Maisy's personal website." />
-				<meta property="og:image" content={`/craig.svg`} />
 				<meta name="og:title" content={siteTitle} />
 				<meta name="og:color" content="#FDF6E3" />
 				<meta name="twitter:card" content="summary_large_image" />
@@ -44,7 +42,7 @@ export default function Layout({
 					<>
 						<motion.img
 							layoutId="headersvg"
-							src="/craig.svg"
+							src="/maisy.png"
 							className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
 							alt={name}
 							width={144}
@@ -60,7 +58,7 @@ export default function Layout({
 							<a>
 								<motion.img
 									layoutId="headersvg"
-									src="/craig.svg"
+									src="/maisy.png"
 									className={`${styles.headerImage} ${utilStyles.borderCircle}`}
 									alt={name}
 									width={108}

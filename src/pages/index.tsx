@@ -3,7 +3,7 @@ import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import { BsPinAngleFill } from "react-icons/bs";
-import Date from "../components/date";
+import DateDisplay from "../components/date";
 import { getSortedPostsData } from "../../lib/posts";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -113,7 +113,7 @@ export default function Home({ allPostsData }) {
 								) : null}
 							</motion.div>
 							<small className={utilStyles.lightText}>
-								<Date dateString={date} />
+								<DateDisplay dateString={date} />
 							</small>
 						</motion.li>
 					))}
