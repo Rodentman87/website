@@ -28,6 +28,8 @@ export default function FirstPost({ content, metadata }) {
 					content={new Date(metadata.date).toISOString()}
 				/>
 				<meta name="og:image" content={imageUrl.toString()} />
+				<meta name="og:image:width" content="1200" />
+				<meta name="og:image:height" content="630" />
 				<meta name="og:author:first_name" content="Maisy" />
 				<meta name="og:author:last_name" content="Dinosaur" />
 				<meta name="og:author:username" content="rodentman87" />
