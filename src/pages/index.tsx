@@ -98,9 +98,7 @@ export default function Home({ allPostsData }) {
 								whileHover="hovered"
 								layoutId={`title-${id}`}
 							>
-								<Link href={`/posts/${id}`}>
-									<a>{title}</a>
-								</Link>
+								<Link href={`/posts/${id}`}>{title}</Link>
 								{pinned == true ? (
 									<motion.div
 										layoutId={`pin-${id}`}

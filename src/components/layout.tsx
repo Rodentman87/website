@@ -53,20 +53,18 @@ export default function Layout({
 				) : (
 					<>
 						<Link href="/">
-							<a>
-								<motion.img
-									layoutId="headersvg"
-									src="/maisy.png"
-									className={`${styles.headerImage} ${utilStyles.borderCircle}`}
-									alt={name}
-									width={108}
-									height={108}
-								/>
-							</a>
+							<motion.img
+								layoutId="headersvg"
+								src="/maisy.png"
+								className={`${styles.headerImage} ${utilStyles.borderCircle}`}
+								alt={name}
+								width={108}
+								height={108}
+							/>
 						</Link>
 						<motion.h2 layoutId="headername" className={utilStyles.headingLg}>
-							<Link href="/">
-								<a className={utilStyles.colorInherit}>{name}</a>
+							<Link href="/" className={utilStyles.colorInherit}>
+								{name}
 							</Link>
 						</motion.h2>
 					</>
@@ -75,9 +73,7 @@ export default function Layout({
 			<main>{children}</main>
 			{!home && (
 				<div className={styles.backToHome}>
-					<Link href="/">
-						<a>← Back to home</a>
-					</Link>
+					<Link href="/">← Back to home</Link>
 				</div>
 			)}
 			<footer>

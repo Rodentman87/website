@@ -5,18 +5,23 @@ import { getAllPostIds, getPostData } from "../../../lib/posts";
 import DateDisplay from "../../components/date";
 import utilStyles from "../../styles/utils.module.css";
 import { motion } from "framer-motion";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+import remarkToc from "remark-toc";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 
-export default function FirstPost({ postData }) {
+export default function FirstPost({ content, metadata }) {
 	return (
 		<Layout>
 			<Head>
-				<title>{postData.title}</title>
-				<meta name="og:title" content={postData.title} />
-				<meta name="og:description" content={postData.description} />
+				<title>{metadata.title}</title>
+				<meta name="og:title" content={metadata.title} />
+				<meta name="og:description" content={metadata.description} />
 				<meta name="og:type" content="article" />
 				<meta
 					name="og:published_time"
-					content={new Date(postData.date).toISOString()}
+					content={new Date(metadata.date).toISOString()}
 				/>
 				<meta name="og:author:first_name" content="Maisy" />
 				<meta name="og:author:last_name" content="Dinosaur" />
@@ -24,33 +29,34 @@ export default function FirstPost({ postData }) {
 				<meta name="og:author:gender" content="female" />
 				<meta name="twitter:card" content="summary" />
 				<meta name="twitter:site" content="@rodentman87" />
-				<meta name="twitter:title" content={postData.title} />
-				<meta name="twitter:description" content={postData.description} />
+				<meta name="twitter:title" content={metadata.title} />
+				<meta name="twitter:description" content={metadata.description} />
 				<link
 					rel="stylesheet"
 					href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/solarized-light.min.css"
-				></link>
+				/>
 			</Head>
 			<article>
 				<motion.h1
-					layoutId={`title-${postData.id}`}
+					layoutId={`title-${metadata.id}`}
 					className={utilStyles.headingXl}
 				>
-					{postData.title}
+					{metadata.title}
 				</motion.h1>
 
 				<div className={utilStyles.lightText}>
-					<DateDisplay dateString={postData.date} />
-					{postData.pinned == true ? (
+					{metadata.pinned == true ? (
 						<motion.div
-							layoutId={`pin-${postData.id}`}
+							layoutId={`pin-${metadata.id}`}
 							style={{ display: "inline-block" }}
 						>
 							<BsPinAngleFill color="#60b53c" style={{ marginLeft: 10 }} />
 						</motion.div>
 					) : null}
+					<DateDisplay dateString={metadata.date} /> •{" "}
+					<span>{metadata.readtime}</span>
 				</div>
-				<div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+				<MDXRemote {...content} components={{ DateDisplay }} />
 			</article>
 		</Layout>
 	);
@@ -68,9 +74,21 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
 	// Fetch necessary data for the blog post using params.id
 	const postData = await getPostData(params.id);
+
+	const serialized = await serialize(postData.content, {
+		parseFrontmatter: true,
+		mdxOptions: {
+			remarkPlugins: [remarkToc, remarkGfm],
+			rehypePlugins: [rehypeHighlight],
+		},
+	});
+
 	return {
 		props: {
-			postData,
+			content: serialized,
+			metadata: {
+				...postData.metadata,
+			},
 		},
 	};
 }
