@@ -53,7 +53,7 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 									<>
 										<motion.span
 											layoutId="line-indicator"
-											className="absolute -left-4 z-10"
+											className="absolute -left-6 z-10 px-1"
 										>
 											{currentScriptLine.replacePointer ?? "👉"}
 										</motion.span>

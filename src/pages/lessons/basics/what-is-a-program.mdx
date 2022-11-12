@@ -15,9 +15,9 @@ In this first lesson, we'll get a basic idea of what a computer program _is_, ho
 
 Code is a set of instructions that a computer can understand, kind of like a recipe. It's how humans communicate with computers. Computers look at this code and read through it line by line, doing what each line says as it gets to it.
 
-In the examples below, I'll use normal writing to make it clear what's going on, then over the course of these lessons, we'll gradually shift to actual JavaScript code. When the computer says something, it'll appear just below the code.
+In the examples below, I'll use normal writing to make it clear what's going on, then over the course of these lessons, we'll gradually shift to actual JavaScript code.
 
-Use the left and right arrows to move forwards and backwards through the steps, or click on a step number to skip to it. The arrow on the left will point to which line is currently running.
+Use the left and right arrows to move forwards and backwards through the steps, or click on a step number to skip to it. The arrow on the left will point to which line is currently running. When the computer says something, it'll appear just below the code.
 
 <CompiledPlaintextCode
 	code={`
@@ -29,7 +29,7 @@ Say "Woah!"
 
 ## How do computers remember?
 
-Just like a human, a computer has memory. As it runs through a program, it stores anything you tell it to in memory. Each piece of information stored is called a <FancyText>variable</FancyText>. Variables have two parts: a name, and a value. Let's try having the computer remember something!
+Just like a human, a computer has memory. You can ask the computer to remember things for you. Each piece of stored information is called a <FancyText>variable</FancyText>. Variables have two parts: a name, and a value. Let's try having the computer remember something!
 
 <CompiledPlaintextCode
 	code={`
@@ -39,9 +39,9 @@ Remember that (name) is "Maisy"
 `.trim()}
 />
 
-Notice how when the program continues to run, the variables don't disappear, this is both good and bad. It's good that we can use this data whenever we want. However, over time we'll try to store so much stuff that the computer will run out of space to keep it in memory! For now we'll ignore this since what we're doing is so small that it doesn't even get close to using up all the memory in a modern computer.
+Notice how when the program continues to run, the variables don't disappear; this is both good and bad. It's good that we can use this data whenever we want, however, over time we'll try to store so much stuff that the computer will run out of space to keep it in memory! For now we'll ignore this since what we're doing is so small that it doesn't even get close to using up all the memory in a modern computer.
 
-We can also tell the computer to change what is stored in a variable.
+We can also tell the computer to change what is stored in a variable. Note that when you change the value in a variable, the old value is overwritten.
 
 <CompiledPlaintextCode
 	code={`
@@ -89,12 +89,11 @@ Lists
 	code={`
 Do nothing
 Remember that (groceries) is the list "apples", and "oranges"
-Add "eggs" to (groceries)
 Say what (groceries) is
 `.trim()}
 />
 
-There's more data types too, but we wont get into those right now.
+There's more data types too, but we won't get into those right now.
 
 ## How do computers make choices?
 
