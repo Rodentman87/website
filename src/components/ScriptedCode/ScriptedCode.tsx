@@ -41,7 +41,7 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 		<AnimateSharedLayout type="switch">
 			<div className="flex flex-col relative mb-10">
 				<div
-					className="flex flex-row"
+					className="flex flex-row z-10"
 					style={{
 						backgroundColor: "#fdf6e3",
 					}}
@@ -100,7 +100,7 @@ const Controls: React.FC<ControlsProps> = ({
 }) => {
 	return (
 		<div
-			className="flex flex-row justify-between px-2"
+			className="flex flex-row justify-between px-2 z-10"
 			style={{ backgroundColor: "#eee8d5" }}
 		>
 			<button
@@ -168,7 +168,7 @@ const VariablesPanel: React.FC<VariablesPanelProps> = ({ variables }) => {
 						transition={{ duration: 0.5, type: "spring", bounce: 0.3 }}
 						layoutId={key}
 						key={key}
-						className="flex flex-row justify-between gap-2 rounded-md -z-10 overflow-clip w-max"
+						className="flex flex-row justify-between gap-2 rounded-md overflow-clip w-max"
 						style={{ backgroundColor: "#eee8d5" }}
 					>
 						<span className="pl-2">{key}</span>
@@ -202,7 +202,7 @@ const ConsoleLinesPanel: React.FC<ConsoleLinesProps> = ({
 					transition={{ duration: 0.25, type: "spring", bounce: 0.3 }}
 					layoutId={`console-line-${index}`}
 					key={index}
-					className="flex flex-row justify-between gap-2 rounded-sm -z-10"
+					className="flex flex-row justify-between gap-2 rounded-sm"
 					style={{ backgroundColor: "#fdf6e3" }}
 				>
 					<span className="px-2">{consoleLine}</span>
