@@ -33,6 +33,12 @@
 	background-color: transparent !important;
 }
 
+pre:not(.shiki) {
+	background-color: #fdf6e3;
+	overflow: auto;
+	padding: 8px;
+}
+
 html,
 body {
 	padding: 0;
