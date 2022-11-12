@@ -29,7 +29,9 @@ export default function FirstPost({ content, metadata }) {
 				/>
 				<meta
 					name="og:image"
-					content={"/api/post-image?" + params.toString()}
+					content={
+						"https://likesdinosaurs.com/api/post-image?" + params.toString()
+					}
 				/>
 				<meta name="og:image:width" content="1200" />
 				<meta name="og:image:height" content="630" />
@@ -43,7 +45,9 @@ export default function FirstPost({ content, metadata }) {
 				<meta name="twitter:description" content={metadata.description} />
 				<meta
 					name="twitter:image"
-					content={"/api/post-image?" + params.toString()}
+					content={
+						"https://likesdinosaurs.com/api/post-image?" + params.toString()
+					}
 				/>
 				<link
 					rel="stylesheet"
