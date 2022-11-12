@@ -1,3 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	h1 {
+		@apply text-2xl font-bold;
+	}
+	h2 {
+		@apply text-xl font-bold;
+	}
+	h3 {
+		@apply text-lg font-bold;
+	}
+	hr {
+		@apply border-2 border-gray-200 my-4;
+	}
+	p {
+		@apply text-base my-4;
+	}
+	ol {
+		@apply text-base list-decimal pl-8;
+	}
+	ul {
+		@apply text-base list-disc pl-8;
+	}
+	li {
+		@apply text-base my-1 pl-1;
+	}
+}
+
+.shiki {
+	background-color: transparent !important;
+}
+
 html,
 body {
 	padding: 0;

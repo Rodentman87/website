@@ -79,7 +79,7 @@ export default function Home({ allPostsData }) {
 				<p>Hi, my name is Maisy and I do stuff sometimes</p>
 			</section>
 			<section>
-				<h2>Blog</h2>
+				<h2 className="mb-4">Blog</h2>
 				<motion.ul
 					className={utilStyles.list}
 					initial="hidden"

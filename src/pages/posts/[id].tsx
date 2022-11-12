@@ -12,9 +12,9 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 
 export default function FirstPost({ content, metadata }) {
-	const imageUrl = new URL("https://likesdinosaurs.com/api/post-image");
-	imageUrl.searchParams.append("title", metadata.title);
-	imageUrl.searchParams.append("description", metadata.description);
+	const params = new URLSearchParams();
+	params.append("title", metadata.title);
+	params.append("description", metadata.description);
 
 	return (
 		<Layout>
@@ -27,7 +27,10 @@ export default function FirstPost({ content, metadata }) {
 					name="og:published_time"
 					content={new Date(metadata.date).toISOString()}
 				/>
-				<meta name="og:image" content={imageUrl.toString()} />
+				<meta
+					name="og:image"
+					content={"/api/post-image?" + params.toString()}
+				/>
 				<meta name="og:image:width" content="1200" />
 				<meta name="og:image:height" content="630" />
 				<meta name="og:author:first_name" content="Maisy" />
@@ -38,7 +41,10 @@ export default function FirstPost({ content, metadata }) {
 				<meta name="twitter:site" content="@rodentman87" />
 				<meta name="twitter:title" content={metadata.title} />
 				<meta name="twitter:description" content={metadata.description} />
-				<meta name="twitter:image" content={imageUrl.toString()} />
+				<meta
+					name="twitter:image"
+					content={"/api/post-image?" + params.toString()}
+				/>
 				<link
 					rel="stylesheet"
 					href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/solarized-light.min.css"

@@ -1,0 +1,145 @@
+import { TutorialLayout } from "@components/tutorial-layout";
+import { FancyText } from "@components/FancyText";
+import { ScriptedCode } from "@components/ScriptedCode/ScriptedCode";
+import { CompiledPlaintextCode } from "@components/ScriptedCode/TextCode";
+import { Fragment } from "react";
+
+In this first lesson, we'll get a basic idea of what a computer program _is_, how it works, and how to understand writing code. I _will_ skip over some stuff in these first few lessons since it's not important to understand right away, but I will go over them later.
+
+## What is code?
+
+Code is a set of instructions that a computer can understand, kind of like a recipe. It's how humans communicate with computers. Computers look at this code and read through it line by line, doing what each line says as it gets to it. For these examples, we'll use
+
+In the example below, I'll use normal writing to make it clear what's going on, then over the course of these lessons, we'll gradually shift to actual JavaScript syntax. When the computer says something, it'll appear just below the code.
+
+Use the left and right arrows to move forwards and backwards through the steps, or click on a step number to skip to it. The arrow on the left will point to which line is currently running.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Say "Hello"
+Say "Woah!"
+`.trim()}
+/>
+
+## How do computers remember?
+
+Just like a human, a computer has memory. As it runs through a program, it stores anything you tell it to in memory. Each piece of information stored is called a <FancyText>variable</FancyText>. Variables have two parts: a name, and a value. Let's try having the computer remember something!
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my variable) is "Hello"
+Remember that (name) is "Maisy"
+`.trim()}
+/>
+
+Notice how when the program continues to run, the variables don't disappear, this is both good and bad. It's good that we can use this data whenever we want. However, over time we'll try to store so much stuff that the computer will run out of space to keep it in memory! For now we'll ignore this since what we're doing is so small that it doesn't even get close to using up all the memory in a modern computer.
+
+We can also tell the computer to change what is stored in a variable.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my variable) is "Hello"
+Remember that (my variable) is "Goodbye"
+`.trim()}
+/>
+
+Cool, we have some stuff stored in variables, but what are these good for? Well, you can use that data later! Let's try it now by telling the computer to remember something, and then asking it to repeat it back to us.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (secret word) is "dinosaur"
+Say what (secret word) is
+`.trim()}
+/>
+
+Look at that! But words aren't all the computers can store, computers can store all kinds of things. For example:
+
+Numbers
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (secret number) is 64
+Say what (secret number) is
+`.trim()}
+/>
+
+Booleans (true or false)
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (is this cool) is true
+Say what (is this cool) is
+`.trim()}
+/>
+
+Lists
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (groceries) is the list "apples", and "oranges"
+Add "eggs" to (groceries)
+Say what (groceries) is
+`.trim()}
+/>
+
+There's more data types too, but we wont get into those right now.
+
+## How do computers make choices?
+
+So now we know how to store and retrieve data, but we can't do much if the computer can only ever run the same set of instructions. That's where <FancyText>control flow statemets</FancyText> comes in. Control flow statements let us tell the computer when (and when not) to run some set of instructions.
+
+One of the most basic types of control flow statements is the <FancyText>if statement</FancyText>. This tells the computer to only run some piece of code if the condition we give it is met.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my number) is 5
+If (my number) is greater than 4,
+  Say "Your number is higher than 4"
+If (my number) is less than 4,
+  Say "Your number is lower than 4"
+Say "Done!"
+`.trim()}
+/>
+
+Notice how the computer skipped over line 6, since our number wasn't lower than 4. We can use this to have the computer run different lines of code depending on what its current <FancyText>state</FancyText> is. But this still doesn't quite cover everything we might want to do, let's take a look at another type of control flow statement.
+
+The <FancyText>while loop</FancyText>! The while loop tells the computer to keep running a piece of code as long as its condition is met.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (counter) is 1
+While (counter) is less than 5,
+  Say what (counter) is
+  Add 1 to (counter)
+Say "Done!"
+`.trim()}
+/>
+
+## Review
+
+That's all we'll go over in this lesson, but there's still lots more to learn! Let's review what we've learned so far:
+
+- Code is like a recipe for a computer
+- Code is evaluated line by line
+- We can have the computer store data in <FancyText>variables</FancyText>
+- We can modify those variables later
+- We can tell the computer to only evaluate certain code if a condition is met using an <FancyText>if statement</FancyText>
+- We can have the computer run code multiple times using a <FancyText>while loop</FancyText>
+
+export default ({ children }) => (
+	<TutorialLayout
+		title="What is a program?"
+		description="Learning the basics of how computers and humans communicate"
+	>
+		{children}
+	</TutorialLayout>
+);
