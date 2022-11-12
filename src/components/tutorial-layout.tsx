@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Layout from "./layout";
-import DateDisplay from "./date";
 import utilStyles from "../styles/utils.module.css";
 import React from "react";
 
@@ -16,8 +15,11 @@ export const TutorialLayout: React.FC<Props> = ({
 	description,
 }) => {
 	const params = new URLSearchParams();
-	params.append("title", title);
+	params.append("title", title.replace(/\?$/, ""));
 	params.append("description", description);
+	if (title.endsWith("?")) {
+		params.append("questionMark", "true");
+	}
 
 	return (
 		<Layout>

@@ -10,13 +10,17 @@ export default async function (req: NextRequest) {
 		const { searchParams } = new URL(req.url);
 
 		const hasTitle = searchParams.has("title");
-		const title = hasTitle
+		let title = hasTitle
 			? searchParams.get("title")?.slice(0, 100)
 			: "My default title";
 
+		const hasQuestionMark = searchParams.has("questionMark");
+
+		title = hasQuestionMark ? `${title}?` : title;
+
 		const hasDescription = searchParams.has("description");
 		const description = hasDescription
-			? searchParams.get("description")?.slice(0, 100)
+			? searchParams.get("description")?.slice(0, 200)
 			: "My default description";
 
 		return new ImageResponse(

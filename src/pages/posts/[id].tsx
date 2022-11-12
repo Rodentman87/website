@@ -13,8 +13,11 @@ import rehypeHighlight from "rehype-highlight";
 
 export default function FirstPost({ content, metadata }) {
 	const params = new URLSearchParams();
-	params.append("title", metadata.title);
+	params.append("title", metadata.title.replace(/\?$/, ""));
 	params.append("description", metadata.description);
+	if (metadata.title.endsWith("?")) {
+		params.append("questionMark", "true");
+	}
 
 	return (
 		<Layout>
