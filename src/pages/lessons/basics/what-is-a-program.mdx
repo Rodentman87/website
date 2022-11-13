@@ -15,7 +15,7 @@ In this first lesson, we'll get a basic idea of what a computer program _is_, ho
 
 Code is a set of instructions that a computer can understand, kind of like a recipe. It's how humans communicate with computers. Computers look at this code and read through it line by line, doing what each line says as it gets to it.
 
-In the examples below, I'll use normal writing to make it clear what's going on, then over the course of these lessons, we'll gradually shift to actual JavaScript code.
+In the examples below, I'll use normal writing to make it clear what's going on, then over the course of these lessons, we'll switch to a programming language. The writing may look a little bit weird, but that's to keep each instruction consistent. Talking with computers is all about consistency! For example, when we want to refer to a piece of text, we'll make sure to surround it with quotes so that the computer knows when the text starts and when it stops.
 
 Use the left and right arrows to move forwards and backwards through the steps, or click on a step number to skip to it. The arrow on the left will point to which line is currently running. When the computer says something, it'll appear just below the code.
 
@@ -39,17 +39,7 @@ Remember that (name) is "Maisy"
 `.trim()}
 />
 
-Notice how when the program continues to run, the variables don't disappear; this is both good and bad. It's good that we can use this data whenever we want, however, over time we'll try to store so much stuff that the computer will run out of space to keep it in memory! For now we'll ignore this since what we're doing is so small that it doesn't even get close to using up all the memory in a modern computer.
-
-We can also tell the computer to change what is stored in a variable. Note that when you change the value in a variable, the old value is overwritten.
-
-<CompiledPlaintextCode
-	code={`
-Do nothing
-Remember that (my variable) is "Hello"
-Remember that (my variable) is "Goodbye"
-`.trim()}
-/>
+> Notice how when the program continues to run, the variables don't disappear; this is both good and bad. It's good that we can use this data whenever we want, however, over time we'll try to store so much stuff that the computer will run out of space to keep it in memory! For now we'll ignore this since what we're doing is so small that it doesn't even get close to using up all the memory in a modern computer.
 
 Cool, we have some stuff stored in variables, but what are these good for? Well, you can use that data later! Let's try it now by telling the computer to remember something, and then asking it to repeat it back to us.
 
@@ -57,7 +47,7 @@ Cool, we have some stuff stored in variables, but what are these good for? Well,
 	code={`
 Do nothing
 Remember that (secret word) is "dinosaur"
-Say what (secret word) is
+Say (secret word)
 `.trim()}
 />
 
@@ -69,7 +59,7 @@ Numbers
 	code={`
 Do nothing
 Remember that (secret number) is 64
-Say what (secret number) is
+Say (secret number)
 `.trim()}
 />
 
@@ -79,7 +69,7 @@ Booleans (true or false)
 	code={`
 Do nothing
 Remember that (is this cool) is true
-Say what (is this cool) is
+Say (is this cool)
 `.trim()}
 />
 
@@ -89,11 +79,49 @@ Lists
 	code={`
 Do nothing
 Remember that (groceries) is the list "apples", and "oranges"
-Say what (groceries) is
+Say (groceries)
 `.trim()}
 />
 
 There's more data types too, but we won't get into those right now.
+
+So now we have some information stored, but what happens when we want to change that information?
+
+One option is just giving the computer a new value to store in that variable. Note that when you change the value in a variable, the old value is overwritten.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my variable) is "Hello"
+Remember that (my variable) is "Goodbye"
+`.trim()}
+/>
+
+The variable changed! But, what happens when we want to modify the value instead of just overwriting it? We can also tell the computer to do that.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my counter) is 1
+Add 1 to (my counter)
+Remember that (my phrase) is "Hello"
+Add ", world!" to (my phrase)
+Remember that (groceries) is the list "apples", and "oranges"
+Add "eggs" to (groceries)
+`.trim()}
+/>
+
+With this, we can start having the computer do things for us, like simple math!
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (result) is 123456789
+Add 123456789 to (result)
+`.trim()}
+/>
+
+The computer can do that much faster than a human could (or at least faster than I could).
 
 ## How do computers make choices?
 
@@ -113,9 +141,9 @@ Say "Done!"
 `.trim()}
 />
 
-Notice how the computer skipped over line 6, since our number wasn't lower than 4. We can use this to have the computer run different lines of code depending on what its current <FancyText>state</FancyText> is. But this still doesn't quite cover everything we might want to do, let's take a look at another type of control flow statement.
+Notice how the computer skipped over line 6, since our number wasn't lower than 4. We can use this to have the computer run different lines of code depending on what its current <FancyText>state</FancyText> is. Now we can tell the computer to make decisions on its own!
 
-The <FancyText>while loop</FancyText>! The while loop tells the computer to keep running a piece of code as long as its condition is met.
+But this still doesn't quite cover everything we might want to do, let's take a look at another type of control flow statement: the <FancyText>while loop</FancyText>! The while loop tells the computer to keep running a piece of code as long as its condition is met.
 
 <CompiledPlaintextCode
 	code={`
@@ -128,6 +156,23 @@ Say "Done!"
 `.trim()}
 />
 
+With this we can run code for as many times as needed (even forever). Let's try putting this together with our variables to make the computer do something simple, in this case, multiplication.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (number a) is 5
+Remember that (number b) is 4
+Remember that (total) is 0
+While (number a) is greater than 0,
+  Add (number b) to (total)
+  Add -1 to (number a)
+Say "Done!"
+`.trim()}
+/>
+
+Here we achieved multiplication using just the small set of things given to us. Since we didn't have a way to multiply, we made it ourselves by repeatedly adding the second number to our total. This is something that happens all the time in programming! Ok, maybe not remaking multiplication, but programming is all about solving problems one by one using the tools you have. Plus, one of the coolest parts about programming is that if you want a tool that you don't have, you can just build it!
+
 ## Review
 
 That's all we'll go over in this lesson, but there's still lots more to learn! Let's review what we've learned so far:
@@ -138,12 +183,4 @@ That's all we'll go over in this lesson, but there's still lots more to learn! L
 - We can modify those variables later
 - We can tell the computer to only evaluate certain code if a condition is met using an <FancyText>if statement</FancyText>
 - We can have the computer run code multiple times using a <FancyText>while loop</FancyText>
-
-export default ({ children }) => (
-	<TutorialLayout
-		title="What is a program?"
-		description="Learning the basics of how computers and humans communicate"
-	>
-		{children}
-	</TutorialLayout>
-);
+- We can put this together to build lots of things!

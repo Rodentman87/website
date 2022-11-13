@@ -24,18 +24,8 @@ export function getScriptFromText(text: string) {
 			indicateLine: currentLine + 1,
 		};
 		if (currentCodeLine.startsWith("Say")) {
-			if (currentCodeLine.match(/Say what \([a-zA-Z0-9 ]+\) is/)) {
-				// Say the value of the variable
-				const variable = currentCodeLine.replace(
-					/Say what \(([a-zA-Z0-9 ]+)\) is/,
-					"$1"
-				);
-				const value = currentVariables[variable];
-				stepInfo.consoleLine = valueToText(value);
-			} else {
-				const text = currentCodeLine.replace(/Say "(.+?)"/, "$1");
-				stepInfo.consoleLine = text;
-			}
+			const val = currentCodeLine.replace(/Say (.+?)/, "$1");
+			stepInfo.consoleLine = valueToText(parseValue(val, currentVariables));
 		} else if (currentCodeLine.startsWith("Remember")) {
 			const variable = currentCodeLine.replace(
 				/Remember that \(([a-zA-Z0-9 ]+)\) is (.+)/,
@@ -45,7 +35,7 @@ export function getScriptFromText(text: string) {
 				/Remember that \(([a-zA-Z0-9 ]+)\) is (.+)/,
 				"$2"
 			);
-			currentVariables[variable] = parseValue(value);
+			currentVariables[variable] = parseValue(value, currentVariables);
 		} else if (currentCodeLine.startsWith("Add")) {
 			const variable = currentCodeLine.replace(
 				/Add (.+) to \(([a-zA-Z0-9 ]+)\)/,
@@ -56,11 +46,11 @@ export function getScriptFromText(text: string) {
 				"$1"
 			);
 			if (Array.isArray(currentVariables[variable])) {
-				currentVariables[variable].push(parseValue(value));
+				currentVariables[variable].push(parseValue(value, currentVariables));
 			} else if (typeof currentVariables[variable] === "number") {
-				currentVariables[variable] += parseValue(value);
+				currentVariables[variable] += parseValue(value, currentVariables);
 			} else if (typeof currentVariables[variable] === "string") {
-				currentVariables[variable] += parseValue(value);
+				currentVariables[variable] += parseValue(value, currentVariables);
 			}
 		} else if (currentCodeLine.startsWith("If")) {
 			const condition = currentCodeLine.replace(/If (.+?),/, "$1");
@@ -135,7 +125,7 @@ function evaluateCondition(condition: string, variables: Record<string, any>) {
 	return false;
 }
 
-function parseValue(value: string, variables: Record<string, any> = {}) {
+function parseValue(value: string, variables: Record<string, any>) {
 	if (value.startsWith('"')) {
 		return value.replace(/"(.+)"/, "$1");
 	} else if (!isNaN(parseFloat(value))) {
@@ -147,7 +137,7 @@ function parseValue(value: string, variables: Record<string, any> = {}) {
 			.replace(/the list (.+)/, "$1")
 			.split(/, (?:and)?/)
 			.map((word) => word.trim());
-		return values.map((val) => parseValue(val));
+		return values.map((val) => parseValue(val, variables));
 	} else if (value.startsWith("(")) {
 		const variable = value.replace(/\((.+?)\)/, "$1");
 		return variables[variable];

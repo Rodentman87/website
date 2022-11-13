@@ -7,19 +7,25 @@ interface Props {
 	children: React.ReactNode;
 	title: string;
 	description: string;
+	courseName: string;
+	lessonNumber: number;
+	token: string;
 }
 
 export const TutorialLayout: React.FC<Props> = ({
 	children,
 	title,
 	description,
+	courseName,
+	lessonNumber,
+	token,
 }) => {
 	const params = new URLSearchParams();
-	params.append("title", title.replace(/\?$/, ""));
+	params.append("title", title);
 	params.append("description", description);
-	if (title.endsWith("?")) {
-		params.append("questionMark", "true");
-	}
+	params.append("badgeLeft", courseName);
+	params.append("badgeRight", `Lesson ${lessonNumber}`);
+	params.append("token", token);
 
 	return (
 		<Layout>
@@ -30,9 +36,7 @@ export const TutorialLayout: React.FC<Props> = ({
 				<meta name="og:type" content="article" />
 				<meta
 					name="og:image"
-					content={
-						"https://likesdinosaurs.com/api/post-image?" + params.toString()
-					}
+					content={"/api/post-image?" + params.toString()}
 				/>
 				<meta name="og:image:width" content="1200" />
 				<meta name="og:image:height" content="630" />
@@ -46,9 +50,7 @@ export const TutorialLayout: React.FC<Props> = ({
 				<meta name="twitter:description" content={description} />
 				<meta
 					name="twitter:image"
-					content={
-						"https://likesdinosaurs.com/api/post-image?" + params.toString()
-					}
+					content={"/api/post-image?" + params.toString()}
 				/>
 				<link
 					rel="stylesheet"

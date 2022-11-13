@@ -49,7 +49,9 @@ export function getAllPostIds() {
 	});
 }
 
-export async function getPostData(id) {
+export async function getPostData(
+	id
+): Promise<{ content: string; metadata: Record<string, any> }> {
 	const fullPath = path.join(postsDirectory, `${id}.mdx`);
 	const fileContents = fs.readFileSync(fullPath, "utf8");
 

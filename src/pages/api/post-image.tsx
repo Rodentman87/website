@@ -5,23 +5,46 @@ export const config = {
 	runtime: "experimental-edge",
 };
 
+const key = crypto.subtle.importKey(
+	"raw",
+	new TextEncoder().encode(process.env.SIGNING_SECRET),
+	{ name: "HMAC", hash: { name: "SHA-256" } },
+	false,
+	["sign"]
+);
+
+function toHex(arrayBuffer: ArrayBuffer) {
+	return Array.prototype.map
+		.call(new Uint8Array(arrayBuffer), (n) => n.toString(16).padStart(2, "0"))
+		.join("");
+}
+
 export default async function (req: NextRequest) {
 	try {
 		const { searchParams } = new URL(req.url);
 
-		const hasTitle = searchParams.has("title");
-		let title = hasTitle
-			? searchParams.get("title")?.slice(0, 100)
-			: "My default title";
+		const token = searchParams.get("token");
 
-		const hasQuestionMark = searchParams.has("questionMark");
+		const title = searchParams.get("title")?.slice(0, 100);
 
-		title = hasQuestionMark ? `${title}?` : title;
+		const description = searchParams.get("description")?.slice(0, 200);
 
-		const hasDescription = searchParams.has("description");
-		const description = hasDescription
-			? searchParams.get("description")?.slice(0, 200)
-			: "My default description";
+		const badgeLeft = searchParams.get("badgeLeft")?.slice(0, 100);
+		const badgeRight = searchParams.get("badgeRight")?.slice(0, 100);
+
+		const verifyToken = toHex(
+			await crypto.subtle.sign(
+				"HMAC",
+				await key,
+				new TextEncoder().encode(
+					JSON.stringify({ title, description, badgeLeft, badgeRight })
+				)
+			)
+		);
+
+		if (token !== verifyToken) {
+			return new Response("Invalid token.", { status: 401 });
+		}
 
 		return new ImageResponse(
 			(
@@ -35,6 +58,7 @@ export default async function (req: NextRequest) {
 						justifyContent: "center",
 						flexDirection: "column",
 						flexWrap: "nowrap",
+						position: "relative",
 					}}
 				>
 					<div
@@ -80,6 +104,39 @@ export default async function (req: NextRequest) {
 					>
 						{description}
 					</div>
+					{badgeLeft && (
+						<div
+							style={{
+								fontSize: 24,
+								fontStyle: "normal",
+								display: "flex",
+								position: "absolute",
+								bottom: 50,
+								right: 50,
+								borderRadius: 8,
+								overflow: "hidden",
+								border: "2px solid gold",
+							}}
+						>
+							<span
+								style={{
+									backgroundColor: "#eee8d5",
+									paddingLeft: 8,
+									paddingRight: 8,
+								}}
+							>
+								{badgeLeft}
+							</span>
+							<span
+								style={{
+									paddingLeft: 8,
+									paddingRight: 8,
+								}}
+							>
+								{badgeRight}
+							</span>
+						</div>
+					)}
 				</div>
 			),
 			{

@@ -10,14 +10,13 @@ import { serialize } from "next-mdx-remote/serialize";
 import remarkToc from "remark-toc";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { createHmac } from "crypto";
 
 export default function FirstPost({ content, metadata }) {
 	const params = new URLSearchParams();
-	params.append("title", metadata.title.replace(/\?$/, ""));
+	params.append("title", metadata.title);
 	params.append("description", metadata.description);
-	if (metadata.title.endsWith("?")) {
-		params.append("questionMark", "true");
-	}
+	params.append("token", metadata.token);
 
 	return (
 		<Layout>
@@ -32,9 +31,7 @@ export default function FirstPost({ content, metadata }) {
 				/>
 				<meta
 					name="og:image"
-					content={
-						"https://likesdinosaurs.com/api/post-image?" + params.toString()
-					}
+					content={"/api/post-image?" + params.toString()}
 				/>
 				<meta name="og:image:width" content="1200" />
 				<meta name="og:image:height" content="630" />
@@ -48,9 +45,7 @@ export default function FirstPost({ content, metadata }) {
 				<meta name="twitter:description" content={metadata.description} />
 				<meta
 					name="twitter:image"
-					content={
-						"https://likesdinosaurs.com/api/post-image?" + params.toString()
-					}
+					content={"/api/post-image?" + params.toString()}
 				/>
 				<link
 					rel="stylesheet"
@@ -96,6 +91,15 @@ export async function getStaticProps({ params }) {
 	// Fetch necessary data for the blog post using params.id
 	const postData = await getPostData(params.id);
 
+	const hmac = createHmac("sha256", process.env.SIGNING_SECRET);
+	hmac.update(
+		JSON.stringify({
+			title: postData.metadata.title,
+			description: postData.metadata.description,
+		})
+	);
+	const token = hmac.digest("hex");
+
 	const serialized = await serialize(postData.content, {
 		parseFrontmatter: true,
 		mdxOptions: {
@@ -109,6 +113,7 @@ export async function getStaticProps({ params }) {
 			content: serialized,
 			metadata: {
 				...postData.metadata,
+				token,
 			},
 		},
 	};
