@@ -40,7 +40,7 @@ export default function Layout({
 					<>
 						<motion.img
 							layoutId="headersvg"
-							src="/maisy.png"
+							src="/maisy-mask.jpg"
 							className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
 							alt={name}
 							width={144}
@@ -55,7 +55,7 @@ export default function Layout({
 						<Link href="/">
 							<motion.img
 								layoutId="headersvg"
-								src="/maisy.png"
+								src="/maisy-mask.jpg"
 								className={`${styles.headerImage} ${utilStyles.borderCircle}`}
 								alt={name}
 								width={108}

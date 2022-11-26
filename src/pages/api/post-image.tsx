@@ -70,7 +70,7 @@ export default async function (req: NextRequest) {
 						}}
 					>
 						<img
-							src="https://www.likesdinosaurs.com/maisy.png"
+							src="https://www.likesdinosaurs.com/maisy-mask.jpg"
 							alt="Maisy Dinosaur"
 							width="250"
 							height="250"
