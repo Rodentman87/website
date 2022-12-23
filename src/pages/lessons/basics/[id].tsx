@@ -78,7 +78,7 @@ export async function getStaticPaths() {
 	const paths = await (
 		await readdir(process.cwd() + "/src/pages/lessons/basics")
 	)
-		.filter((file) => !file.startsWith("["))
+		.filter((file) => !file.startsWith("[") && !file.startsWith("index"))
 		.map((file) => file.replace(/\..*?$/, ""))
 		.map((file) => "/lessons/basics/" + file);
 
