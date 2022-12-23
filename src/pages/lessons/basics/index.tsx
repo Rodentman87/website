@@ -107,6 +107,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 	const pageData = await Promise.all(
 		ids.map(async (id) => {
+			if (id === "index") return;
 			const page = await import(`./${id}.mdx`);
 			return {
 				id,
