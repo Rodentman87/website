@@ -4,9 +4,7 @@ import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { SocialIcon } from "react-social-icons";
-
-export const name = "Maisy Dinosaur";
-export const siteTitle = "Dinos are kinda cool";
+import { name } from "./layout";
 
 const item = {
 	visible: ({ i, shouldReduceMotion }) => ({
@@ -20,12 +18,12 @@ const item = {
 		shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -50 },
 };
 
-export default function Layout({
+export default function LessonLayout({
 	children,
-	home,
+	course,
 }: {
 	children: any;
-	home?: any;
+	course: string;
 }) {
 	const shouldReduceMotion = useReducedMotion();
 
@@ -35,47 +33,28 @@ export default function Layout({
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="og:color" content="#FDF6E3" />
 			</Head>
-			<header className={home ? styles.header : styles.headerPost}>
-				{home ? (
-					<>
-						<motion.img
-							layoutId="headersvg"
-							src="/maisy-mask.jpg"
-							className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
-							alt={name}
-							width={144}
-							height={144}
-						/>
-						<motion.h1 layoutId="headername" className={utilStyles.heading2Xl}>
-							{name}
-						</motion.h1>
-					</>
-				) : (
-					<>
-						<Link href="/">
-							<motion.img
-								layoutId="headersvg"
-								src="/maisy-mask.jpg"
-								className={`${styles.headerImage} ${utilStyles.borderCircle}`}
-								alt={name}
-								width={108}
-								height={108}
-							/>
-						</Link>
-						<motion.h2 layoutId="headername" className={utilStyles.headingLg}>
-							<Link href="/" className={utilStyles.colorInherit}>
-								{name}
-							</Link>
-						</motion.h2>
-					</>
-				)}
+			<header className={styles.headerPost}>
+				<Link href="/">
+					<motion.img
+						layoutId="headersvg"
+						src="/maisy-mask.jpg"
+						className={`${styles.headerImage} ${utilStyles.borderCircle}`}
+						alt={name}
+						width={108}
+						height={108}
+					/>
+				</Link>
+				<motion.h2 layoutId="headername" className={utilStyles.headingLg}>
+					<Link href="/" className={utilStyles.colorInherit}>
+						{name}
+					</Link>
+				</motion.h2>
 			</header>
 			<main>{children}</main>
-			{!home && (
-				<div className={styles.backToHome}>
-					<Link href="/">← Back to home</Link>
-				</div>
-			)}
+			<div className={styles.backToHome}>
+				<Link href={`/lessons/${course}`}>← Back to course</Link>
+			</div>
+
 			<footer>
 				<motion.div
 					className={styles.footer}

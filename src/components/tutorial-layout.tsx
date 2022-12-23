@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Layout from "./layout";
+import LessonLayout from "./lesson-layout";
 import utilStyles from "../styles/utils.module.css";
 import React from "react";
 
@@ -8,6 +8,7 @@ interface Props {
 	title: string;
 	description: string;
 	courseName: string;
+	courseSlug: string;
 	lessonNumber: number;
 	token: string;
 }
@@ -17,6 +18,7 @@ export const TutorialLayout: React.FC<Props> = ({
 	title,
 	description,
 	courseName,
+	courseSlug,
 	lessonNumber,
 	token,
 }) => {
@@ -28,7 +30,7 @@ export const TutorialLayout: React.FC<Props> = ({
 	params.append("token", token);
 
 	return (
-		<Layout>
+		<LessonLayout course={courseSlug}>
 			<Head>
 				<title>{title}</title>
 				<meta name="og:title" content={title} />
@@ -63,6 +65,6 @@ export const TutorialLayout: React.FC<Props> = ({
 				<div className={utilStyles.lightText}>{description}</div>
 				{children}
 			</article>
-		</Layout>
+		</LessonLayout>
 	);
 };
