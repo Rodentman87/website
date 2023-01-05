@@ -104,6 +104,7 @@ const Controls: React.FC<ControlsProps> = ({
 			style={{ backgroundColor: "#eee8d5" }}
 		>
 			<button
+				aria-label="Previous step"
 				disabled={currentScriptLineNumber === 0}
 				className="disabled:cursor-not-allowed disabled:text-gray-500"
 				onClick={() => setCurrentScriptLinenumber(currentScriptLineNumber - 1)}
@@ -128,6 +129,7 @@ const Controls: React.FC<ControlsProps> = ({
 				))}
 			</div>
 			<button
+				aria-label="Next step"
 				disabled={currentScriptLineNumber === scriptLength - 1}
 				className="disabled:cursor-not-allowed disabled:text-gray-500"
 				onClick={() => setCurrentScriptLinenumber(currentScriptLineNumber + 1)}

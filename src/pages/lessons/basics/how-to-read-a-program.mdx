@@ -1,0 +1,285 @@
+import { TutorialLayout } from "@components/tutorial-layout";
+import { FancyText } from "@components/FancyText";
+import { ScriptedCode } from "@components/ScriptedCode/ScriptedCode";
+import { CompiledPlaintextCode } from "@components/ScriptedCode/TextCode";
+import { Fragment } from "react";
+
+export const meta = {
+	title: "How to Read a Program",
+	description: "What on earth do all these symbols mean‽",
+	lessonNumber: 2,
+};
+
+So now that you understand what a program is, and what we can do with them, let's take a look at how to read them yourself. A lot of programming is reading your own, as well as other people's code. Rather than show you a big block of text and trying to explain it piece by piece, let's learn by doing. In this lesson we'll take a look at a program written in the same plain text style as the last lesson, and slowly convert it into something that's a little more similar to a real programming language. This will help to understand why languages are written the way that they are.
+
+## Variables
+
+Let's start super simple here:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (name) is "Maisy"
+`.trim()}
+/>
+
+This is fairly simple to understand as a human, but for computers, this text is pretty difficult to process. English text is very ambiguous, and things can mean more than one thing depending on context (sometimes, multiple things at the same time). Computers don't understand this context and therefore we need something that's a little more rigid. Let's draw some inspiration from something with a set of well defined rules: Math.
+
+Here, we'll convert that variable assignment to something that looks like a math equation:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (name) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+(name) = "Maisy"	
+`.trim()}
+/>
+
+Nice! That's much easier for a computer to read, and humans can still understand it pretty well too. Can we simplify this a little bit though? Those parenthesis look unnecessary, let's try removing those:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (name) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+name = "Maisy"	
+`.trim()}
+/>
+
+That's much cleaner, however, we've just created a problem here. Can you spot it? It might be a little hard to see with this example, let's try a different one.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my name) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+my name = "Maisy"	
+`.trim()}
+/>
+
+Can you spot it now? Multi-word variable names are a littl hard to read now. Is the variable named "my name"? Is it named "name" and "my" is part of something else? Let's fix this by adding some rules to naming things. Let's say that all variables must have a name that only uses letters, numbers, and a couple symbols like dash and underscore. This gives us some flexiblity in naming things, while still making it easy for a computer to tell what is and isn't part of the name. Let's take a look at a couple different ways we can write a variable with multiple words using our new rule. These are all ways that programmers write names in real code, in many cases there's a general consensus as to which style to use where, but for the most part, it's really up to you and whoever you're working with.
+
+### PascalCase
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (MyName) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+MyName = "Maisy"	
+`.trim()}
+/>
+
+### camelCase
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (myName) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+myName = "Maisy"	
+`.trim()}
+/>
+
+### snake_case
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my_name) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+my_name = "Maisy"	
+`.trim()}
+/>
+
+### kebab-case
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (my-name) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+my-name = "Maisy"	
+`.trim()}
+/>
+
+and last, but not least:
+
+### SCREAMING_SNAKE_CASE
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (MY_NAME) is "Maisy"
+`.trim()}
+	swappedCode={`
+Do nothing
+MY_NAME = "Maisy"	
+`.trim()}
+/>
+
+For the rest of this lesson, we'll be using camelCase for variables just for consistency.
+
+## Math
+
+Now that we've started to draw from math for the variable assignment, let's draw from math for the... math. Let's simplify this example:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (myNumber) is 5
+Add 5 to (myNumber)
+`.trim()}
+	swappedCode={`
+Do nothing
+myNumber = 5
+Add 5 to (myNumber)
+`.trim()}
+/>
+
+How can we turn this into a math expression? There's a couple ways to go about this, and a lot of programming languages actually offer multiple as options. First, let's do this by just reassinging the variable to the new value:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (myNumber) is 5
+Add 5 to (myNumber)
+`.trim()}
+	swappedCode={`
+Do nothing
+myNumber = 5
+myNumber = myNumber + 5
+`.trim()}
+/>
+
+This is nice, it's a little hard to read though with how much text we have here. This is such a simple operation, what if we wanted to just give it an extra special symbol since it's something we'll probably be doing super often too:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (myNumber) is 5
+Add 5 to (myNumber)
+`.trim()}
+	swappedCode={`
+Do nothing
+myNumber = 5
+myNumber += 5
+`.trim()}
+/>
+
+This is another thing that's more up to you and your team's prefered style, so choose whichever one you want when writing your code.
+
+## If Statements
+
+Next let's work on transforming our if statements to fit our new look. Before we start converting it, let's discuss a new term: <FancyText>blocks</FancyText>. What is a block? A block is simply a grouping of lines of code, this lets you pass a group of code for the computer to execute. What is this useful for? Well, you may have figured out based on the section title, but it's very useful for if statements (and other types of control flow statements, like while loops).
+
+How can we represent a block of statements? One easy way is to wrap it in something. Curly braces seem like a good idea, they look pretty cool. Let's see what that looks like.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (myNumber) is 5
+If (myNumber) is greater than 4,
+	Say "Your number is higher than 4"
+`.trim()}
+	swappedCode={`
+Do nothing
+myNumber = 5
+if myNumber is greater than 4 {
+	Say "Your number is higher than 4"
+}
+`.trim()}
+/>
+
+Hmm, that looks good, but that condition is a little hard to read. Let's give that a surrounding thing too, maybe let's do some parenthesis. And while we're at it, let's simplify that comparison to a math operator too.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (myNumber) is 5
+If (myNumber) is greater than 4,
+	Say "Your number is higher than 4"
+`.trim()}
+	swappedCode={`
+Do nothing
+myNumber = 5
+if (myNumber > 4) {
+	Say "Your number is higher than 4"
+}
+`.trim()}
+/>
+
+Let's see how this looks with the while loop example from last time:
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (a) is 5
+Remember that (b) is 4
+Remember that (total) is 0
+While (a) is greater than 0,
+  Add (b) to (total)
+  Add -1 to (a)
+
+Say "Done!"
+`.trim()}
+	swappedCode={`
+Do nothing
+a = 5
+b = 4
+total = 0
+while (a > 0) {
+	total += b
+	a += -1
+}
+Say "Done!"
+`.trim()}
+/>
+
+Now this is something that's much more similar to what a computer can read. While these changes aren't huge, it makes the entire block of text much easier for computers to understand. We've removed a lot of ambiguity here. Let's do one last thing here to help the computer out. You've probably seen this before if you've seen blocks of code, let's end all of our statements with a semicolon. This tells the computer that the instruction ends there, just like a period in a normal sentence.
+
+<CompiledPlaintextCode
+	code={`
+Do nothing
+Remember that (a) is 5
+Remember that (b) is 4
+Remember that (total) is 0
+While (a) is greater than 0,
+  Add (b) to (total)
+  Add -1 to (a)
+
+Say "Done!"
+`.trim()}
+	swappedCode={`
+Do nothing
+a = 5;
+b = 4;
+total = 0;
+while (a > 0) {
+	total += b;
+	a += -1;
+}
+Say "Done!"
+`.trim()}
+/>
+
+That's it! This looks really good (in fact, this is almost completely valid JavaScript code).
+
+## Conclusion
+
+That's all you really need to understand most programming syntax you see. Most languages have more ways of writing things, but I hope this lesson has provided the tools necessary to get an idea of what you're reading. If something is confusing, search is your friend! For the vast majority of things, a simple search like "JavaScript if" or "python for" should return helpful resources.

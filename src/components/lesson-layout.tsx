@@ -50,6 +50,9 @@ export default function LessonLayout({
 					</Link>
 				</motion.h2>
 			</header>
+			<div>
+				<Link href={`/lessons/${course}`}>← Back to course</Link>
+			</div>
 			<main>{children}</main>
 			<div className={styles.backToHome}>
 				<Link href={`/lessons/${course}`}>← Back to course</Link>

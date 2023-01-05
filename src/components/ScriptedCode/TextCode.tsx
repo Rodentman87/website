@@ -1,12 +1,21 @@
 import React, { useMemo } from "react";
 import { ScriptedCode, ScriptLine, valueToText } from "./ScriptedCode";
 
-export const CompiledPlaintextCode: React.FC<{ code: string }> = ({ code }) => {
+export const CompiledPlaintextCode: React.FC<{
+	code: string;
+	swappedCode?: string;
+}> = ({ code, swappedCode }) => {
 	const script = useMemo(() => {
 		return getScriptFromText(code);
 	}, [code]);
 
-	return <ScriptedCode code={code} language="plaintext" script={script} />;
+	return (
+		<ScriptedCode
+			code={swappedCode ?? code}
+			language="plaintext"
+			script={script}
+		/>
+	);
 };
 
 export function getScriptFromText(text: string) {
@@ -20,6 +29,10 @@ export function getScriptFromText(text: string) {
 	let returnAfterLine = -1;
 	while (running) {
 		const currentCodeLine = lines[currentLine].trim();
+		if (currentCodeLine === "") {
+			currentLine++;
+			continue;
+		}
 		const stepInfo: ScriptLine = {
 			indicateLine: currentLine + 1,
 		};
@@ -28,21 +41,21 @@ export function getScriptFromText(text: string) {
 			stepInfo.consoleLine = valueToText(parseValue(val, currentVariables));
 		} else if (currentCodeLine.startsWith("Remember")) {
 			const variable = currentCodeLine.replace(
-				/Remember that \(([a-zA-Z0-9 ]+)\) is (.+)/,
+				/Remember that \(([a-zA-Z0-9 _-]+)\) is (.+)/,
 				"$1"
 			);
 			const value = currentCodeLine.replace(
-				/Remember that \(([a-zA-Z0-9 ]+)\) is (.+)/,
+				/Remember that \(([a-zA-Z0-9 _-]+)\) is (.+)/,
 				"$2"
 			);
 			currentVariables[variable] = parseValue(value, currentVariables);
 		} else if (currentCodeLine.startsWith("Add")) {
 			const variable = currentCodeLine.replace(
-				/Add (.+) to \(([a-zA-Z0-9 ]+)\)/,
+				/Add (.+) to \(([a-zA-Z0-9 _-]+)\)/,
 				"$2"
 			);
 			const value = currentCodeLine.replace(
-				/Add (.+) to \(([a-zA-Z0-9 ]+)\)/,
+				/Add (.+) to \(([a-zA-Z0-9 _-]+)\)/,
 				"$1"
 			);
 			if (Array.isArray(currentVariables[variable])) {

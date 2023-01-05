@@ -1,4 +1,6 @@
 import Layout from "@components/layout";
+import { useLessonData } from "@components/LessonDataStorage/useLessonData";
+import { LessonProgressBadge } from "@components/LessonProgressBadge";
 import { createHmac } from "crypto";
 import { motion, useReducedMotion } from "framer-motion";
 import { readdir } from "fs/promises";
@@ -74,7 +76,9 @@ export default function LessonList({
 					href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/solarized-light.min.css"
 				/>
 			</Head>
-			<h1>Lessons</h1>
+			<div className="flex flex-row justify-between">
+				<h1>Programming: the Basics</h1>
+			</div>
 			<br />
 			<motion.ul className={utilStyles.list} initial="hidden" animate="visible">
 				{lessons.map(({ id, title, description }, i) => (
@@ -90,7 +94,7 @@ export default function LessonList({
 							whileHover="hovered"
 							layoutId={`title-${id}`}
 						>
-							<Link href={`/posts/${id}`}>{title}</Link>
+							<Link href={`/lessons/basics/${id}`}>{title}</Link>
 							<div>{description}</div>
 						</motion.div>
 					</motion.li>
@@ -112,9 +116,12 @@ export const getStaticProps: GetStaticProps = async () => {
 				id,
 				title: page.meta.title,
 				description: page.meta.description,
+				lessonNumber: page.meta.lessonNumber,
 			};
 		})
 	);
+
+	pageData.sort((a, b) => a.lessonNumber - b.lessonNumber);
 
 	const title = "Basics";
 	const description = "An introduction to the basics of programming";
