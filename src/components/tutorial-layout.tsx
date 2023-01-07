@@ -11,6 +11,7 @@ interface Props {
 	courseSlug: string;
 	lessonNumber: number;
 	token: string;
+	nextLesson?: string;
 }
 
 export const TutorialLayout: React.FC<Props> = ({
@@ -21,6 +22,7 @@ export const TutorialLayout: React.FC<Props> = ({
 	courseSlug,
 	lessonNumber,
 	token,
+	nextLesson,
 }) => {
 	const params = new URLSearchParams();
 	params.append("title", title);
@@ -30,7 +32,7 @@ export const TutorialLayout: React.FC<Props> = ({
 	params.append("token", token);
 
 	return (
-		<LessonLayout course={courseSlug}>
+		<LessonLayout course={courseSlug} nextLesson={nextLesson}>
 			<Head>
 				<title>{title}</title>
 				<meta name="og:title" content={title} />

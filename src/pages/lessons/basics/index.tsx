@@ -81,7 +81,7 @@ export default function LessonList({
 			</div>
 			<p>
 				Welcome to the basics of programming! This series of lessons is intended
-				to be a primer on the funamentals you should know before getting into
+				to be a primer on the fundamentals you should know before getting into
 				any other programming course. You do not need to know <i>anything</i>{" "}
 				going into this series.
 			</p>

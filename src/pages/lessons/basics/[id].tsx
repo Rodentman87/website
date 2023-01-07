@@ -23,6 +23,7 @@ type PageProps = {
 	lessonNumber: number;
 	token: string;
 	fileName: string;
+	nextLesson?: string;
 };
 
 export default function Post({
@@ -30,6 +31,7 @@ export default function Post({
 	description,
 	courseName,
 	lessonNumber,
+	nextLesson,
 	token,
 	fileName,
 }: PageProps) {
@@ -43,6 +45,7 @@ export default function Post({
 			courseSlug="basics"
 			lessonNumber={lessonNumber}
 			token={token}
+			nextLesson={nextLesson}
 		>
 			<br />
 			<Alert>This page works best on desktop or tablet</Alert>
@@ -56,6 +59,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const page = await import(`./${id}.mdx`);
 	const title = page.meta.title;
 	const description = page.meta.description;
+	const nextLesson = page.meta.nextLesson ?? null;
 	const courseName = "Basics";
 	const lessonNumber = page.meta.lessonNumber;
 	const hmac = createHmac("sha256", process.env.SIGNING_SECRET);
@@ -77,6 +81,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 			lessonNumber,
 			token,
 			fileName: `${id}.mdx`,
+			nextLesson,
 		},
 	};
 };

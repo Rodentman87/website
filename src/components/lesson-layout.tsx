@@ -9,9 +9,11 @@ import styles from "./layout.module.css";
 export default function LessonLayout({
 	children,
 	course,
+	nextLesson,
 }: {
 	children: any;
 	course: string;
+	nextLesson?: string;
 }) {
 	return (
 		<div className={styles.container}>
@@ -40,8 +42,11 @@ export default function LessonLayout({
 				<Link href={`/lessons/${course}`}>← Back to course</Link>
 			</div>
 			<main>{children}</main>
-			<div className={styles.backToHome}>
+			<div className={styles.backToHome + " flex flex-row justify-between"}>
 				<Link href={`/lessons/${course}`}>← Back to course</Link>
+				{nextLesson && (
+					<Link href={`/lessons/${course}/${nextLesson}`}>Next lesson →</Link>
+				)}
 			</div>
 			<Footer />
 		</div>
