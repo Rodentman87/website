@@ -16,7 +16,7 @@ export default function Layout({
 	home?: any;
 }) {
 	return (
-		<div className={styles.container}>
+		<div className="max-w-full md:max-w-[45rem] px-4 mx-auto">
 			<Head>
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="og:color" content="#FDF6E3" />

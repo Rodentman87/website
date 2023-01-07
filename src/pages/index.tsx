@@ -158,7 +158,7 @@ export default function Home({
 							<div className="flex flex-row items-center gap-2">
 								<motion.h3
 									layoutId="lesson-basics-title"
-									className="text-2xl font-bold"
+									className="text-xl font-bold md:text-2xl"
 								>
 									Programming: the Basics
 								</motion.h3>
@@ -171,7 +171,7 @@ export default function Home({
 									Beta
 								</motion.span>
 							</div>
-							<div className="flex flex-row justify-between">
+							<div className="flex flex-col sm:flex-row justify-between">
 								<p className="m-0">Lessons: 4</p>
 								<p className="m-0">Esimated time to complete: 1 hour</p>
 							</div>
