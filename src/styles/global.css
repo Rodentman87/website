@@ -27,6 +27,27 @@
 	li {
 		@apply text-base my-1 pl-1;
 	}
+	th,
+	td {
+		@apply text-base p-2;
+	}
+	th {
+		@apply font-bold;
+		background-color: #fdf6e3;
+	}
+	tr {
+		@apply divide-x-2;
+	}
+	thead,
+	tbody {
+		@apply divide-y-2;
+	}
+	thead {
+		@apply border-b-2;
+	}
+	table {
+		@apply border-2;
+	}
 }
 
 .shiki {

@@ -2,12 +2,112 @@ import { FancyText } from "@components/FancyText";
 
 export const meta = {
 	title: "Problem Solving for Computers",
-	description: "Where do I even begin to solve this problem?",
+	description: "Where do I even begin?",
 	lessonNumber: 3,
 };
 
 Programming is all about solving problems, so it's important to have a good framework to follow to solve those problems in a way that's easy to understand and think about. To do this, let's work through an example problem together. Let's say you have a bunch of blocks that you want to sort by size.
 
-## Step 1: Understand what you're given
+## Step 1: Understand what you're given and what your goal is
 
-The very first thing you should do is look at everything you're given, not just the data, but what tools you have at your disposal. In our example, we're given some data in the form of a group of blocks, for each of these blocks, we also know how tall they are. Beyond that we'll assume that the only other tools we have are
+The very first thing you should do is look at everything you're given, not just the data, but what tools you have at your disposal. By understanding everything you're given, you have a lot to build off of to come up with a solution. In our example, we're given some data in the form of a group of blocks, for each of these blocks, we also know how tall it is. Beyond that we'll assume that the only other tools we have are our hands and a table to set these blocks on.
+
+Then, you want to make it clear what your goal is. Sure, you want to sort these blocks, but what restrictions do you have? Does it need to be done in a certain amount of time? Does this need to be flexible to handle something else in the future, like sorting by volume instead? Make sure to write everything down so that you can look back at it and keep yourself on track.
+
+## Step 2: Break the problem down into manageable pieces
+
+When programming, you want to break things into small pieces. In fact, try to break them down as much as possible. One way to do this is instead of building from the top down, work from the bottom up. For instance, here we could give ourself a procedure for comparing two blocks, and another one for swapping two blocks. Let's try writing these out:
+
+```
+Procedure: Compare blocks
+Inputs:
+	- Block 1
+	- Block 2
+
+If Block 1 is taller than Block 2, say yes
+Otherwise, say no
+```
+
+and
+
+```
+Procedure: Swap blocks
+Inputs:
+	- Block 1
+	- Block 2
+
+Take Block 1 out of the line
+Move Block 2 into Block 1's place
+Place Block 1 into the empty space
+```
+
+Now that we have both of these at our disposal, if we want to write out a procedure for swapping two blocks if one is larger than the other, we don't need to write out the full instructions for how to compare them or how to swap them we can just do:
+
+```
+Procedure: Swap blocks if the first is larger
+Inputs:
+	- Block 1
+	- Block 2
+
+If Compare blocks, Block 1 and Block 2
+	Swap blocks, Block 1 and Block 2
+Otherwise do nothing
+```
+
+This is called <FancyText>abstraction</FancyText>. Abstraction is when you take a group of common actions, and turn them into one action. That way, you can use more complex actions without needing to know exactly how the action is taken. This makes problem solving and debugging way easier. Imagine you're looking through a big program that sorts objects, but there's a bug! For some reason, the code doesn't modify the list at all.
+
+Now, this could have several causes. The first cause could be that the comparison logic is broken, the second could be that the swapping is broken. Because we've broken the code down into functions that handle each of those things, we can test each of those things individually and see which is broken rather than trying to work our way through the entire piece of code.
+
+## Step 3: Start small
+
+Working with problems on a small scale allows you to solve individual pieces at a time much easier. For our example, we'll start with the case of two blocks. I know that seems a little trivial, but it does help here. How would we sort two blocks by their height? Well, you compare them, and move the taller one to the right. Simple, right?
+
+Now how do we expand this to work with three blocks? Given our tools, we can try moving one block at a time to the right place. As a human, we can easily look at the group of blocks and find the tallest right away. But let's pretend we're a computer. We have our group of blocks and we can only look at 2 blocks at a time. Let's start by looking at the first block and keep moving it to the right until we find a taller block, then we'll start moving that one to the right until we hit the end. Then we'll repeat this until we have sorted the blocks.
+
+## Step 4: Scale up
+
+Now that we have a solution that we know works at small scales, let's try it with a whole lot more data! Let's use that same method for 100 blocks. Well, we know it works, but how well does it work? This is where something called <FancyText>big O notation</FancyText> comes in. You may have seen this before if you've been around mathemeticians or looked at anything related to <FancyText>algorithms</FancyText> (another name for procedures) before. Big O notation is a way of talking about how much time or space (computer memory) some process takes relative to the amount of input it receives.
+
+Why do we use big O notation? Big O notation allows us to talk about the speed of an algorithm without needing to use specific values. This means that if you and I were to compare some code that we wrote, it wouldn't matter if you happen to have a faster computer than I do. If we know that your algorithm runs in O(n) time, that means that for each extra block we add to our group to be sorted, your algorithm will take some amount of extra time that stays constant. For instance, your algorithm make take 1 extra second for each block added. If we then know that my algorithm runs in O(n²), that means that for each extra block we add to the group, the time it takes to run grows _exponentially_. At 2 blocks it may only take 4 seconds to run, but at 3 it takes 9 seconds, at 4 it takes 16 seconds, and on and on. In every case, the lower the number, the better.
+
+But there's a caveat to this: computer programs don't just take time to run, they also take memory. Let's say that while your algorithm takes O(n) time, it takes O(n²) memory. That's a lot of memory if we're trying to sort a lot of things, say, a list of every city by their population. Now my algorithm takes O(n²) time, but it only takes O(1) memory. That means that while mine takes a lot longer to run, it never needs more memory to run it.
+
+So how do we decide which is better? That depends on the where we want to use it. If we have a tiny computer with only a few kilobytes of memory, but we really need to sort this list, then mine would be the better option since we know that it wont run out of memory while trying to run. But if we have a super computer with hundreds of gigabytes of memory, then we can run yours and be done much quicker.
+
+Let's take a look at our algorithm from earlier for sorting those blocks. I'm not going to run through exactly how to calculate it here, but for a worst case scenario, the algorithm will run in O(n²) time. Keep in mind that big O notation is all about the _worst_ possible speed. But the algorithm _can_ run faster than that. In fact, in an ideal scenario, the algorithm will run in O(n). What about memory? This algorithm always runs in O(1) memory, meaning that it's very space efficient.
+
+If you've done algorithms before, you'll likely recognize this as Bubble Sort. Bubble Sort is a very simple sorting algorithm to implement, and works well for small amounts of data. But there are many algorithms out there for sorting that run quicker.
+
+## Conclusion & Tips
+
+That's it! Yes, really. That's the 4 major steps to solving a problem. If you keep breaking problems down smaller and smaller, you'll reach a point where you can solve the problem right away (or it's a problem you've solved before). Then all the pieces fall into place and you've found your solution. Before we end this lesson though, let's cover a few tips.
+
+### Step 1 is _very_ important.
+
+Often times, people get ahead of themselves and miss important information. Before you try to solve a problem, make sure you know the problem actually is.
+
+### Don't reinvent the wheel.
+
+If you're doing something common, chances are it's been done before a hundred times. Look up what other people have done and see if the code is available to use (Always make sure you're following all code licenses). You'll save yourself a lot of time and headaches by not doing work that has already been done.
+
+### Don't optimize too early
+
+Better optimized algorithms are often more complex and difficult to understand and maintain. Keep it simple and use an algorithm that works for your scenario. This goes back to knowing your problem. If your current algorithm fits well within the specifications that you outlined, then leave it as is. If the specifications change in the future, then go back and start making modifications.
+
+### Ask your rubber ducky for help
+
+Rubber duck debugging is a technique where you explain your problem to an inanimate object (or whatever plant, animal, or fungus is willing and available to listen). This forces your brain to slow down and view the problem from a new angle. Often times you'll notice details that you hadn't before.
+
+### Ask people for help
+
+This goes for any problem in programming. People are a resource that you can use. If you've tried searching for existing solutions, and you've tried solving it yourself but just can't get it, then reach out to someone or post your question online.
+
+### Take breaks
+
+Problem solving is a very mentally draining activity. Taking regular breaks is important to prevent burnout. If you notice yourself starting to get frustrated with an issue, that's a good sign that a break would help you to clear your mind. By the time you come back you may have already thought of a solution.
+
+### Visualize, visualize, visualize
+
+Humans have a really hard time thinking about abstract concepts. Find a way to look at your problem from a physical perspective.
+
+That's it for this course! With these concepts as a foundation, understanding the world of programming will make a lot more sense.
