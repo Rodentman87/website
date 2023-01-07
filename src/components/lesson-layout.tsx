@@ -1,22 +1,10 @@
+import { motion } from "framer-motion";
 import Head from "next/head";
-import styles from "./layout.module.css";
-import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { SocialIcon } from "react-social-icons";
+import utilStyles from "../styles/utils.module.css";
+import Footer from "./footer";
 import { name } from "./layout";
-
-const item = {
-	visible: ({ i, shouldReduceMotion }) => ({
-		opacity: 1,
-		y: 0,
-		transition: {
-			delay: i * 0.1,
-		},
-	}),
-	hidden: ({ i, shouldReduceMotion }) =>
-		shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -50 },
-};
+import styles from "./layout.module.css";
 
 export default function LessonLayout({
 	children,
@@ -25,8 +13,6 @@ export default function LessonLayout({
 	children: any;
 	course: string;
 }) {
-	const shouldReduceMotion = useReducedMotion();
-
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -57,31 +43,7 @@ export default function LessonLayout({
 			<div className={styles.backToHome}>
 				<Link href={`/lessons/${course}`}>← Back to course</Link>
 			</div>
-
-			<footer>
-				<motion.div
-					className={styles.footer}
-					initial="hidden"
-					animate="visible"
-				>
-					<motion.div variants={item} custom={{ i: 0, shouldReduceMotion }}>
-						<SocialIcon url="https://twitter.com/rodentman87" />
-					</motion.div>
-					<motion.div variants={item} custom={{ i: 1, shouldReduceMotion }}>
-						<SocialIcon url="https://github.com/Rodentman87" />
-					</motion.div>
-					<motion.div variants={item} custom={{ i: 2, shouldReduceMotion }}>
-						<SocialIcon url="mailto:maisy@likesdinosaurs.com" />
-					</motion.div>
-					<motion.div variants={item} custom={{ i: 3, shouldReduceMotion }}>
-						<SocialIcon
-							network="discord"
-							bgColor="#5865F2"
-							url="https://discord.likesdinosaurs.com"
-						/>
-					</motion.div>
-				</motion.div>
-			</footer>
+			<Footer />
 		</div>
 	);
 }

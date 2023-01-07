@@ -1,6 +1,4 @@
 import Layout from "@components/layout";
-import { useLessonData } from "@components/LessonDataStorage/useLessonData";
-import { LessonProgressBadge } from "@components/LessonProgressBadge";
 import { createHmac } from "crypto";
 import { motion, useReducedMotion } from "framer-motion";
 import { readdir } from "fs/promises";
@@ -77,9 +75,16 @@ export default function LessonList({
 				/>
 			</Head>
 			<div className="flex flex-row justify-between">
-				<h1>Programming: the Basics</h1>
+				<motion.h1 layoutId="lesson-basics-title" className="text-3xl">
+					Programming: the Basics
+				</motion.h1>
 			</div>
-			<br />
+			<p>
+				Welcome to the basics of programming! This series of lessons is intended
+				to be a primer on the funamentals you should know before getting into
+				any other programming course. You do not need to know <i>anything</i>{" "}
+				going into this series.
+			</p>
 			<motion.ul className={utilStyles.list} initial="hidden" animate="visible">
 				{lessons.map(({ id, title, description }, i) => (
 					<motion.li
