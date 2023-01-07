@@ -3,10 +3,18 @@ import { TutorialLayout } from "@components/tutorial-layout";
 import { createHmac } from "crypto";
 import { readdir } from "fs/promises";
 import { GetStaticProps } from "next";
-import dynamic from "next/dynamic";
+import lesson0 from "./lesson-0.mdx";
+import whatIsAProgram from "./what-is-a-program.mdx";
+import howToReadAProgram from "./how-to-read-a-program.mdx";
+import problemSolvingForComputers from "./problem-solving-for-computers.mdx";
 import React from "react";
 
-const getDynamicContent = (fileName) => dynamic(() => import(`./${fileName}`));
+const pages = {
+	"lesson-0.mdx": lesson0,
+	"what-is-a-program.mdx": whatIsAProgram,
+	"how-to-read-a-program.mdx": howToReadAProgram,
+	"problem-solving-for-computers.mdx": problemSolvingForComputers,
+};
 
 type PageProps = {
 	title: string;
@@ -25,7 +33,7 @@ export default function Post({
 	token,
 	fileName,
 }: PageProps) {
-	const DynamicContent = getDynamicContent(fileName);
+	const Component = pages[fileName];
 
 	return (
 		<TutorialLayout
@@ -38,7 +46,7 @@ export default function Post({
 		>
 			<br />
 			<Alert>This page works best on desktop or tablet</Alert>
-			<DynamicContent />
+			<Component />
 		</TutorialLayout>
 	);
 }
