@@ -126,7 +126,7 @@ export default function Home({
 				/>
 			</Head>
 			<section className={utilStyles.headingMd}>
-				<p>Hi, my name is Maisy and I do stuff sometimes</p>
+				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>
 			</section>
 			{shouldShowCourse && (
 				<section className="mb-4">
@@ -160,7 +160,7 @@ export default function Home({
 									layoutId="lesson-basics-title"
 									className="text-xl font-bold md:text-2xl"
 								>
-									Programming: the Basics
+									Programming: The Basics
 								</motion.h3>
 								<motion.span
 									initial={{ opacity: 0, x: -20 }}

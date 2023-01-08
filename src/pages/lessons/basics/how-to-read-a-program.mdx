@@ -11,7 +11,7 @@ export const meta = {
 	nextLesson: "problem-solving-for-computers",
 };
 
-So now that you understand what a program is, and what we can do with them, let's take a look at how to read them yourself. A lot of programming is reading your own, as well as other people's code. Rather than show you a big block of text and trying to explain it piece by piece, let's learn by doing. In this lesson we'll take a look at a program written in the same plain text style as the last lesson, and slowly convert it into something that's a little more similar to a real programming language. This will help to understand why languages are written the way that they are.
+Now that you understand what a program is, and what we can do with them, let's take a look at how to read them yourself. A lot of programming is reading your own, as well as other people's, code. Rather than show you a big block of text and trying to explain it piece by piece, let's learn by doing. In this lesson we'll take a look at a program written in the same plain text style as the last lesson, and slowly convert it into something that's a little more similar to a real programming language. This will help to understand why languages are written the way they are.
 
 ## Variables
 
@@ -24,9 +24,9 @@ Remember that (name) is "Maisy"
 `.trim()}
 />
 
-This is fairly simple to understand as a human, but for computers, this text is pretty difficult to process. English text is very ambiguous, and things can mean more than one thing depending on context (sometimes, multiple things at the same time). Computers don't understand this context and therefore we need something that's a little more rigid. Let's draw some inspiration from something with a set of well defined rules: Math.
+This is fairly simple to understand as a human, but for computers, this text is pretty difficult to process. English text is very ambiguous, and things can mean more than one thing depending on context (sometimes, multiple things at the same time). Computers don't understand this context and therefore we need something that's a little more rigid. Let's draw some inspiration from something with a set of well defined rules: math.
 
-Here, we'll convert that variable assignment to something that looks like a math equation:
+Here, we'll convert that variable assignment—giving a value to a variable—to something that looks like a math equation:
 
 <CompiledPlaintextCode
 	code={`
@@ -52,7 +52,7 @@ name = "Maisy"
 `.trim()}
 />
 
-That's much cleaner, however, we've just created a problem here. Can you spot it? It might be a little hard to see with this example, let's try a different one.
+That's much cleaner, however, we've just created a problem here. Can you spot it? It might be a little hard to see with this example, let's try a different one:
 
 <CompiledPlaintextCode
 	code={`
@@ -65,7 +65,7 @@ my name = "Maisy"
 `.trim()}
 />
 
-Can you spot it now? Multi-word variable names are a little hard to read now. Is the variable named "my name"? Is it named "name" and "my" is part of something else? Let's fix this by adding some rules to naming things. Let's say that all variables must have a name that only uses letters, numbers, and a couple symbols like dash and underscore. This gives us some flexiblity in naming things, while still making it easy for a computer to tell what is and isn't part of the name. Let's take a look at a couple different ways we can write a variable with multiple words using our new rule. These are all ways that programmers write names in real code, in many cases there's a general consensus as to which style to use where, but for the most part, it's really up to you and whoever you're working with.
+Can you spot it now? Multi-word variable names are a little hard to read now. Is the variable named "my name"? Is it named "name" and "my" is part of something else? Let's fix this by adding some rules to naming things. Let's say that all variables must have a name that only uses letters, numbers, and a couple symbols like dash and underscore. This gives us some flexiblity in naming things, while still making it easy for a computer to tell what is and isn't part of the name. Take a look at a couple different ways we can write a variable with multiple words using our new rule. These are all ways that programmers write names in real code; in many cases there's a general consensus as to which style to use where, but for the most part, it's really up to you and whoever you're working with.
 
 ### PascalCase
 
@@ -119,7 +119,7 @@ my-name = "Maisy"
 `.trim()}
 />
 
-and last, but not least:
+And last, but not least:
 
 ### SCREAMING_SNAKE_CASE
 
@@ -138,7 +138,7 @@ For the rest of this lesson, we'll be using camelCase for variables just for con
 
 ## Math
 
-Now that we've started to draw from math for the variable assignment, let's draw from math for the... math. Let's simplify this example:
+We used math for the variable assigned, but we can also use it for... math! Let's simplify this example:
 
 <CompiledPlaintextCode
 	code={`
@@ -153,7 +153,7 @@ Add 5 to (myNumber)
 `.trim()}
 />
 
-How can we turn this into a math expression? There's a couple ways to go about this, and a lot of programming languages actually offer multiple as options. First, let's do this by just reassinging the variable to the new value:
+How can we turn this into a math expression? There's a couple ways to go about this, and a lot of programming languages actually offer multiple options. First, let's just reassign the variable to the new value:
 
 <CompiledPlaintextCode
 	code={`
@@ -168,7 +168,7 @@ myNumber = myNumber + 5
 `.trim()}
 />
 
-This is nice, it's a little hard to read though with how much text we have here. This is such a simple operation, what if we wanted to just give it an extra special symbol since it's something we'll probably be doing super often too:
+This is nice, but it's a little hard to read with how much text we have here. This is such a simple operation; what if we wanted to just give it an extra special symbol since it's something we'll probably be doing super often too? That might look like:
 
 <CompiledPlaintextCode
 	code={`
@@ -187,9 +187,9 @@ This is another thing that's more up to you and your team's prefered style, so c
 
 ## If Statements
 
-Next let's work on transforming our if statements to fit our new look. Before we start converting it, let's discuss a new term: <FancyText>blocks</FancyText>. What is a block? A block is simply a grouping of lines of code, this lets you pass a group of code for the computer to execute. What is this useful for? Well, you may have figured out based on the section title, but it's very useful for if statements (and other types of control flow statements, like while loops).
+Next let's work on transforming our if statements to fit our new look. Before we start converting our program, let's discuss a new term: <FancyText>blocks</FancyText>. What is a block? A block is simply a grouping of lines of code, that lets you pass a group of code for the computer to execute. What is this useful for? Well, you may have figured out based on the section title, but blocks are very useful for if statements (and other types of control flow statements, like while loops).
 
-How can we represent a block of statements? One easy way is to wrap it in something. Curly braces seem like a good idea, they look pretty cool. Let's see what that looks like.
+How can we represent a block of statements? One easy way is to wrap it in something. Curly braces seem like a good idea; they look pretty cool. Let's see what that looks like:
 
 <CompiledPlaintextCode
 	code={`
@@ -207,7 +207,7 @@ if myNumber is greater than 4 {
 `.trim()}
 />
 
-Hmm, that looks good, but that condition is a little hard to read. Let's give that a surrounding thing too, maybe let's do some parenthesis. And while we're at it, let's simplify that comparison to a math operator too.
+Hmm, that looks good, but that condition is a little hard to read. Let's give that a surrounding thing too—perhaps some parenthesis. And while we're at it, let's simplify that comparison to a math operator too:
 
 <CompiledPlaintextCode
 	code={`
@@ -245,14 +245,16 @@ a = 5
 b = 4
 total = 0
 while (a > 0) {
-	total += b
-	a += -1
+  total += b
+  a += -1
 }
 Say "Done!"
 `.trim()}
 />
 
-Now this is something that's much more similar to what a computer can read. While these changes aren't huge, it makes the entire block of text much easier for computers to understand. We've removed a lot of ambiguity here. Let's do one last thing here to help the computer out. You've probably seen this before if you've seen blocks of code, let's end all of our statements with a semicolon. This tells the computer that the instruction ends there, just like a period in a normal sentence.
+This is something that's much more similar to what a computer can read. While these changes aren't huge, it makes the entire block of text much easier for computers to understand. We've removed a lot of ambiguity here.
+
+Let's do one last thing here to help the computer out; you've probably seen this before if you've seen blocks of code. Let's end all of our statements with a semicolon. This tells the computer that the instruction ends there, just like a period in a normal sentence.
 
 <CompiledPlaintextCode
 	code={`
@@ -272,8 +274,8 @@ a = 5;
 b = 4;
 total = 0;
 while (a > 0) {
-	total += b;
-	a += -1;
+  total += b;
+  a += -1;
 }
 Say "Done!"
 `.trim()}
@@ -283,4 +285,4 @@ That's it! This looks really good (in fact, this is almost completely valid Java
 
 ## Conclusion
 
-That's all you really need to understand most programming syntax you see. Most languages have more ways of writing things, but I hope this lesson has provided the tools necessary to get an idea of what you're reading. If something is confusing, search is your friend! For the vast majority of things, a simple search like "JavaScript if" or "python for" should return helpful resources.
+That's all you really need to understand most programming syntax you see. Most languages have more ways of writing things, but I hope this lesson has provided the tools necessary to get an idea of what you're reading. If something is confusing, search engines are your friend! For the vast majority of things, a simple search like "JavaScript if" or "python for" should return helpful resources.

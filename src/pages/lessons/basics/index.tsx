@@ -76,7 +76,7 @@ export default function LessonList({
 			</Head>
 			<div className="flex flex-row justify-between">
 				<motion.h1 layoutId="lesson-basics-title" className="text-3xl">
-					Programming: the Basics
+					Programming: The Basics
 				</motion.h1>
 			</div>
 			<p>

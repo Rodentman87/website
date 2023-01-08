@@ -11,15 +11,15 @@ export const meta = {
 	nextLesson: "how-to-read-a-program",
 };
 
-In this first lesson, we'll cover how computers work and how they understand and follow the instructions we give them.
+In this lesson, we'll cover how computers work and how they understand and follow the instructions we give them.
 
 ## What is code?
 
-Code is a set of instructions that a computer can understand, kind of like a recipe. It's how humans communicate with computers. Computers look at this code and read through it line by line, doing what each line says as it gets to it.
+Code is a set of instructions that a computer can understand, similar to a recipe. It's how humans communicate with computers. Computers look at this code and read through it line by line, following each instruction in order.
 
-In the examples below, I'll use normal writing to make it clear what's going on, but in later lessons we will switch to a real programming language. The writing may look a little bit weird, but that's to keep each instruction consistent. Talking with computers is all about consistency! For example, when we want to refer to a piece of text, we'll make sure to surround it with quotes so that the computer knows when the text starts and when it stops.
+In the examples below, I'll use plain english sentences to make it clear what's going on, but in later lessons we will switch to a real programming language. The writing may look a little bit weird, but that's to keep each instruction consistent. Talking with computers is all about consistency! For example, when we want to refer to a piece of text, we'll make sure to surround it with quotes so that the computer knows when the text starts and when it stops.
 
-Use the left and right arrows to move forwards and backwards through the steps, or click on a step number to skip to it. The arrow on the left will point to which line is currently running. When the computer says something, it'll appear just below the code.
+Use the left and right arrows to move forward and backward through the steps, or click on a step number to skip to it. The arrow on the left will point to which line is currently running. When the computer says something, it will appear just below the code.
 
 <CompiledPlaintextCode
 	code={`
@@ -31,7 +31,7 @@ Say "Woah!"
 
 ## How do computers remember?
 
-Just like a human, a computer has memory. You can ask the computer to remember things for you. Each piece of stored information is called a <FancyText>variable</FancyText>. Variables have two parts: a name, and a value. Let's try having the computer remember something!
+Just like a human, a computer has memory. You can ask the computer to remember things for you. Each piece of stored information is called a <FancyText>variable</FancyText>. Variables have two parts: a name and a value. Let's try having the computer remember something!
 
 <CompiledPlaintextCode
 	code={`
@@ -41,9 +41,9 @@ Remember that (name) is "Maisy"
 `.trim()}
 />
 
-> Notice how when the program continues to run, the variables don't disappear; this is both good and bad. It's good that we can use this data whenever we want, however, over time we'll try to store so much stuff that the computer will run out of space to keep it in memory! For now we'll ignore this since what we're doing is so small that it doesn't even get close to using up all the memory in a modern computer.
+> Notice how when the program continues to run, the variables don't disappear; this is both good and bad. It's good that we can use this data whenever we want; however, each variable we store takes up some amount of the computer's memory. Just like a human, computers have a limited amount of it, and when it runs out, it needs to make space before it can store new things. For now we'll ignore this since the pgroam we're writing is so small that it doesn't even get close to using up all the memory in a modern computer.
 
-Cool, we have some stuff stored in variables, but what are these good for? Well, you can use that data later! Let's try it now by telling the computer to remember something, and then asking it to repeat it back to us.
+Cool—we have some stuff stored in variables, but what are these good for? Well, you can use that data later! Let's try it now by telling the computer to remember something, and then asking it to repeat it back to us.
 
 <CompiledPlaintextCode
 	code={`
@@ -53,7 +53,7 @@ Say (secret word)
 `.trim()}
 />
 
-Look at that! But words aren't all the computers can store, computers can store all kinds of things. For example:
+Look at that! But words aren't all the computers can store; computers can store all kinds of things. In computer science, we call these different things <FancyText>data types</FancyText>. For example:
 
 Numbers
 
@@ -85,7 +85,7 @@ Say (groceries)
 `.trim()}
 />
 
-There's more data types too, but we won't get into those right now.
+There are more data types too, but we won't get into those right now.
 
 So now we have some information stored, but what happens when we want to change that information?
 
@@ -127,7 +127,7 @@ The computer can do that much faster than a human could (or at least faster than
 
 ## How do computers make choices?
 
-So now we know how to store and retrieve data, but we can't do much if the computer can only ever run the same set of instructions. That's where <FancyText>control flow statements</FancyText> come in. Control flow statements let us tell the computer when (and when not) to run some set of instructions.
+We now know how to store and retrieve data, but we can't do much if the computer can only ever run the same set of instructions. That's where <FancyText>control flow statements</FancyText> come in. Control flow statements let us tell the computer when (and when not) to run some set of instructions.
 
 One of the most basic types of control flow statements is the <FancyText>if statement</FancyText>. This tells the computer to only run some piece of code if the condition we give it is met.
 
@@ -145,7 +145,7 @@ Say "Done!"
 
 Notice how the computer skipped over line 6, since our number wasn't lower than 4. We can use this to have the computer run different lines of code depending on what its current <FancyText>state</FancyText> is. Now we can tell the computer to make decisions on its own!
 
-But this still doesn't quite cover everything we might want to do, let's take a look at another type of control flow statement: the <FancyText>while loop</FancyText>! The while loop tells the computer to keep running a piece of code as long as its condition is met.
+But this still doesn't quite cover everything we might want to do,. Let's take a look at another type of control flow statement: the <FancyText>while loop</FancyText>! The while loop tells the computer to keep running a piece of code as long as its condition is met.
 
 <CompiledPlaintextCode
 	code={`
