@@ -85,7 +85,7 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
+a:not(.no-underline):hover {
 	text-decoration: underline;
 }
 
@@ -98,43 +98,4 @@ blockquote {
 	border-left: black solid 4px;
 	margin: 0;
 	padding: 0 1em;
-}
-
-.jargon-term {
-	text-decoration: underline dotted #228be6;
-}
-
-.jargon-term::after {
-	content: "?";
-	font-weight: bold;
-	display: inline-block;
-	transform: translate(0, -0.5em);
-	font-size: 75%;
-	color: #228be6;
-	margin-left: 3px;
-}
-
-.jargon-term:hover {
-	position: relative;
-	text-decoration: none;
-	cursor: help;
-}
-
-.jargon-term .jargon-info {
-	display: none;
-}
-
-.jargon-term:hover .jargon-info {
-	display: block;
-	position: absolute;
-	top: 1.5em;
-	left: 0;
-	background: #f8f8f8;
-	border: 1px solid #dcdcdc;
-	padding: 1rem;
-	border-radius: 4px;
-	font-size: 90%;
-	min-width: 250px;
-	max-width: 450px;
-	z-index: 1;
 }

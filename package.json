@@ -4,8 +4,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
-		"start": "next start --port ${PORT-3000}"
+		"build": "yarn gen:licenses && next build",
+		"start": "next start --port ${PORT-3000}",
+		"gen:licenses": "license-report --only=prod --output=json > licenses.json"
 	},
 	"dependencies": {
 		"@mdx-js/loader": "^2.1.5",
@@ -15,6 +16,7 @@
 		"date-fns": "^2.16.1",
 		"framer-motion": "^3.2.2-rc.1",
 		"gray-matter": "^4.0.2",
+		"license-report": "^6.3.0",
 		"next": "^13.0.2",
 		"next-mdx-remote": "^4.2.0",
 		"react": "18",
