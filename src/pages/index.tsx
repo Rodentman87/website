@@ -131,7 +131,7 @@ export default function Home({
 			{shouldShowCourse && (
 				<section className="mb-4">
 					<h2 className="mb-4">Courses </h2>
-					<Link href={"lessons/basics"} className="hover:no-underline">
+					<Link href={"lessons/basics"} className="no-underline">
 						<motion.div
 							whileHover={"hover"}
 							whileTap={"default"}
