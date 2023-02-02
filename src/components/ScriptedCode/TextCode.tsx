@@ -37,7 +37,10 @@ export function getScriptFromText(text: string) {
 			indicateLine: currentLine + 1,
 		};
 		if (currentCodeLine.startsWith("Say")) {
-			const val = currentCodeLine.replace(/Say (.+?)/, "$1");
+			let val = currentCodeLine.replace(/Say (.+?)/, "$1");
+			if (val.startsWith("what")) {
+				val = val.replace(/what (\(.+\)) is/, "$1");
+			}
 			stepInfo.consoleLine = valueToText(parseValue(val, currentVariables));
 		} else if (currentCodeLine.startsWith("Remember")) {
 			const variable = currentCodeLine.replace(

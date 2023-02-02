@@ -173,7 +173,7 @@ export default function Home({
 							</div>
 							<div className="flex flex-col sm:flex-row justify-between">
 								<p className="m-0">Lessons: 4</p>
-								<p className="m-0">Esimated time to complete: 1 hour</p>
+								<p className="m-0">Estimated time to complete: 1 hour</p>
 							</div>
 						</motion.div>
 					</Link>
