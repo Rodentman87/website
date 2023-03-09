@@ -29,6 +29,9 @@ export default async function (req: NextRequest) {
 
 		const description = searchParams.get("description")?.slice(0, 200);
 
+		const options = searchParams.get("options") ?? undefined;
+		const finalOptions = options ? JSON.parse(atob(options)) : null;
+
 		const badgeLeft = searchParams.get("badgeLeft")?.slice(0, 100);
 		const badgeRight = searchParams.get("badgeRight")?.slice(0, 100);
 
@@ -37,7 +40,7 @@ export default async function (req: NextRequest) {
 				"HMAC",
 				await key,
 				new TextEncoder().encode(
-					JSON.stringify({ title, description, badgeLeft, badgeRight })
+					JSON.stringify({ title, description, badgeLeft, badgeRight, options })
 				)
 			)
 		);
@@ -50,7 +53,7 @@ export default async function (req: NextRequest) {
 			(
 				<div
 					style={{
-						backgroundColor: "#fdf6e3",
+						backgroundColor: finalOptions?.backgroundColor ?? "#fdf6e3",
 						backgroundSize: "150px 150px",
 						height: "100%",
 						width: "100%",
@@ -81,7 +84,7 @@ export default async function (req: NextRequest) {
 							fontSize: 60,
 							fontStyle: "normal",
 							letterSpacing: "-0.025em",
-							color: "black",
+							color: finalOptions?.textColor ?? "black",
 							marginTop: 8,
 							padding: "0 120px",
 							lineHeight: 1.4,

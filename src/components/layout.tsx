@@ -10,10 +10,16 @@ export const siteTitle = "Dinos are kinda cool";
 
 export default function Layout({
 	children,
-	home,
+	centeredHeader,
+	hideBackToHome,
+	backButtonText,
+	backButtonLink,
 }: {
 	children: any;
-	home?: any;
+	centeredHeader?: boolean;
+	hideBackToHome?: boolean;
+	backButtonText?: string;
+	backButtonLink?: string;
 }) {
 	return (
 		<div className="max-w-full md:max-w-[45rem] px-4 mx-auto mb-24 mt-12">
@@ -21,8 +27,8 @@ export default function Layout({
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="og:color" content="#FDF6E3" />
 			</Head>
-			<header className={home ? styles.header : styles.headerPost}>
-				{home ? (
+			<header className={centeredHeader ? styles.header : styles.headerPost}>
+				{centeredHeader ? (
 					<>
 						<motion.img
 							layoutId="headersvg"
@@ -57,9 +63,11 @@ export default function Layout({
 				)}
 			</header>
 			<main>{children}</main>
-			{!home && (
+			{!hideBackToHome && (
 				<div className={styles.backToHome}>
-					<Link href="/">← Back to home</Link>
+					<Link href={backButtonLink ?? "/"}>
+						← {backButtonText ?? "Back to home"}
+					</Link>
 				</div>
 			)}
 			<Footer />

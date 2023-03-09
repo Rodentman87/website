@@ -1,12 +1,13 @@
+import { CyclesCard } from "@components/CyclesCard";
+import { createHmac } from "crypto";
+import { motion, useReducedMotion } from "framer-motion";
 import Head from "next/head";
-import Layout, { siteTitle } from "../components/layout";
-import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import { BsPinAngleFill } from "react-icons/bs";
-import DateDisplay from "../components/date";
 import { getSortedPostsData } from "../../lib/posts";
-import { motion, useReducedMotion } from "framer-motion";
-import { createHmac } from "crypto";
+import DateDisplay from "../components/date";
+import Layout, { siteTitle } from "../components/layout";
+import utilStyles from "../styles/utils.module.css";
 
 export async function getServerSideProps({ req }) {
 	const allPostsData = getSortedPostsData();
@@ -99,7 +100,7 @@ export default function Home({
 	params.append("token", token);
 
 	return (
-		<Layout home>
+		<Layout centeredHeader hideBackToHome>
 			<Head>
 				<title>{siteTitle}</title>
 				<meta name="og:title" content={siteTitle} />
@@ -179,6 +180,12 @@ export default function Home({
 					</Link>
 				</section>
 			)}
+			<section className="mb-4">
+				<h2 className="mb-4">Writing</h2>
+				<Link href={"/cycles"} className="no-underline">
+					<CyclesCard starLayers={4} starsPerLayer={40} />
+				</Link>
+			</section>
 			<section>
 				<h2 className="mb-4">Blog</h2>
 				<motion.ul
