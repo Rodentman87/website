@@ -17,6 +17,7 @@ export const CyclesCard: React.FC<{
 		>
 			{[...Array(starLayers)].map((_, i) => (
 				<motion.div
+					key={i}
 					variants={{
 						default: {
 							scale: 1,
@@ -29,7 +30,7 @@ export const CyclesCard: React.FC<{
 					transition={{ duration: 0.25 }}
 					className="absolute w-full h-full top-0 left-0"
 				>
-					<Starfield starCount={starsPerLayer} />
+					<Starfield starCount={starsPerLayer} addDustCloud={i % 2 === 0} />
 				</motion.div>
 			))}
 			<div className="flex flex-row items-center gap-2 z-10">

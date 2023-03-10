@@ -1,6 +1,7 @@
 import { CyclesCard } from "@components/CyclesCard";
 import { createHmac } from "crypto";
 import { motion, useReducedMotion } from "framer-motion";
+import { useFancyEffects } from "hooks/useFancyEffect";
 import Head from "next/head";
 import Link from "next/link";
 import { BsPinAngleFill } from "react-icons/bs";
@@ -96,6 +97,7 @@ export default function Home({
 	cyclesEntriesCount,
 }) {
 	const shouldReduceMotion = useReducedMotion();
+	const [showFancy, setShowFancy] = useFancyEffects();
 
 	const params = new URLSearchParams();
 	params.append("title", title);
@@ -129,8 +131,20 @@ export default function Home({
 					content={"/api/post-image?" + params.toString()}
 				/>
 			</Head>
-			<section className={utilStyles.headingMd}>
+			<section className="text-xl flex flex-col md:flex-row justify-between items-center">
 				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>
+				<label className="text-sm">
+					Show fancy effects
+					<input
+						type="checkbox"
+						className="ml-2"
+						checked={showFancy}
+						onChange={(e) => {
+							setShowFancy(e.target.checked);
+							window.location.reload();
+						}}
+					/>
+				</label>
 			</section>
 			{shouldShowCourse && (
 				<section className="mb-4">
