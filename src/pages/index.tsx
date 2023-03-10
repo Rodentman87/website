@@ -4,13 +4,14 @@ import { motion, useReducedMotion } from "framer-motion";
 import Head from "next/head";
 import Link from "next/link";
 import { BsPinAngleFill } from "react-icons/bs";
-import { getSortedPostsData } from "../../lib/posts";
+import { getCyclesEntriesCount, getSortedPostsData } from "../../lib/posts";
 import DateDisplay from "../components/date";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
 
 export async function getServerSideProps({ req }) {
 	const allPostsData = getSortedPostsData();
+	const cyclesEntriesCount = getCyclesEntriesCount();
 
 	const title = siteTitle;
 	const description = "Maisy's homepage and blog";
@@ -33,6 +34,7 @@ export async function getServerSideProps({ req }) {
 				new URL(req.url, `http://${req.headers.host}`).searchParams.get(
 					"course"
 				) === "true",
+			cyclesEntriesCount,
 		},
 	};
 }
@@ -91,6 +93,7 @@ export default function Home({
 	description,
 	token,
 	shouldShowCourse,
+	cyclesEntriesCount,
 }) {
 	const shouldReduceMotion = useReducedMotion();
 
@@ -183,7 +186,11 @@ export default function Home({
 			<section className="mb-4">
 				<h2 className="mb-4">Writing</h2>
 				<Link href={"/cycles"} className="no-underline">
-					<CyclesCard starLayers={4} starsPerLayer={40} />
+					<CyclesCard
+						starLayers={4}
+						starsPerLayer={60}
+						cyclesEntriesCount={cyclesEntriesCount}
+					/>
 				</Link>
 			</section>
 			<section>

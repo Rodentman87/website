@@ -5,7 +5,8 @@ import { Starfield } from "./Starfield";
 export const CyclesCard: React.FC<{
 	starLayers: number;
 	starsPerLayer: number;
-}> = ({ starLayers, starsPerLayer }) => {
+	cyclesEntriesCount: number;
+}> = ({ starLayers, starsPerLayer, cyclesEntriesCount }) => {
 	const shouldReduceMotion = useReducedMotion();
 
 	return (
@@ -21,7 +22,8 @@ export const CyclesCard: React.FC<{
 							scale: 1,
 						},
 						hover: {
-							scale: 1 + (i + 1) * 0.1,
+							scale: 1 + (i + 1) * 0.05,
+							zIndex: i >= starLayers / 2 ? 100 : undefined,
 						},
 					}}
 					transition={{ duration: 0.25 }}
@@ -50,7 +52,7 @@ export const CyclesCard: React.FC<{
 					Cycles
 				</motion.h3>
 			</div>
-			<div className="flex flex-col sm:flex-row justify-between z-10">
+			<div className="flex flex-row sm:flex-row justify-between z-10">
 				<motion.p
 					variants={{
 						hover: {
@@ -65,6 +67,21 @@ export const CyclesCard: React.FC<{
 					}}
 				>
 					A journal
+				</motion.p>
+				<motion.p
+					variants={{
+						hover: {
+							scale: 1.05,
+						},
+						default: { scale: 1 },
+					}}
+					transition={{ duration: 0.25 }}
+					className="m-0 backdrop-blur-sm px-1 rounded-md"
+					style={{
+						backgroundColor: "rgba(255, 255, 255, 0.01)",
+					}}
+				>
+					{cyclesEntriesCount} entries
 				</motion.p>
 			</div>
 		</motion.div>

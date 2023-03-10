@@ -1,11 +1,16 @@
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
+import path from "path";
 import readTime from "read-time";
 
 const postsDirectory = path.join(process.cwd(), "posts");
+let cachedPosts: any[] | null = null;
 
 export function getSortedPostsData() {
+	// If cached, use it
+	if (cachedPosts) {
+		return cachedPosts;
+	}
 	// Get file names under /posts
 	const fileNames = fs.readdirSync(postsDirectory);
 	const allPostsData = fileNames.map((fileName) => {
@@ -26,7 +31,7 @@ export function getSortedPostsData() {
 		};
 	});
 	// Sort posts by date
-	return allPostsData.sort((a: any, b: any) => {
+	cachedPosts = allPostsData.sort((a: any, b: any) => {
 		if (a.pinned && !b.pinned) return -1;
 		if (b.pinned && !a.pinned) return 1;
 		if (a.date < b.date) {
@@ -35,6 +40,20 @@ export function getSortedPostsData() {
 			return -1;
 		}
 	});
+
+	return cachedPosts;
+}
+
+const cyclesDirectory = path.join(process.cwd(), "src/pages/cycles");
+let cachedCount: number | null = null;
+
+export function getCyclesEntriesCount() {
+	if (cachedCount) return cachedCount;
+	const fileNames = fs.readdirSync(cyclesDirectory);
+	cachedCount = fileNames.filter((fileName) =>
+		fileName.endsWith(".mdx")
+	).length;
+	return cachedCount;
 }
 
 export function getAllPostIds() {

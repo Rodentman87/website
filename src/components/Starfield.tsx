@@ -16,12 +16,12 @@ export const Starfield: React.FC<{ starCount: number }> = ({ starCount }) => {
 		const ctx = canvas.getContext("2d");
 		for (let i = 0; i < starCount; i++) {
 			ctx.beginPath();
-			const color = Math.random() * 200 + 55;
+			const color = Math.random() * 150 + 105;
 			ctx.fillStyle = `rgb(${color}, ${color}, ${color})`;
 			ctx.arc(
 				Math.random() * canvas.width,
 				Math.random() * canvas.height,
-				Math.random() * 2,
+				Math.random() * 2.5,
 				0,
 				2 * Math.PI
 			);
