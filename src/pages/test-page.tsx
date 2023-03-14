@@ -17,6 +17,7 @@ export default function CardmawPrivacyPolicy() {
 			<p>This page works best on desktop.</p>
 			<ScriptedCode
 				code={testCode}
+				id="test"
 				language="typescript"
 				script={[
 					{
