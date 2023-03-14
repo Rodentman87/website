@@ -106,7 +106,7 @@ export default function Home({
 	params.append("token", token);
 
 	return (
-		<Layout centeredHeader hideBackToHome>
+		<Layout centeredHeader hideBackToHome allowLmao>
 			<Head>
 				<title>{siteTitle}</title>
 				<meta name="og:title" content={siteTitle} />

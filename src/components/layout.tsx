@@ -1,6 +1,9 @@
+import clsx from "clsx";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Portal } from "react-portal";
 import utilStyles from "../styles/utils.module.css";
 import Footer from "./footer";
 import styles from "./layout.module.css";
@@ -14,13 +17,22 @@ export default function Layout({
 	hideBackToHome,
 	backButtonText,
 	backButtonLink,
+	allowLmao,
 }: {
 	children: any;
 	centeredHeader?: boolean;
 	hideBackToHome?: boolean;
 	backButtonText?: string;
 	backButtonLink?: string;
+	allowLmao?: boolean;
 }) {
+	const [lmao, setLmao] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
 	return (
 		<div className="max-w-full md:max-w-[45rem] px-4 mx-auto mb-24 mt-12">
 			<Head>
@@ -28,12 +40,33 @@ export default function Layout({
 				<meta name="og:color" content="#FDF6E3" />
 			</Head>
 			<header className={centeredHeader ? styles.header : styles.headerPost}>
+				{isMounted && allowLmao && (
+					<Portal>
+						<div
+							onClick={(e) => e.stopPropagation()}
+							className={clsx(
+								"fixed top-0 left-0 z-10 w-screen h-screen transition-all duration-300 pointer-events-none",
+								{
+									"backdrop-blur-none": !lmao,
+									"backdrop-blur-sm": lmao,
+								}
+							)}
+						></div>
+					</Portal>
+				)}
 				{centeredHeader ? (
 					<>
 						<motion.img
+							onClick={() => setLmao(!lmao)}
 							layoutId="headersvg"
-							src="/maisy-mask.jpg"
-							className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
+							src={
+								lmao && allowLmao ? "/maisy-no-glasses.png" : "/maisy-mask.jpg"
+							}
+							className={clsx(
+								styles.headerHomeImage,
+								utilStyles.borderCircle,
+								"z-20"
+							)}
 							alt={name}
 							width={144}
 							height={144}

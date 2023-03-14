@@ -25,7 +25,7 @@ export const CyclesCard: React.FC<{
 					<div
 						onClick={(e) => e.stopPropagation()}
 						className={clsx(
-							"fixed top-0 left-0 z-0 w-screen h-screen transition-all duration-300 pointer-events-none",
+							"fixed top-0 left-0 z-20 w-screen h-screen transition-all duration-300 pointer-events-none",
 							{
 								"backdrop-blur-none": !isHovered,
 								"backdrop-blur-sm": isHovered,
@@ -48,7 +48,7 @@ export const CyclesCard: React.FC<{
 				className={clsx(
 					"relative flex flex-col gap-2 p-4 text-gray-200 transition-all bg-gray-900 rounded-md shadow-sm hover:shadow-md active:shadow-inner",
 					{
-						"z-20": showAbove,
+						"z-30": showAbove,
 					}
 				)}
 			>
