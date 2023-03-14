@@ -35,8 +35,8 @@ export const Starfield: React.FC<{
 			const color = Math.random() * 150 + 105;
 			ctx.fillStyle = `rgb(${color}, ${color}, ${color})`;
 			ctx.arc(
-				Math.random() * canvas.width,
-				Math.random() * canvas.height,
+				Math.random() * (canvas.width - 8) + 4,
+				Math.random() * (canvas.height - 8) + 4,
 				Math.random() * 2.5,
 				0,
 				2 * Math.PI
@@ -57,8 +57,10 @@ export const Starfield: React.FC<{
 						x / resolution,
 						y / resolution
 					);
-					ctx.fillStyle = `rgba(123, 50, 207, ${perlinValue - 0.2})`;
-					ctx.fillRect(x, y, 1, 1);
+					if (perlinValue > 0.2) {
+						ctx.fillStyle = `rgba(123, 50, 207, ${perlinValue - 0.2})`;
+						ctx.fillRect(x, y, 1, 1);
+					}
 				}
 			}
 		}
@@ -67,7 +69,7 @@ export const Starfield: React.FC<{
 	}, [canvasRef.current]);
 
 	return (
-		<div ref={containerRef} className=" absolute top-0 left-0 w-full h-full">
+		<div ref={containerRef} className="absolute top-0 left-0 w-full h-full ">
 			<canvas ref={canvasRef} />
 		</div>
 	);
