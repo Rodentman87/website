@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import React from "react";
 import { Portal } from "react-portal";
+import { FocusTrap } from "./FocusTrap";
 
 interface ProjectCardProps {
 	id: string;
@@ -27,10 +28,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 	link,
 }) => {
 	const [isExpanded, setIsExpanded] = React.useState(false);
+	const firstFocusRef = React.useRef<HTMLButtonElement>(null);
+	const lastFocusRef = React.useRef<HTMLAnchorElement>(null);
 
 	return (
 		<>
-			<motion.div
+			<motion.button
 				onClick={() => setIsExpanded(true)}
 				layoutId={id}
 				style={{
@@ -54,12 +57,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 						className={iconClassNames}
 					/>
 				)}
-			</motion.div>
+			</motion.button>
 			{isExpanded && (
 				<Portal>
+					<FocusTrap
+						firstFocusRef={firstFocusRef}
+						lastFocusRef={lastFocusRef}
+					/>
 					<div
 						onClick={() => setIsExpanded(false)}
-						className="fixed top-0 left-0 z-50 flex flex-row items-center justify-center w-screen h-screen p-2 bg-black bg-opacity-25"
+						className="fixed top-0 left-0 z-50 flex flex-row items-center justify-center w-screen h-screen p-2 bg-black bg-opacity-25 backdrop-blur-sm"
 					>
 						<motion.div
 							onClick={(e) => e.stopPropagation()}
@@ -93,12 +100,23 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 								)}
 							</div>
 							<p className="m-0">{description}</p>
-							<div className="flex flex-row justify-end">
+							<div className="flex flex-row justify-between">
+								<button
+									onClick={() => setIsExpanded(false)}
+									className="hover:underline focus:underline"
+									ref={(el) => {
+										if (el) el.focus();
+										firstFocusRef.current = el;
+									}}
+								>
+									Close
+								</button>
 								<a
 									href={link}
 									target="_blank"
 									rel="noreferrer"
 									className="text-sm font-bold"
+									ref={lastFocusRef}
 								>
 									Project link
 								</a>
