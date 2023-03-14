@@ -22,6 +22,7 @@ Let's start super simple here:
 Do nothing
 Remember that (name) is "Maisy"
 `.trim()}
+	id="1"
 />
 
 This is fairly simple to understand as a human, but for computers, this text is pretty difficult to process. English text is very ambiguous, and things can mean more than one thing depending on context (sometimes, multiple things at the same time). Computers don't understand this context and therefore we need something that's a little more rigid. Let's draw some inspiration from something with a set of well defined rules: math.
@@ -37,6 +38,7 @@ Remember that (name) is "Maisy"
 Do nothing
 (name) = "Maisy"	
 `.trim()}
+	id="2"
 />
 
 Nice! That's much easier for a computer to read, and humans can still understand it pretty well too. Can we simplify this a little bit though? Those parenthesis look unnecessary, let's try removing those:
@@ -50,6 +52,7 @@ Remember that (name) is "Maisy"
 Do nothing
 name = "Maisy"	
 `.trim()}
+	id="3"
 />
 
 That's much cleaner, however, we've just created a problem here. Can you spot it? It might be a little hard to see with this example, let's try a different one:
@@ -63,6 +66,7 @@ Remember that (my name) is "Maisy"
 Do nothing
 my name = "Maisy"	
 `.trim()}
+	id="4"
 />
 
 Can you spot it now? Multi-word variable names are a little hard to read now. Is the variable named "my name"? Is it named "name" and "my" is part of something else? Let's fix this by adding some rules to naming things. Let's say that all variables must have a name that only uses letters, numbers, and a couple symbols like dash and underscore. This gives us some flexiblity in naming things, while still making it easy for a computer to tell what is and isn't part of the name. Take a look at a couple different ways we can write a variable with multiple words using our new rule. These are all ways that programmers write names in real code; in many cases there's a general consensus as to which style to use where, but for the most part, it's really up to you and whoever you're working with.
@@ -78,6 +82,7 @@ Remember that (MyName) is "Maisy"
 Do nothing
 MyName = "Maisy"	
 `.trim()}
+	id="5"
 />
 
 ### camelCase
@@ -91,6 +96,7 @@ Remember that (myName) is "Maisy"
 Do nothing
 myName = "Maisy"	
 `.trim()}
+	id="6"
 />
 
 ### snake_case
@@ -104,6 +110,7 @@ Remember that (my_name) is "Maisy"
 Do nothing
 my_name = "Maisy"	
 `.trim()}
+	id="7"
 />
 
 ### kebab-case
@@ -117,6 +124,7 @@ Remember that (my-name) is "Maisy"
 Do nothing
 my-name = "Maisy"	
 `.trim()}
+	id="8"
 />
 
 And last, but not least:
@@ -132,6 +140,7 @@ Remember that (MY_NAME) is "Maisy"
 Do nothing
 MY_NAME = "Maisy"	
 `.trim()}
+	id="9"
 />
 
 For the rest of this lesson, we'll be using camelCase for variables just for consistency.
@@ -151,6 +160,7 @@ Do nothing
 myNumber = 5
 Add 5 to (myNumber)
 `.trim()}
+	id="10"
 />
 
 How can we turn this into a math expression? There's a couple ways to go about this, and a lot of programming languages actually offer multiple options. First, let's just reassign the variable to the new value:
@@ -166,6 +176,7 @@ Do nothing
 myNumber = 5
 myNumber = myNumber + 5
 `.trim()}
+	id="11"
 />
 
 This is nice, but it's a little hard to read with how much text we have here. This is such a simple operation; what if we wanted to just give it an extra special symbol since it's something we'll probably be doing super often too? That might look like:
@@ -181,6 +192,7 @@ Do nothing
 myNumber = 5
 myNumber += 5
 `.trim()}
+	id="12"
 />
 
 This is another thing that's more up to you and your team's prefered style, so choose whichever one you want when writing your code.
@@ -205,6 +217,7 @@ if myNumber is greater than 4 {
 	Say "Your number is higher than 4"
 }
 `.trim()}
+	id="13"
 />
 
 Hmm, that looks good, but that condition is a little hard to read. Let's give that a surrounding thing too—perhaps some parenthesis. And while we're at it, let's simplify that comparison to a math operator too:
@@ -223,6 +236,7 @@ if (myNumber > 4) {
 	Say "Your number is higher than 4"
 }
 `.trim()}
+	id="14"
 />
 
 Let's see how this looks with the while loop example from last time:
@@ -250,6 +264,7 @@ while (a > 0) {
 }
 Say "Done!"
 `.trim()}
+	id="15"
 />
 
 This is something that's much more similar to what a computer can read. While these changes aren't huge, it makes the entire block of text much easier for computers to understand. We've removed a lot of ambiguity here.
@@ -279,6 +294,7 @@ while (a > 0) {
 }
 Say "Done!"
 `.trim()}
+	id="16"
 />
 
 That's it! This looks really good (in fact, this is almost completely valid JavaScript code).

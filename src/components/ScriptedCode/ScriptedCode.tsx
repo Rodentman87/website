@@ -1,7 +1,7 @@
-import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import React, { useMemo } from "react";
+import { IoMdArrowRoundBack, IoMdArrowRoundForward } from "react-icons/io";
 import { useShikiHighlighter } from "../ShikiProvider";
-import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export interface ScriptLine {
 	indicateLine: number;
@@ -14,12 +14,14 @@ interface ScriptedCodeProps {
 	code: string;
 	language: string;
 	script: ScriptLine[];
+	id: string;
 }
 
 export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 	code,
 	language,
 	script,
+	id,
 }) => {
 	const highlighter = useShikiHighlighter();
 
@@ -38,28 +40,28 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 	}, [code]);
 
 	return (
-		<AnimateSharedLayout type="switch">
-			<div className="flex flex-col relative mb-10">
+		<div className="relative flex flex-col mb-10">
+			<LayoutGroup id={id}>
 				<div
-					className="flex flex-row z-10"
+					className="z-10 flex flex-row"
 					style={{
 						backgroundColor: "#fdf6e3",
 					}}
 				>
 					<div className="flex flex-col">
 						{Array.from(Array(numberOfLines).keys()).map((lineNumber) => (
-							<span className="font-mono px-1 relative" key={lineNumber}>
+							<span className="relative px-1 font-mono" key={lineNumber}>
 								{currentScriptLine.indicateLine === lineNumber + 1 && (
 									<>
 										<motion.span
 											layoutId="line-indicator"
-											className="absolute -left-6 z-10 px-1"
+											className="absolute z-10 px-1 -left-6"
 										>
 											{currentScriptLine.replacePointer ?? "👉"}
 										</motion.span>
 										<motion.span
 											layoutId="line-indicator-bg"
-											className="absolute left-0 w-96 h-full from-green-200 bg-gradient-to-r"
+											className="absolute left-0 h-full w-96 from-green-200 bg-gradient-to-r"
 										/>
 									</>
 								)}
@@ -82,8 +84,8 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 					consoleLine={currentScriptLine.consoleLine}
 					index={currentScriptLineNumber}
 				/>
-			</div>
-		</AnimateSharedLayout>
+			</LayoutGroup>
+		</div>
 	);
 };
 
@@ -100,7 +102,7 @@ const Controls: React.FC<ControlsProps> = ({
 }) => {
 	return (
 		<div
-			className="flex flex-row justify-between px-2 z-10"
+			className="z-10 flex flex-row justify-between px-2"
 			style={{ backgroundColor: "#eee8d5" }}
 		>
 			<button
@@ -111,17 +113,17 @@ const Controls: React.FC<ControlsProps> = ({
 			>
 				<IoMdArrowRoundBack />
 			</button>
-			<div className="flex flex-row justify-center grow px-2">
+			<div className="flex flex-row justify-center px-2 grow">
 				{Array.from(Array(scriptLength).keys()).map((stepNumber) => (
 					<button
-						className="font-mono px-1 relative"
+						className="relative px-1 font-mono"
 						key={stepNumber}
 						onClick={() => setCurrentScriptLinenumber(stepNumber)}
 					>
 						{currentScriptLineNumber === stepNumber && (
 							<motion.span
 								layoutId="step-indicator"
-								className="absolute left-0 border-b-2 border-blue-300 w-full h-full"
+								className="absolute left-0 w-full h-full border-b-2 border-blue-300"
 							/>
 						)}
 						{stepNumber + 1}
@@ -146,8 +148,7 @@ interface VariablesPanelProps {
 
 const VariablesPanel: React.FC<VariablesPanelProps> = ({ variables }) => {
 	return (
-		<div className="absolute left-full flex flex-col gap-2 items-start pl-2">
-			{/* @ts-expect-error Something is weird with the types here */}
+		<div className="absolute flex flex-col items-start gap-2 pl-2 left-full">
 			<AnimatePresence>
 				{Object.keys(variables).length > 0 && (
 					<motion.div
@@ -160,7 +161,6 @@ const VariablesPanel: React.FC<VariablesPanelProps> = ({ variables }) => {
 					</motion.div>
 				)}
 			</AnimatePresence>
-			{/* @ts-expect-error Something is weird with the types here */}
 			<AnimatePresence>
 				{Object.entries(variables).map(([key, value]) => (
 					<motion.div
@@ -194,9 +194,8 @@ const ConsoleLinesPanel: React.FC<ConsoleLinesProps> = ({
 	index,
 }) => {
 	return (
-		<div className="absolute top-full flex flex-row gap-2 items-start">
-			{/* @ts-expect-error Something is weird with the types here */}
-			<AnimatePresence exitBeforeEnter>
+		<div className="absolute flex flex-row items-start gap-2 top-full">
+			<AnimatePresence mode="wait">
 				<motion.div
 					initial={{ opacity: 0, y: -30 }}
 					animate={{ opacity: 1, y: 0 }}

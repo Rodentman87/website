@@ -4,7 +4,8 @@ import { ScriptedCode, ScriptLine, valueToText } from "./ScriptedCode";
 export const CompiledPlaintextCode: React.FC<{
 	code: string;
 	swappedCode?: string;
-}> = ({ code, swappedCode }) => {
+	id: string;
+}> = ({ code, swappedCode, id }) => {
 	const script = useMemo(() => {
 		return getScriptFromText(code);
 	}, [code]);
@@ -14,6 +15,7 @@ export const CompiledPlaintextCode: React.FC<{
 			code={swappedCode ?? code}
 			language="plaintext"
 			script={script}
+			id={id}
 		/>
 	);
 };
