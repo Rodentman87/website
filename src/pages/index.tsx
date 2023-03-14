@@ -1,6 +1,7 @@
 import { CyclesCard } from "@components/CyclesCard";
+import { ProjectCard } from "@components/ProjectCard";
 import { createHmac } from "crypto";
-import { motion, useReducedMotion } from "framer-motion";
+import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { useFancyEffects } from "hooks/useFancyEffect";
 import Head from "next/head";
 import Link from "next/link";
@@ -131,7 +132,7 @@ export default function Home({
 					content={"/api/post-image?" + params.toString()}
 				/>
 			</Head>
-			<section className="text-xl flex flex-col md:flex-row justify-between items-center">
+			<section className="flex flex-col items-center justify-between text-xl md:flex-row">
 				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>
 				<label className="text-sm">
 					Show fancy effects
@@ -160,11 +161,11 @@ export default function Home({
 								},
 								default: { scale: 1, rotate: 0 },
 							}}
-							className="rounded-md relative shadow-sm p-4 hover:shadow-md flex flex-col gap-2 text-black active:shadow-inner transition-shadow"
+							className="relative flex flex-col gap-2 p-4 text-black transition-shadow rounded-md shadow-sm hover:shadow-md active:shadow-inner"
 							style={{ backgroundColor: "#fdf6e3" }}
 						>
 							<motion.div
-								className="not-sr-only absolute from-transparent to-transparent via-white bg-gradient-to-br h-36 -top-8 left-0 w-28 opacity-50"
+								className="absolute left-0 opacity-50 not-sr-only from-transparent to-transparent via-white bg-gradient-to-br h-36 -top-8 w-28"
 								variants={{
 									hover: { x: "650%", transition: { duration: 1 } },
 								}}
@@ -189,7 +190,7 @@ export default function Home({
 									Beta
 								</motion.span>
 							</div>
-							<div className="flex flex-col sm:flex-row justify-between">
+							<div className="flex flex-col justify-between sm:flex-row">
 								<p className="m-0">Lessons: 4</p>
 								<p className="m-0">Estimated time to complete: 1 hour</p>
 							</div>
@@ -206,6 +207,40 @@ export default function Home({
 						cyclesEntriesCount={cyclesEntriesCount}
 					/>
 				</Link>
+			</section>
+			<section className="mb-4">
+				<h2 className="mb-4">Projects</h2>
+				<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+					<LayoutGroup>
+						<ProjectCard
+							id="ksp-2-save-viewer"
+							title="KSP 2 Save Viewer"
+							description="A web app to view and edit KSP 2 save files."
+							brandColor="#25282f"
+							dark
+							iconPath="/icons/ksp-2-save-viewer.svg"
+							iconClassNames="text-white"
+							link="https://ksp-2-save-viewer.likesdinosaurs.com/"
+						/>
+						<ProjectCard
+							id="slashasaurus"
+							title="Slashasaurus"
+							description="A framework for building Discord bots with well typed slash commands and a React-like API for using message components."
+							brandColor="white"
+							iconPath="/icons/slashy.png"
+							link="https://www.npmjs.com/package/slashasaurus"
+							cardClassNames="border border-gray-200"
+						/>
+						<ProjectCard
+							id="dino-ql"
+							title="DinoQL"
+							description="My take on an alternative to GraphQL and REST."
+							brandColor="#004f41"
+							dark
+							link="https://github.com/Rodentman87/dinoql"
+						/>
+					</LayoutGroup>
+				</div>
 			</section>
 			<section>
 				<h2 className="mb-4">Blog</h2>

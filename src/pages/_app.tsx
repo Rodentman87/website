@@ -1,9 +1,8 @@
-import { AnimateSharedLayout } from "framer-motion";
-import "../styles/global.css";
-import { AppProps } from "next/app";
-import { ShikiContext } from "../components/ShikiProvider";
-import { useEffect, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
+import { AppProps } from "next/app";
+import { useEffect, useState } from "react";
+import { ShikiContext } from "../components/ShikiProvider";
+import "../styles/global.css";
 
 export default function App({ Component, pageProps }: AppProps) {
 	const [highlighter, setHighlighter] = useState(null);
@@ -24,24 +23,22 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<ShikiContext.Provider value={highlighter}>
-			<AnimateSharedLayout type="switch">
-				<MDXProvider
-					components={{
-						code: ({ children }) => (
-							<code
-								className="px-1 rounded-sm"
-								style={{
-									backgroundColor: "#fdf6e3",
-								}}
-							>
-								{children}
-							</code>
-						),
-					}}
-				>
-					<Component {...pageProps} />
-				</MDXProvider>
-			</AnimateSharedLayout>
+			<MDXProvider
+				components={{
+					code: ({ children }) => (
+						<code
+							className="px-1 rounded-sm"
+							style={{
+								backgroundColor: "#fdf6e3",
+							}}
+						>
+							{children}
+						</code>
+					),
+				}}
+			>
+				<Component {...pageProps} />
+			</MDXProvider>
 		</ShikiContext.Provider>
 	);
 }
