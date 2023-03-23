@@ -4,11 +4,13 @@ import { readdir } from "fs/promises";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import destruction from "./destruction.mdx";
+import heat from "./heat.mdx";
 import prologue from "./prologue.mdx";
 
 const pages = {
 	"prologue.mdx": prologue,
 	"destruction.mdx": destruction,
+	"heat.mdx": heat,
 };
 
 type PageProps = {
@@ -65,7 +67,7 @@ export default function Post({
 				/>
 				<meta name="theme-color" content="#000000" />
 			</Head>
-			<div className="indent-8 bg-yellow-50 px-4 pt-7 pb-1 rounded-lg">
+			<div className="px-4 pb-1 rounded-lg indent-8 bg-yellow-50 pt-7">
 				<Component />
 			</div>
 		</Layout>
