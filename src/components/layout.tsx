@@ -65,7 +65,8 @@ export default function Layout({
 							className={clsx(
 								styles.headerHomeImage,
 								utilStyles.borderCircle,
-								"z-20 cursor-pointer"
+								"z-20",
+								{ "cursor-pointer": allowLmao }
 							)}
 							alt={name}
 							width={144}
