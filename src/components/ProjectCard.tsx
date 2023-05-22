@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import React from "react";
 import { Portal } from "react-portal";
 import { FocusTrap } from "./FocusTrap";
@@ -50,12 +51,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 			>
 				<motion.span layoutId={id + "-title"}>{title}</motion.span>
 				{iconPath && (
-					<motion.img
-						layoutId={id + "-icon"}
-						src={iconPath}
-						width={32}
-						className={iconClassNames}
-					/>
+					<motion.div layoutId={id + "-icon"} className={iconClassNames}>
+						<Image
+							alt={`${title} icon`}
+							src={iconPath}
+							width={32}
+							height={32}
+						/>
+					</motion.div>
 				)}
 			</motion.button>
 			{isExpanded && (
@@ -91,12 +94,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 									{title}
 								</motion.span>
 								{iconPath && (
-									<motion.img
+									<motion.div
 										layoutId={id + "-icon"}
-										src={iconPath}
-										width={32}
 										className={iconClassNames}
-									/>
+									>
+										<Image
+											alt={`${title} icon`}
+											src={iconPath}
+											width={32}
+											height={32}
+										/>
+									</motion.div>
 								)}
 							</div>
 							<p className="m-0">{description}</p>

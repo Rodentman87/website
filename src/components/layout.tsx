@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Portal } from "react-portal";
@@ -56,22 +57,27 @@ export default function Layout({
 				)}
 				{centeredHeader ? (
 					<>
-						<motion.img
+						<motion.div
 							onClick={() => setLmao(!lmao)}
 							layoutId="headersvg"
-							src={
-								lmao && allowLmao ? "/maisy-no-glasses.png" : "/maisy-mask.jpg"
-							}
 							className={clsx(
 								styles.headerHomeImage,
 								utilStyles.borderCircle,
 								"z-20",
 								{ "cursor-pointer": allowLmao }
 							)}
-							alt={name}
-							width={144}
-							height={144}
-						/>
+						>
+							<Image
+								alt={name}
+								src={
+									lmao && allowLmao
+										? "/maisy-no-glasses.png"
+										: "/maisy-mask.jpg"
+								}
+								width={144}
+								height={144}
+							/>
+						</motion.div>
 						<motion.h1 layoutId="headername" className={utilStyles.heading2Xl}>
 							{name}
 						</motion.h1>
