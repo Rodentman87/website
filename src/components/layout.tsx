@@ -69,6 +69,7 @@ export default function Layout({
 						>
 							<Image
 								alt={name}
+								priority
 								src={
 									lmao && allowLmao
 										? "/maisy-no-glasses.png"
