@@ -32,10 +32,6 @@ export async function getServerSideProps({ req }) {
 			title,
 			description,
 			token,
-			shouldShowCourse:
-				new URL(req.url, `http://${req.headers.host}`).searchParams.get(
-					"course"
-				) === "true",
 			cyclesEntriesCount,
 		},
 	};
@@ -94,7 +90,6 @@ export default function Home({
 	title,
 	description,
 	token,
-	shouldShowCourse,
 	cyclesEntriesCount,
 }) {
 	const shouldReduceMotion = useReducedMotion();
@@ -147,57 +142,55 @@ export default function Home({
 					/>
 				</label>
 			</section>
-			{shouldShowCourse && (
-				<section className="mb-4">
-					<h2 className="mb-4">Courses </h2>
-					<Link href={"lessons/basics"} className="no-underline">
+			<section className="mb-4">
+				<h2 className="mb-4">Courses </h2>
+				<Link href={"lessons/basics"} className="no-underline">
+					<motion.div
+						whileHover={"hover"}
+						whileTap={"default"}
+						variants={{
+							hover: {
+								scale: shouldReduceMotion ? 1 : 1.05,
+								rotate: shouldReduceMotion ? 0 : 1,
+							},
+							default: { scale: 1, rotate: 0 },
+						}}
+						className="relative flex flex-col gap-2 p-4 text-black transition-shadow rounded-md shadow-sm hover:shadow-md active:shadow-inner"
+						style={{ backgroundColor: "#fdf6e3" }}
+					>
 						<motion.div
-							whileHover={"hover"}
-							whileTap={"default"}
+							className="absolute left-0 opacity-50 not-sr-only from-transparent to-transparent via-white bg-gradient-to-br h-36 -top-8 w-28"
 							variants={{
-								hover: {
-									scale: shouldReduceMotion ? 1 : 1.05,
-									rotate: shouldReduceMotion ? 0 : 1,
-								},
-								default: { scale: 1, rotate: 0 },
+								hover: { x: "650%", transition: { duration: 1 } },
 							}}
-							className="relative flex flex-col gap-2 p-4 text-black transition-shadow rounded-md shadow-sm hover:shadow-md active:shadow-inner"
-							style={{ backgroundColor: "#fdf6e3" }}
-						>
-							<motion.div
-								className="absolute left-0 opacity-50 not-sr-only from-transparent to-transparent via-white bg-gradient-to-br h-36 -top-8 w-28"
-								variants={{
-									hover: { x: "650%", transition: { duration: 1 } },
-								}}
-								initial={{
-									x: "-100%",
-								}}
-								animate="hover"
-							/>
-							<div className="flex flex-row items-center gap-2">
-								<motion.h3
-									layoutId="lesson-basics-title"
-									className="text-xl font-bold md:text-2xl"
-								>
-									Programming: The Basics
-								</motion.h3>
-								<motion.span
-									initial={{ opacity: 0, x: -20 }}
-									animate={{ opacity: 1, x: 0 }}
-									transition={{ delay: 0.3, duration: 0.5 }}
-									className="px-2 text-sm font-normal text-white bg-blue-500 rounded-full"
-								>
-									Beta
-								</motion.span>
-							</div>
-							<div className="flex flex-col justify-between sm:flex-row">
-								<p className="m-0">Lessons: 4</p>
-								<p className="m-0">Estimated time to complete: 1 hour</p>
-							</div>
-						</motion.div>
-					</Link>
-				</section>
-			)}
+							initial={{
+								x: "-100%",
+							}}
+							animate="hover"
+						/>
+						<div className="flex flex-row items-center gap-2">
+							<motion.h3
+								layoutId="lesson-basics-title"
+								className="text-xl font-bold md:text-2xl"
+							>
+								Programming: The Basics
+							</motion.h3>
+							<motion.span
+								initial={{ opacity: 0, x: -20 }}
+								animate={{ opacity: 1, x: 0 }}
+								transition={{ delay: 0.3, duration: 0.5 }}
+								className="px-2 text-sm font-normal text-white bg-blue-500 rounded-full"
+							>
+								Beta
+							</motion.span>
+						</div>
+						<div className="flex flex-col justify-between sm:flex-row">
+							<p className="m-0">Lessons: 4</p>
+							<p className="m-0">Estimated time to complete: 1 hour</p>
+						</div>
+					</motion.div>
+				</Link>
+			</section>
 			<section className="mb-4">
 				<h2 className="mb-4">Writing</h2>
 				<Link href={"/cycles"} className="no-underline">

@@ -1,6 +1,11 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import React, { useMemo } from "react";
-import { IoMdArrowRoundBack, IoMdArrowRoundForward } from "react-icons/io";
+import React, { useEffect, useMemo, useRef } from "react";
+import {
+	IoMdArrowRoundBack,
+	IoMdArrowRoundForward,
+	IoMdPause,
+	IoMdPlay,
+} from "react-icons/io";
 import { useShikiHighlighter } from "../ShikiProvider";
 
 export interface ScriptLine {
@@ -24,6 +29,30 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 	id,
 }) => {
 	const highlighter = useShikiHighlighter();
+
+	const playTick = useRef(null);
+	const [isPlaying, setIsPlaying] = React.useState(false);
+
+	useEffect(() => {
+		if (!isPlaying && playTick.current) {
+			clearInterval(playTick.current);
+		}
+		if (isPlaying) {
+			if (playTick.current) clearInterval(playTick.current);
+			playTick.current = setInterval(() => {
+				setCurrentScriptLinenumber((current) => {
+					if (current === script.length - 1) {
+						setIsPlaying(false);
+						return current;
+					}
+					return current + 1;
+				});
+			}, 1000);
+		}
+		return () => {
+			if (playTick.current) clearInterval(playTick.current);
+		};
+	}, [isPlaying]);
 
 	const [currentScriptLineNumber, setCurrentScriptLinenumber] =
 		React.useState(0);
@@ -65,7 +94,7 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 										/>
 									</>
 								)}
-								<span className="relative z-10">{lineNumber + 1}</span>
+								<span className="relative z-10 pr-1">{lineNumber + 1}</span>
 							</span>
 						))}
 					</div>
@@ -75,6 +104,8 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 					></div>
 				</div>
 				<Controls
+					isPlaying={isPlaying}
+					setIsPlaying={setIsPlaying}
 					currentScriptLineNumber={currentScriptLineNumber}
 					scriptLength={script.length}
 					setCurrentScriptLinenumber={setCurrentScriptLinenumber}
@@ -90,6 +121,8 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 };
 
 interface ControlsProps {
+	isPlaying: boolean;
+	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 	currentScriptLineNumber: number;
 	setCurrentScriptLinenumber: React.Dispatch<React.SetStateAction<number>>;
 	scriptLength: number;
@@ -99,21 +132,25 @@ const Controls: React.FC<ControlsProps> = ({
 	currentScriptLineNumber,
 	setCurrentScriptLinenumber,
 	scriptLength,
+	isPlaying,
+	setIsPlaying,
 }) => {
 	return (
 		<div
 			className="z-10 flex flex-row justify-between px-2"
 			style={{ backgroundColor: "#eee8d5" }}
 		>
-			<button
-				aria-label="Previous step"
-				disabled={currentScriptLineNumber === 0}
-				className="disabled:cursor-not-allowed disabled:text-gray-500"
-				onClick={() => setCurrentScriptLinenumber(currentScriptLineNumber - 1)}
-			>
-				<IoMdArrowRoundBack />
-			</button>
-			<div className="flex flex-row justify-center px-2 grow">
+			<div className="flex flex-row justify-center gap-1 px-2 grow">
+				<button
+					aria-label="Previous step"
+					disabled={currentScriptLineNumber === 0}
+					className="disabled:cursor-not-allowed disabled:text-gray-500"
+					onClick={() =>
+						setCurrentScriptLinenumber(currentScriptLineNumber - 1)
+					}
+				>
+					<IoMdArrowRoundBack />
+				</button>
 				{Array.from(Array(scriptLength).keys()).map((stepNumber) => (
 					<button
 						className="relative px-1 font-mono"
@@ -129,14 +166,27 @@ const Controls: React.FC<ControlsProps> = ({
 						{stepNumber + 1}
 					</button>
 				))}
+				<button
+					aria-label="Next step"
+					disabled={currentScriptLineNumber === scriptLength - 1}
+					className="disabled:cursor-not-allowed disabled:text-gray-500"
+					onClick={() =>
+						setCurrentScriptLinenumber(currentScriptLineNumber + 1)
+					}
+				>
+					<IoMdArrowRoundForward />
+				</button>
 			</div>
+
 			<button
-				aria-label="Next step"
-				disabled={currentScriptLineNumber === scriptLength - 1}
-				className="disabled:cursor-not-allowed disabled:text-gray-500"
-				onClick={() => setCurrentScriptLinenumber(currentScriptLineNumber + 1)}
+				aria-label={isPlaying ? "Pause" : "Play"}
+				onClick={() => {
+					if (currentScriptLineNumber === scriptLength - 1)
+						setCurrentScriptLinenumber(0);
+					setIsPlaying((current) => !current);
+				}}
 			>
-				<IoMdArrowRoundForward />
+				{isPlaying ? <IoMdPause /> : <IoMdPlay />}
 			</button>
 		</div>
 	);
