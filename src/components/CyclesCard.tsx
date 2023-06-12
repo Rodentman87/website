@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
-import React from "react";
+import React, { useMemo } from "react";
 import { Portal } from "react-portal";
 import { Starfield } from "./Starfield";
 
@@ -14,6 +14,20 @@ export const CyclesCard: React.FC<{
 	const [showAbove, setShowAbove] = React.useState(false);
 	const [isMounted, setIsMounted] = React.useState(false);
 
+	const keyframes = useMemo(() => {
+		return {
+			x: Array(50)
+				.fill(0)
+				.map(() => Math.random() * 4 - 2),
+			y: Array(50)
+				.fill(0)
+				.map(() => Math.random() * 4 - 2),
+			rotate: Array(50)
+				.fill(0)
+				.map(() => Math.random() * 0.5 - 0.25),
+		};
+	}, []);
+
 	React.useEffect(() => {
 		setIsMounted(true);
 	}, []);
@@ -25,10 +39,10 @@ export const CyclesCard: React.FC<{
 					<div
 						onClick={(e) => e.stopPropagation()}
 						className={clsx(
-							"fixed top-0 left-0 z-20 w-screen h-screen transition-all duration-300 pointer-events-none",
+							"fixed top-0 left-0 z-20 w-screen h-screen transition-all duration-300 pointer-events-none bg-opacity-80",
 							{
 								"backdrop-blur-none": !isHovered,
-								"backdrop-blur-sm": isHovered,
+								"backdrop-blur-sm bg-black bg-transition-one-way": isHovered,
 							}
 						)}
 					></div>
@@ -45,10 +59,26 @@ export const CyclesCard: React.FC<{
 				}}
 				whileHover={shouldReduceMotion ? "default" : "hover"}
 				initial={"default"}
+				variants={{
+					default: {
+						x: 0,
+						y: 0,
+						rotate: 0,
+					},
+					hover: {
+						...keyframes,
+						transition: {
+							duration: 100,
+							repeat: Infinity,
+							repeatType: "reverse",
+						},
+					},
+				}}
 				className={clsx(
-					"relative flex flex-col gap-2 p-4 text-gray-200 transition-all bg-gray-900 rounded-md shadow-sm hover:shadow-md active:shadow-inner",
+					"relative flex flex-col gap-2 p-4 text-gray-200 bg-gray-900 rounded-md shadow-[0px_0px_0px_1px_rgba(123,43,227,0.15)] hover:shadow-[0px_0px_50px_1px_rgba(123,43,227,0.15)]",
 					{
 						"z-30": showAbove,
+						"transition-shadow duration-[10s] delay-[8s]": isHovered,
 					}
 				)}
 			>

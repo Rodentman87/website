@@ -93,3 +93,7 @@ blockquote {
 	margin: 0;
 	padding: 0 1em;
 }
+
+.bg-transition-one-way {
+	transition: backdrop-filter 0.3s ease-in-out, background-color 10s ease-in-out;
+}
