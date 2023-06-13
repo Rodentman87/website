@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
 import React, { useMemo } from "react";
 import { Portal } from "react-portal";
+import { AudioLinkContext } from "./AudioLink";
 import { Starfield } from "./Starfield";
 
 export const CyclesCard: React.FC<{
@@ -13,6 +14,12 @@ export const CyclesCard: React.FC<{
 	const [isHovered, setIsHovered] = React.useState(false);
 	const [showAbove, setShowAbove] = React.useState(false);
 	const [isMounted, setIsMounted] = React.useState(false);
+	const audioRef = React.useRef<HTMLAudioElement>(null);
+	const audioTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+	const volumeInterval = React.useRef<ReturnType<typeof setInterval> | null>(
+		null
+	);
+	const audioLinkContext = React.useContext(AudioLinkContext);
 
 	const keyframes = useMemo(() => {
 		return {
@@ -45,15 +52,68 @@ export const CyclesCard: React.FC<{
 								"backdrop-blur-sm bg-black bg-transition-one-way": isHovered,
 							}
 						)}
-					></div>
+					>
+						<audio
+							ref={audioRef}
+							src="/slow-motion-121841.mp3"
+							autoPlay={false}
+							loop={true}
+						/>
+					</div>
 				</Portal>
 			)}
 			<motion.div
 				onHoverStart={() => {
 					setIsHovered(true);
 					setShowAbove(true);
+					audioTimer.current = setTimeout(() => {
+						try {
+							audioRef.current?.play();
+							audioLinkContext.setMetadata({
+								title: "Slow Motion",
+								artist: "Lexin_Music",
+								link: "https://pixabay.com/music/small-emotions-slow-motion-121841/",
+							});
+						} catch (e) {
+							console.log("User didn't allow audio autoplay");
+							return;
+						}
+						audioRef.current && (audioRef.current.volume = 0);
+						volumeInterval.current = setInterval(() => {
+							if (audioRef.current?.volume > 0.99) {
+								clearInterval(volumeInterval.current!);
+								volumeInterval.current = null;
+							} else {
+								console.log(audioRef.current?.volume);
+								audioRef.current!.volume += 0.01;
+							}
+						}, 250);
+					}, 8000);
 				}}
-				onHoverEnd={() => setIsHovered(false)}
+				onHoverEnd={() => {
+					setIsHovered(false);
+					audioTimer.current && clearTimeout(audioTimer.current);
+					audioTimer.current = null;
+					volumeInterval.current && clearInterval(volumeInterval.current);
+					if (audioRef.current?.volume > 0)
+						volumeInterval.current = setInterval(() => {
+							if (audioRef.current?.volume < 0.02) {
+								clearInterval(volumeInterval.current!);
+								audioRef.current!.volume = 0;
+								volumeInterval.current = null;
+								setTimeout(() => {
+									audioRef.current?.pause();
+									audioRef.current?.fastSeek(0);
+								}, 100);
+								setTimeout(() => {
+									audioLinkContext.setMetadata(null);
+								}, 5000);
+							} else {
+								console.log(audioRef.current?.volume);
+								audioRef.current!.volume -= 0.02;
+							}
+						}, 250);
+				}}
 				onTransitionEnd={() => {
 					if (isHovered === false) setShowAbove(false);
 				}}

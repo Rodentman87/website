@@ -1,3 +1,4 @@
+import { AudioAutoplayPrompt } from "@components/AudioAutoplayPrompt";
 import { CyclesCard } from "@components/CyclesCard";
 import { ProjectCard } from "@components/ProjectCard";
 import { createHmac } from "crypto";
@@ -127,10 +128,11 @@ export default function Home({
 					content={"/api/post-image?" + params.toString()}
 				/>
 			</Head>
+			<AudioAutoplayPrompt />
 			<section className="flex flex-col items-center justify-between text-xl md:flex-row">
 				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>
 				<label className="text-sm">
-					Show fancy effects
+					Enable fancy effects
 					<input
 						type="checkbox"
 						className="ml-2"
@@ -155,7 +157,7 @@ export default function Home({
 							},
 							default: { scale: 1, rotate: 0 },
 						}}
-						className="relative flex flex-col gap-2 p-4 text-black transition-shadow rounded-md shadow-sm hover:shadow-md active:shadow-inner"
+						className="relative flex flex-col gap-2 p-4 text-black transition-shadow rounded-md shadow-sm overflow-clip hover:shadow-md active:shadow-inner"
 						style={{ backgroundColor: "#fdf6e3" }}
 					>
 						<motion.div
