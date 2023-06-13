@@ -9,6 +9,7 @@ export const AudioAutoplayPrompt = () => {
 	);
 
 	useEffect(() => {
+		if (window.visualViewport.width < 768) return; // Don't show on mobile
 		const val = localStorage.getItem("audio-autoplay-prompt-skip");
 		if (val === "true") return;
 		if (!audioRef.current) return;
