@@ -94,6 +94,7 @@ export const CyclesCard: React.FC<{
 					setIsHovered(true);
 					setShowAbove(true);
 					audioTimer.current = setTimeout(() => {
+						if (window.visualViewport.width < 768) return; // Don't play audio on mobile
 						try {
 							audioRef.current?.play();
 							audioLinkContext.setMetadata({
