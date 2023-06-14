@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Portal } from "react-portal";
 import { AudioLinkContext } from "./AudioLink";
 import { Starfield } from "./Starfield";
@@ -20,6 +20,17 @@ export const CyclesCard: React.FC<{
 		null
 	);
 	const audioLinkContext = React.useContext(AudioLinkContext);
+	const shootingStarInterval = React.useRef<ReturnType<
+		typeof setTimeout
+	> | null>(null);
+
+	const [shootingStarParams, setShootingStarParams] = React.useState<{
+		x: number;
+		mirrored: boolean;
+		speed: number;
+	}>({ x: 0, mirrored: false, speed: 0.7 });
+	const [showShootingStar, setShowShootingStar] = React.useState(false);
+	const shootingStarContainer = React.useRef<HTMLDivElement>(null);
 
 	const keyframes = useMemo(() => {
 		return {
@@ -37,6 +48,22 @@ export const CyclesCard: React.FC<{
 
 	React.useEffect(() => {
 		setIsMounted(true);
+	}, []);
+
+	const doShootingStar = useCallback(() => {
+		const area = shootingStarContainer.current!.clientWidth * 0.75;
+		setShootingStarParams({
+			x: Math.random() * area - area / 2,
+			mirrored: Math.random() > 0.5,
+			speed: Math.random() * 0.5 + 0.5,
+		});
+		setShowShootingStar(true);
+		setTimeout(() => {
+			setShowShootingStar(false);
+		}, 1000);
+		shootingStarInterval.current = setTimeout(() => {
+			doShootingStar();
+		}, Math.random() * 2500 + 3000);
 	}, []);
 
 	return (
@@ -84,11 +111,13 @@ export const CyclesCard: React.FC<{
 								clearInterval(volumeInterval.current!);
 								volumeInterval.current = null;
 							} else {
-								console.log(audioRef.current?.volume);
 								audioRef.current!.volume += 0.01;
 							}
 						}, 250);
 					}, 8000);
+					shootingStarInterval.current = setTimeout(() => {
+						doShootingStar();
+					}, 9000);
 				}}
 				onHoverEnd={() => {
 					setIsHovered(false);
@@ -109,10 +138,11 @@ export const CyclesCard: React.FC<{
 									audioLinkContext.setMetadata(null);
 								}, 5000);
 							} else {
-								console.log(audioRef.current?.volume);
 								audioRef.current!.volume -= 0.02;
 							}
 						}, 250);
+					if (shootingStarInterval.current)
+						clearInterval(shootingStarInterval.current);
 				}}
 				onTransitionEnd={() => {
 					if (isHovered === false) setShowAbove(false);
@@ -142,6 +172,36 @@ export const CyclesCard: React.FC<{
 					}
 				)}
 			>
+				{/* Shooting star */}
+				<div
+					ref={shootingStarContainer}
+					className="absolute top-0 left-0 w-full h-full overflow-clip"
+				>
+					<motion.div
+						className={clsx("absolute bottom-0 w-64 h-64 -top-10 left-1/4", {
+							hidden: !showShootingStar,
+						})}
+						style={{
+							translateX: shootingStarParams.x,
+							rotateZ: shootingStarParams.mirrored ? 180 : 0,
+						}}
+						animate={{
+							rotate: showShootingStar
+								? shootingStarParams.mirrored
+									? 130
+									: 120
+								: -45,
+							transition: {
+								duration: shootingStarParams.speed,
+							},
+						}}
+					>
+						<div className="w-64 h-32 overflow-clip">
+							<div className="w-64 h-64 border-r-2 border-white rounded-full"></div>
+						</div>
+					</motion.div>
+				</div>
+				{/* Starfields */}
 				{[...Array(starLayers)].map((_, i) => (
 					<motion.div
 						key={i}
@@ -160,6 +220,7 @@ export const CyclesCard: React.FC<{
 						<Starfield starCount={starsPerLayer} addDustCloud={i % 2 === 0} />
 					</motion.div>
 				))}
+				{/* Text */}
 				<div className="z-10 flex flex-row items-center gap-2">
 					<motion.h3
 						variants={{
