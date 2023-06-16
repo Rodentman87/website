@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
 import React, { useCallback, useMemo } from "react";
 import { Portal } from "react-portal";
-import { AudioLinkContext } from "./AudioLink";
+import { AudioLinkContext, Song } from "./AudioLink";
 import { Starfield } from "./Starfield";
 
 export const CyclesCard: React.FC<{
@@ -14,11 +14,8 @@ export const CyclesCard: React.FC<{
 	const [isHovered, setIsHovered] = React.useState(false);
 	const [showAbove, setShowAbove] = React.useState(false);
 	const [isMounted, setIsMounted] = React.useState(false);
-	const audioRef = React.useRef<HTMLAudioElement>(null);
 	const audioTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-	const volumeInterval = React.useRef<ReturnType<typeof setInterval> | null>(
-		null
-	);
+	const song = React.useRef<Song | null>(null);
 	const audioLinkContext = React.useContext(AudioLinkContext);
 	const shootingStarInterval = React.useRef<ReturnType<
 		typeof setTimeout
@@ -51,7 +48,8 @@ export const CyclesCard: React.FC<{
 	}, []);
 
 	const doShootingStar = useCallback(() => {
-		const area = shootingStarContainer.current!.clientWidth * 0.75;
+		if (!shootingStarContainer.current) return;
+		const area = shootingStarContainer.current.clientWidth * 0.75;
 		setShootingStarParams({
 			x: Math.random() * area - area / 2,
 			mirrored: Math.random() > 0.5,
@@ -80,12 +78,12 @@ export const CyclesCard: React.FC<{
 							}
 						)}
 					>
-						<audio
+						{/* <audio
 							ref={audioRef}
 							src="/slow-motion-121841.mp3"
 							autoPlay={false}
 							loop={true}
-						/>
+						/> */}
 					</div>
 				</Portal>
 			)}
@@ -93,29 +91,30 @@ export const CyclesCard: React.FC<{
 				onHoverStart={() => {
 					setIsHovered(true);
 					setShowAbove(true);
-					audioTimer.current = setTimeout(() => {
-						if (window.visualViewport.width < 768) return; // Don't play audio on mobile
-						try {
-							audioRef.current?.play();
-							audioLinkContext.setMetadata({
-								title: "Slow Motion",
-								artist: "Lexin_Music",
-								link: "https://pixabay.com/music/small-emotions-slow-motion-121841/",
+					if (song.current) {
+						// If the song is already playing, just fade it in again
+						song.current.fade(1, 100);
+					} // Otherwise, start playing it after a delay
+					else
+						audioTimer.current = setTimeout(() => {
+							if (window.visualViewport.width < 768) return; // Don't play audio on mobile
+							song.current = audioLinkContext.playSong(
+								{
+									title: "Slow Motion",
+									artist: "Lexin_Music",
+									location: "/slow-motion-121841.mp3",
+									loop: true,
+									link: "https://pixabay.com/music/small-emotions-slow-motion-121841/",
+								},
+								0
+							);
+							song.current
+								.play()
+								.catch(() => console.log("Failed to play song"));
+							song.current.fade(1, 100).catch(() => {
+								/* Fading ended early, we don't care about that */
 							});
-						} catch (e) {
-							console.log("User didn't allow audio autoplay");
-							return;
-						}
-						audioRef.current && (audioRef.current.volume = 0);
-						volumeInterval.current = setInterval(() => {
-							if (audioRef.current?.volume > 0.99) {
-								clearInterval(volumeInterval.current!);
-								volumeInterval.current = null;
-							} else {
-								audioRef.current!.volume += 0.01;
-							}
-						}, 250);
-					}, 8000);
+						}, 8000);
 					shootingStarInterval.current = setTimeout(() => {
 						doShootingStar();
 					}, 9000);
@@ -124,24 +123,17 @@ export const CyclesCard: React.FC<{
 					setIsHovered(false);
 					audioTimer.current && clearTimeout(audioTimer.current);
 					audioTimer.current = null;
-					volumeInterval.current && clearInterval(volumeInterval.current);
-					if (audioRef.current?.volume > 0)
-						volumeInterval.current = setInterval(() => {
-							if (audioRef.current?.volume < 0.02) {
-								clearInterval(volumeInterval.current!);
-								audioRef.current!.volume = 0;
-								volumeInterval.current = null;
-								setTimeout(() => {
-									audioRef.current?.pause();
-									audioRef.current?.fastSeek(0);
-								}, 100);
-								setTimeout(() => {
-									audioLinkContext.setMetadata(null);
-								}, 5000);
-							} else {
-								audioRef.current!.volume -= 0.02;
-							}
-						}, 250);
+					if (song.current && !song.current.ended) {
+						song.current
+							.fade(-2.5, 0)
+							.then(() => {
+								song.current!.end();
+								song.current = null;
+							})
+							.catch(() => {
+								// Ignore, this means something else is fading the song now, so we don't need to do anything
+							});
+					}
 					if (shootingStarInterval.current)
 						clearInterval(shootingStarInterval.current);
 				}}

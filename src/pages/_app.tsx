@@ -1,4 +1,4 @@
-import { AudioLink } from "@components/AudioLink";
+import { AudioSystem } from "@components/AudioLink";
 import { MDXProvider } from "@mdx-js/react";
 import { AppProps } from "next/app";
 import { useEffect, useState } from "react";
@@ -38,9 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
 					),
 				}}
 			>
-				<AudioLink>
+				<AudioSystem>
 					<Component {...pageProps} />
-				</AudioLink>
+				</AudioSystem>
 			</MDXProvider>
 		</ShikiContext.Provider>
 	);
