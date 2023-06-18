@@ -218,6 +218,16 @@ export default function Home({
 							link="https://ksp-2-save-viewer.likesdinosaurs.com/"
 						/>
 						<ProjectCard
+							id="cardmaw"
+							title="Colossal Cardmaw"
+							description="Colossal Cardmaw allows you to look up and share Magic: The Gathering cards in Discord, allowing for new ways to build decks collaboratively."
+							brandColor="#b39f6b"
+							dark
+							iconPath="/icons/cardmaw.png"
+							iconClassNames="rounded-full overflow-hidden"
+							link="https://www.discord.com/application-directory/956059320880103475"
+						/>
+						<ProjectCard
 							id="slashasaurus"
 							title="Slashasaurus"
 							description="A framework for building Discord bots with well typed slash commands and a React-like API for using message components."

@@ -55,8 +55,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 						<Image
 							alt={`${title} icon`}
 							src={iconPath}
-							width={32}
-							height={32}
+							width={48}
+							height={48}
 						/>
 					</motion.div>
 				)}
@@ -89,7 +89,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 							<div className="flex flex-row items-center justify-between">
 								<motion.span
 									layoutId={id + "-title"}
-									className="text-lg font-bold"
+									className="text-xl font-bold"
 								>
 									{title}
 								</motion.span>
@@ -101,8 +101,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 										<Image
 											alt={`${title} icon`}
 											src={iconPath}
-											width={32}
-											height={32}
+											width={48}
+											height={48}
 										/>
 									</motion.div>
 								)}
