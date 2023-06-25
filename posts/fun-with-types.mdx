@@ -2,6 +2,7 @@
 title: "Fun with Types"
 description: "Making hilarious things with no emitted code"
 date: "2022-11-08"
+edited: "2023-06-24"
 ---
 
 I've had a _lot_ of fun over the years writing TypeScript, and I've delved deep into the ~~cursed~~ amazing land of generics. This post is going to be a mix of interesting tidbits, semi-useful things, and some absolutely absurd things that you can do with TypeScript. Nothing here is going to seem immediately practical, but pieces of them can be used in real projects. Everything here is in no particular order, so feel free to jump around.
@@ -11,7 +12,7 @@ I've had a _lot_ of fun over the years writing TypeScript, and I've delved deep 
 Here's an interesting one I came accross when browsing through some of the issues on the TypeScript repo.
 
 ```ts
-function foo(input: "foo" | "bar" | string) {
+function foo(input: "foo" | "bar" | (string & {})) {
 	// ...
 }
 ```

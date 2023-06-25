@@ -1,16 +1,16 @@
-import Head from "next/head";
-import { BsPinAngleFill } from "react-icons/bs";
-import Layout from "../../components/layout";
-import { getAllPostIds, getPostData } from "../../../lib/posts";
-import DateDisplay from "../../components/date";
-import utilStyles from "../../styles/utils.module.css";
+import { createHmac } from "crypto";
 import { motion } from "framer-motion";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import remarkToc from "remark-toc";
-import remarkGfm from "remark-gfm";
+import Head from "next/head";
+import { BsPinAngleFill } from "react-icons/bs";
 import rehypeHighlight from "rehype-highlight";
-import { createHmac } from "crypto";
+import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
+import { getAllPostIds, getPostData } from "../../../lib/posts";
+import DateDisplay from "../../components/date";
+import Layout from "../../components/layout";
+import utilStyles from "../../styles/utils.module.css";
 
 export default function FirstPost({ content, metadata }) {
 	const params = new URLSearchParams();
@@ -62,14 +62,17 @@ export default function FirstPost({ content, metadata }) {
 
 				<div className={utilStyles.lightText}>
 					{metadata.pinned == true ? (
-						<motion.div
-							layoutId={`pin-${metadata.id}`}
-							style={{ display: "inline-block" }}
-						>
-							<BsPinAngleFill color="#60b53c" style={{ marginLeft: 10 }} />
+						<motion.div style={{ display: "inline-block" }}>
+							<BsPinAngleFill color="#60b53c" className="mr-1" />
 						</motion.div>
 					) : null}
-					<DateDisplay dateString={metadata.date} /> •{" "}
+					Published: <DateDisplay dateString={metadata.date} />{" "}
+					{metadata.edited && (
+						<>
+							• Edited: <DateDisplay dateString={metadata.edited} />
+						</>
+					)}
+					<br />
 					<span>{metadata.readtime}</span>
 				</div>
 				<MDXRemote {...content} components={{ DateDisplay }} />

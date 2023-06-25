@@ -252,7 +252,7 @@ export default function Home({
 				<motion.ul
 					className={utilStyles.list}
 					initial="hidden"
-					animate="visible"
+					whileInView="visible"
 				>
 					{allPostsData.map(({ id, date, title, pinned }, i) => (
 						<motion.li
@@ -263,14 +263,13 @@ export default function Home({
 						>
 							<motion.div
 								initial="hidden"
-								animate="visible"
+								whileInView="visible"
 								whileHover="hovered"
 								layoutId={`title-${id}`}
 							>
 								<Link href={`/posts/${id}`}>{title}</Link>
 								{pinned == true ? (
 									<motion.div
-										layoutId={`pin-${id}`}
 										style={{ display: "inline-block" }}
 										variants={pin}
 										custom={{ i, shouldReduceMotion }}
