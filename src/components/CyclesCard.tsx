@@ -2,7 +2,6 @@ import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
 import React, { useCallback, useMemo } from "react";
 import { Portal } from "react-portal";
-import { AudioLinkContext, Song } from "./AudioLink";
 import { Starfield } from "./Starfield";
 
 export const CyclesCard: React.FC<{
@@ -14,9 +13,6 @@ export const CyclesCard: React.FC<{
 	const [isHovered, setIsHovered] = React.useState(false);
 	const [showAbove, setShowAbove] = React.useState(false);
 	const [isMounted, setIsMounted] = React.useState(false);
-	const audioTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-	const song = React.useRef<Song | null>(null);
-	const audioLinkContext = React.useContext(AudioLinkContext);
 	const shootingStarInterval = React.useRef<ReturnType<
 		typeof setTimeout
 	> | null>(null);
@@ -77,63 +73,19 @@ export const CyclesCard: React.FC<{
 								"backdrop-blur-sm bg-black bg-transition-one-way": isHovered,
 							}
 						)}
-					>
-						{/* <audio
-							ref={audioRef}
-							src="/slow-motion-121841.mp3"
-							autoPlay={false}
-							loop={true}
-						/> */}
-					</div>
+					></div>
 				</Portal>
 			)}
 			<motion.div
 				onHoverStart={() => {
 					setIsHovered(true);
 					setShowAbove(true);
-					if (song.current) {
-						// If the song is already playing, just fade it in again
-						song.current.fade(1, 100);
-					} // Otherwise, start playing it after a delay
-					else
-						audioTimer.current = setTimeout(() => {
-							if (window.visualViewport.width < 768) return; // Don't play audio on mobile
-							song.current = audioLinkContext.playSong(
-								{
-									title: "Slow Motion",
-									artist: "Lexin_Music",
-									location: "/slow-motion-121841.mp3",
-									loop: true,
-									link: "https://pixabay.com/music/small-emotions-slow-motion-121841/",
-								},
-								0
-							);
-							song.current
-								.play()
-								.catch(() => console.log("Failed to play song"));
-							song.current.fade(1, 100).catch(() => {
-								/* Fading ended early, we don't care about that */
-							});
-						}, 8000);
 					shootingStarInterval.current = setTimeout(() => {
 						doShootingStar();
 					}, 9000);
 				}}
 				onHoverEnd={() => {
 					setIsHovered(false);
-					audioTimer.current && clearTimeout(audioTimer.current);
-					audioTimer.current = null;
-					if (song.current && !song.current.ended) {
-						song.current
-							.fade(-2.5, 0)
-							.then(() => {
-								song.current!.end();
-								song.current = null;
-							})
-							.catch(() => {
-								// Ignore, this means something else is fading the song now, so we don't need to do anything
-							});
-					}
 					if (shootingStarInterval.current)
 						clearInterval(shootingStarInterval.current);
 				}}
