@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
+import { useAchievementStore } from "hooks/useAchievementStore";
 import React, { useCallback, useMemo } from "react";
 import { Portal } from "react-portal";
 import { Starfield } from "./Starfield";
@@ -24,6 +25,7 @@ export const CyclesCard: React.FC<{
 	}>({ x: 0, mirrored: false, speed: 0.7 });
 	const [showShootingStar, setShowShootingStar] = React.useState(false);
 	const shootingStarContainer = React.useRef<HTMLDivElement>(null);
+	const achievementStore = useAchievementStore();
 
 	const keyframes = useMemo(() => {
 		return {
@@ -52,6 +54,7 @@ export const CyclesCard: React.FC<{
 			speed: Math.random() * 0.5 + 0.5,
 		});
 		setShowShootingStar(true);
+		achievementStore.markProgress("shooting-stars");
 		setTimeout(() => {
 			setShowShootingStar(false);
 		}, 1000);

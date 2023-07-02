@@ -1,9 +1,14 @@
+import { AchievementGetDisplay } from "@components/AchievementGetDisplay";
 import { AudioSystem } from "@components/AudioLink";
 import { MDXProvider } from "@mdx-js/react";
+import { AchievementStore } from "achievements/AchievementStore";
+import { AchievementStoreContext } from "hooks/useAchievementStore";
 import { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { ShikiContext } from "../components/ShikiProvider";
 import "../styles/global.css";
+
+const achievementStore = new AchievementStore();
 
 export default function App({ Component, pageProps }: AppProps) {
 	const [highlighter, setHighlighter] = useState(null);
@@ -39,7 +44,10 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			>
 				<AudioSystem>
-					<Component {...pageProps} />
+					<AchievementStoreContext.Provider value={achievementStore}>
+						<AchievementGetDisplay />
+						<Component {...pageProps} />
+					</AchievementStoreContext.Provider>
 				</AudioSystem>
 			</MDXProvider>
 		</ShikiContext.Provider>

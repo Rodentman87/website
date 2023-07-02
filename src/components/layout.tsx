@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import { useAchievementStore } from "hooks/useAchievementStore";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,10 +30,20 @@ export default function Layout({
 }) {
 	const [lmao, setLmao] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
+	const achievementStore = useAchievementStore();
 
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
+
+	const onClickMyFace = () => {
+		setLmao(!lmao);
+		if (!lmao) {
+			achievementStore.markProgress("blurry");
+			achievementStore.markProgress("blurry-10");
+			achievementStore.markProgress("blurry-100");
+		}
+	};
 
 	return (
 		<div className="max-w-full md:max-w-[45rem] px-4 mx-auto mb-24 mt-12 overflow-clip sm:overflow-visible">
@@ -58,7 +69,7 @@ export default function Layout({
 				{centeredHeader ? (
 					<>
 						<motion.div
-							onClick={() => setLmao(!lmao)}
+							onClick={onClickMyFace}
 							layoutId="headersvg"
 							className={clsx(
 								styles.headerHomeImage,

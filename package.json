@@ -15,6 +15,7 @@
 		"@vercel/og": "^0.0.20",
 		"clsx": "^1.2.1",
 		"date-fns": "^2.16.1",
+		"eventemitter3": "^5.0.1",
 		"framer-motion": "^10.2.5",
 		"gray-matter": "^4.0.2",
 		"license-report": "^6.3.0",
