@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import { useAchievementStore } from "hooks/useAchievementStore";
 import Image from "next/image";
 import React from "react";
 import { Portal } from "react-portal";
@@ -31,11 +32,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 	const [isExpanded, setIsExpanded] = React.useState(false);
 	const firstFocusRef = React.useRef<HTMLButtonElement>(null);
 	const lastFocusRef = React.useRef<HTMLAnchorElement>(null);
+	const achievementStore = useAchievementStore();
 
 	return (
 		<>
 			<motion.button
-				onClick={() => setIsExpanded(true)}
+				onClick={() => {
+					setIsExpanded(true);
+					achievementStore.markProgress("carded");
+				}}
 				layoutId={id}
 				style={{
 					backgroundColor: brandColor,

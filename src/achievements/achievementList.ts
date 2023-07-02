@@ -27,4 +27,11 @@ export const ACHIEVEMENTS = [
 		numberNeeded: 20,
 		icon: "/shooting-star.png",
 	},
+	{
+		id: "carded",
+		name: "Carded",
+		description: "You've clicked my project cards a few times",
+		numberNeeded: 5,
+		icon: "/carded.png",
+	},
 ] as const;

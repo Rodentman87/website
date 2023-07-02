@@ -8,7 +8,7 @@ export type Achievement = {
 	name: string;
 	description: string;
 	numberNeeded: number;
-	icon?: string;
+	icon: string;
 };
 
 type AchievementProgress = {
@@ -80,6 +80,7 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 			!progress.markedCompleted
 		) {
 			progress.markedCompleted = true;
+			this.saveToLocalStorage();
 			this.emit("achievementCompleted", achievement);
 		}
 	}

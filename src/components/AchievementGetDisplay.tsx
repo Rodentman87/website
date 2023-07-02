@@ -46,13 +46,6 @@ export const AchievementGetDisplay: React.FC = () => {
 	const onAchievementGet = useCallback(
 		(achievement: Achievement) => {
 			setAchievementsToBeDisplayed((prev) => [...prev, achievement]);
-			if (achievement.icon === undefined)
-				// If there is no icon, set the timeout right away, otherwise we'll wait for the icon to load
-				setTimeout(() => {
-					setAchievementsToBeDisplayed((prev) =>
-						prev.filter((a) => a.id !== achievement.id)
-					);
-				}, 5000);
 		},
 		[setAchievementsToBeDisplayed]
 	);
@@ -60,7 +53,10 @@ export const AchievementGetDisplay: React.FC = () => {
 	useOnAchievment(onAchievementGet);
 
 	return (
-		<div className="fixed top-0 left-0 z-50 flex flex-row justify-center w-screen">
+		<div
+			className="fixed top-0 left-0 flex flex-row justify-center w-screen"
+			style={{ zIndex: 100000 }}
+		>
 			<div className="flex flex-col gap-2 pt-2">
 				<AnimatePresence>
 					{achievementsToBeDisplayed.map((achievement) => (
@@ -90,7 +86,7 @@ const SingleAchievement: React.FC<{
 	return (
 		<motion.div
 			key={achievement.id}
-			className="relative flex flex-row p-2 text-black bg-gray-300 rounded-full bg-opacity-40 backdrop-blur-md overflow-clip"
+			className="relative flex flex-row p-2 text-black bg-gray-300 border border-gray-400 border-solid rounded-full bg-opacity-40 backdrop-blur-md overflow-clip border-opacity-40"
 			variants={achievementGetBodyVariants}
 			initial="hidden"
 			animate={shouldShow ? "shown" : "hidden"}
@@ -108,20 +104,18 @@ const SingleAchievement: React.FC<{
 					x: "-100%",
 				}}
 			/>
-			{achievement.icon && (
-				<Image
-					src={achievement.icon}
-					alt={achievement.name}
-					width={54}
-					height={54}
-					onLoad={() => {
-						setShouldShow(true);
-						setTimeout(() => {
-							clearAchievement(achievement.id);
-						}, 5000);
-					}}
-				/>
-			)}
+			<Image
+				src={achievement.icon}
+				alt={achievement.name}
+				width={54}
+				height={54}
+				onLoad={() => {
+					setShouldShow(true);
+					setTimeout(() => {
+						clearAchievement(achievement.id);
+					}, 5000);
+				}}
+			/>
 			<motion.div
 				variants={achievementTextVariants}
 				className="flex flex-col justify-between overflow-clip"
