@@ -39,9 +39,7 @@ export default function Layout({
 	const onClickMyFace = () => {
 		setLmao(!lmao);
 		if (!lmao) {
-			achievementStore.markProgress("blurry");
-			achievementStore.markProgress("blurry-10");
-			achievementStore.markProgress("blurry-100");
+			achievementStore.markProgress("glassesRemoved", 1);
 		}
 	};
 

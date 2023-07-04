@@ -39,7 +39,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 			<motion.button
 				onClick={() => {
 					setIsExpanded(true);
-					achievementStore.markProgress("carded");
+					achievementStore.markProgress("cardClicks", 1);
 				}}
 				layoutId={id}
 				style={{

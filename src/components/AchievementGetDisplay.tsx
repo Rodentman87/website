@@ -113,7 +113,7 @@ const SingleAchievement: React.FC<{
 					setShouldShow(true);
 					setTimeout(() => {
 						clearAchievement(achievement.id);
-					}, 5000);
+					}, 3500);
 				}}
 			/>
 			<motion.div

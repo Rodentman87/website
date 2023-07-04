@@ -1,20 +1,47 @@
 import EventEmitter from "eventemitter3";
 import { ACHIEVEMENTS } from "./achievementList";
+import { METRICS } from "./metricsList";
 
-const ACHIEVEMENTS_KEY = "achievement-progress";
+const ACHIEVEMENTS_KEY = "metrics-progress";
+const ACHIEVEMENTS_VERSION = "1";
+const ACHIEVEMENTS_VERSION_KEY = "metrics-version";
 
 export type Achievement = {
 	id: string;
 	name: string;
 	description: string;
-	numberNeeded: number;
+	requirements: AchievementRequirement[];
+	completed: boolean;
 	icon: string;
 };
 
-type AchievementProgress = {
+export type AchievementRequirement =
+	| AchievementNumberRequirement
+	| AchievementBooleanRequirement;
+
+type AchievementNumberRequirement = {
+	metricId: string;
+	number: number;
+};
+
+type AchievementBooleanRequirement = {
+	metricId: string;
+};
+
+export type AchievementMetric = {
 	id: string;
-	numberCompleted: number;
-	markedCompleted: boolean;
+	name: string;
+	type: "number" | "boolean";
+};
+
+interface MetricTypeMap {
+	number: number;
+	boolean: boolean;
+}
+
+type MetricProgress = {
+	id: string;
+	value: number | boolean;
 };
 
 type AchievementStoreEvents = {
@@ -23,65 +50,129 @@ type AchievementStoreEvents = {
 
 export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 	achievements: Achievement[];
-	achievementProgress: Record<string, AchievementProgress>;
+	metrics: AchievementMetric[];
+	metricsProgress: Record<string, MetricProgress>;
+	metricToAchievementMap = new Map<string, Set<string>>();
 
 	constructor() {
 		super();
-		this.achievements = ACHIEVEMENTS as unknown as Achievement[];
-		this.achievementProgress = {};
+		this.achievements = ACHIEVEMENTS.map((a) => {
+			return {
+				...a,
+				completed: false,
+			};
+		}) as unknown as Achievement[];
+		this.achievements.forEach((a) => {
+			a.requirements.forEach((r) => {
+				if (!this.metricToAchievementMap.has(r.metricId)) {
+					this.metricToAchievementMap.set(r.metricId, new Set());
+				}
+				this.metricToAchievementMap.get(r.metricId)!.add(a.id);
+			});
+		});
+		this.metricsProgress = {};
+		this.metrics = METRICS as unknown as AchievementMetric[];
 		if (typeof window !== "undefined") {
 			this.loadFromLocalStorage();
 		}
 	}
 
 	loadFromLocalStorage() {
+		if (
+			localStorage.getItem(ACHIEVEMENTS_VERSION_KEY) !== ACHIEVEMENTS_VERSION
+		) {
+			// Clear out old achievements
+			localStorage.removeItem(ACHIEVEMENTS_KEY);
+		}
 		const data = localStorage.getItem(ACHIEVEMENTS_KEY);
 		if (data) {
-			this.achievementProgress = JSON.parse(data);
+			this.metricsProgress = JSON.parse(data);
+			this.achievements.forEach((a) => {
+				this.checkAchievementCompleted(a.id, true);
+			});
 		}
 	}
 
 	saveToLocalStorage() {
 		localStorage.setItem(
 			ACHIEVEMENTS_KEY,
-			JSON.stringify(this.achievementProgress)
+			JSON.stringify(this.metricsProgress)
 		);
+		localStorage.setItem(ACHIEVEMENTS_VERSION_KEY, ACHIEVEMENTS_VERSION);
 	}
 
-	markProgress(
-		achievementId: (typeof ACHIEVEMENTS)[number]["id"],
-		amount: number = 1
-	) {
-		// Grab the achievement from the list
-		const achievement = this.achievements.find(
-			(achievement) => achievement.id === achievementId
-		);
+	checkAchievementCompleted(achievementId: string, skipEvent = false) {
+		const achievement = this.achievements.find((a) => a.id === achievementId);
 		if (!achievement) {
-			throw new Error(
-				`No achievement with id ${achievementId}, you done goofed and forgot to add it to the list`
-			);
+			return;
 		}
-		// If we haven't marked progress for this achievement yet, create a new entry
-		if (!(achievementId in this.achievementProgress)) {
-			this.achievementProgress[achievementId] = {
-				id: achievementId,
-				numberCompleted: 0,
-				markedCompleted: false,
+
+		if (achievement.completed) {
+			return;
+		}
+
+		const completed = achievement.requirements.every((r) => {
+			const progress = this.metricsProgress[r.metricId];
+			if (!progress) {
+				return false;
+			}
+			const metric = this.metrics.find((m) => m.id === r.metricId);
+			if (!metric) {
+				return false;
+			}
+			switch (metric.type) {
+				case "number":
+					return (
+						(progress.value as number) >=
+						(r as AchievementNumberRequirement).number
+					);
+				case "boolean":
+					return progress.value === true;
+			}
+		});
+
+		if (completed) {
+			achievement.completed = true;
+			if (!skipEvent) this.emit("achievementCompleted", achievement);
+		}
+	}
+
+	markProgress<T extends (typeof METRICS)[number]["id"]>(
+		metricId: T,
+		value: MetricTypeMap[Extract<(typeof METRICS)[number], { id: T }>["type"]]
+	) {
+		// Grab the metric from the list
+		const metric = this.metrics.find((m) => m.id === metricId);
+		if (!metric) {
+			return;
+		}
+
+		// Update the progress
+		if (!this.metricsProgress[metricId]) {
+			this.metricsProgress[metricId] = {
+				id: metricId,
+				value,
 			};
+		} else {
+			switch (metric.type) {
+				case "number":
+					(this.metricsProgress[metricId].value as number) += value;
+					break;
+				case "boolean":
+					this.metricsProgress[metricId].value = true;
+					break;
+			}
 		}
-		const progress = this.achievementProgress[achievementId];
-		if (!progress.markedCompleted) {
-			progress.numberCompleted += amount;
-			this.saveToLocalStorage();
+
+		// Check if any achievements are completed
+		const achievements = this.metricToAchievementMap.get(metricId);
+		if (achievements) {
+			achievements.forEach((a) => {
+				this.checkAchievementCompleted(a);
+			});
 		}
-		// If we've completed the achievement, mark it as completed and emit an event
-		if (
-			progress.numberCompleted >= achievement.numberNeeded &&
-			!progress.markedCompleted
-		) {
-			progress.markedCompleted = true;
-			this.saveToLocalStorage();
-			this.emit("achievementCompleted", achievement);
-		}
+
+		// Save to local storage
+		this.saveToLocalStorage();
 	}
 }

@@ -3,35 +3,108 @@ export const ACHIEVEMENTS = [
 		id: "blurry",
 		name: "Blurry",
 		description: "I can't see without my glasses!",
-		numberNeeded: 1,
+		requirements: [
+			{
+				metricId: "glassesRemoved",
+				number: 1,
+			},
+		],
+		icon: "/maisy-no-glasses.png",
+	},
+	{
+		id: "blurry-5",
+		name: "Still blurry",
+		description: "That wasn't a joke, I can't see without my glasses.",
+		requirements: [
+			{
+				metricId: "glassesRemoved",
+				number: 5,
+			},
+		],
 		icon: "/maisy-no-glasses.png",
 	},
 	{
 		id: "blurry-10",
 		name: "You keep taking them",
 		description: "I really do need these to see",
-		numberNeeded: 10,
+		requirements: [
+			{
+				metricId: "glassesRemoved",
+				number: 10,
+			},
+		],
+		icon: "/maisy-no-glasses.png",
+	},
+	{
+		id: "blurry-25",
+		name: "You better not break these",
+		description: "These are expensive you know",
+		requirements: [
+			{
+				metricId: "glassesRemoved",
+				number: 25,
+			},
+		],
+		icon: "/maisy-no-glasses.png",
+	},
+	{
+		id: "blurry-50",
+		name: "This is getting ridiculous",
+		description: "What are you doing with these?",
+		requirements: [
+			{
+				metricId: "glassesRemoved",
+				number: 50,
+			},
+		],
 		icon: "/maisy-no-glasses.png",
 	},
 	{
 		id: "blurry-100",
 		name: "Oh come on now",
 		description: "Please stop taking my glasses 😭",
-		numberNeeded: 100,
+		requirements: [
+			{
+				metricId: "glassesRemoved",
+				number: 100,
+			},
+		],
 		icon: "/maisy-no-glasses.png",
 	},
 	{
-		id: "shooting-stars",
+		id: "shooting-stars-5",
 		name: "Shooting Stars",
+		description: "You've seen 5 shooting stars!",
+		requirements: [
+			{
+				metricId: "shootingStarsSeen",
+				number: 5,
+			},
+		],
+		icon: "/shooting-star.png",
+	},
+	{
+		id: "shooting-stars-20",
+		name: "Meteor Shower",
 		description: "You've seen 20 shooting stars!",
-		numberNeeded: 20,
+		requirements: [
+			{
+				metricId: "shootingStarsSeen",
+				number: 20,
+			},
+		],
 		icon: "/shooting-star.png",
 	},
 	{
 		id: "carded",
 		name: "Carded",
 		description: "You've clicked my project cards a few times",
-		numberNeeded: 5,
+		requirements: [
+			{
+				metricId: "cardClicks",
+				number: 5,
+			},
+		],
 		icon: "/carded.png",
 	},
 ] as const;

@@ -54,7 +54,7 @@ export const CyclesCard: React.FC<{
 			speed: Math.random() * 0.5 + 0.5,
 		});
 		setShowShootingStar(true);
-		achievementStore.markProgress("shooting-stars");
+		achievementStore.markProgress("shootingStarsSeen", 1);
 		setTimeout(() => {
 			setShowShootingStar(false);
 		}, 1000);
