@@ -137,7 +137,7 @@ const SingleAchievement: React.FC<{
 					x: "-100%",
 				}}
 			/>
-			<div className="relative ml-2">
+			<div className="relative">
 				<Image
 					className="absolute top-0 left-0 -z-10 blur-md saturate-200"
 					src={achievement.icon}
