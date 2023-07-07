@@ -139,6 +139,7 @@ const SingleAchievement: React.FC<{
 			/>
 			<div className="relative">
 				<Image
+					unoptimized
 					className="absolute top-0 left-0 -z-10 blur-md saturate-200"
 					src={achievement.icon}
 					alt={achievement.name}
@@ -146,6 +147,7 @@ const SingleAchievement: React.FC<{
 					height={54}
 				/>
 				<Image
+					unoptimized
 					className="z-10"
 					src={achievement.icon}
 					alt={achievement.name}
