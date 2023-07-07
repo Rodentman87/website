@@ -88,7 +88,7 @@ export const ACHIEVEMENTS = [
 			},
 		],
 		score: 10,
-		icon: "/shooting-star.png",
+		icon: "/comet_2604-fe0f.png",
 	},
 	{
 		id: "shooting-stars-20",
@@ -101,7 +101,7 @@ export const ACHIEVEMENTS = [
 			},
 		],
 		score: 20,
-		icon: "/shooting-star.png",
+		icon: "/comet_2604-fe0f.png",
 	},
 	{
 		id: "carded",
@@ -114,6 +114,6 @@ export const ACHIEVEMENTS = [
 			},
 		],
 		score: 10,
-		icon: "/carded.png",
+		icon: "/identification-card_1faaa.png",
 	},
 ] as const;

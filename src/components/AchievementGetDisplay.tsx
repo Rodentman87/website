@@ -137,15 +137,25 @@ const SingleAchievement: React.FC<{
 					x: "-100%",
 				}}
 			/>
-			<Image
-				src={achievement.icon}
-				alt={achievement.name}
-				width={54}
-				height={54}
-				onLoad={() => {
-					setShouldShow(true);
-				}}
-			/>
+			<div className="relative ml-2">
+				<Image
+					className="absolute top-0 left-0 -z-10 blur-md saturate-200"
+					src={achievement.icon}
+					alt={achievement.name}
+					width={54}
+					height={54}
+				/>
+				<Image
+					className="z-10"
+					src={achievement.icon}
+					alt={achievement.name}
+					width={54}
+					height={54}
+					onLoad={() => {
+						setShouldShow(true);
+					}}
+				/>
+			</div>
 			<motion.div
 				variants={achievementTextVariants}
 				className="flex flex-col justify-between overflow-clip"
