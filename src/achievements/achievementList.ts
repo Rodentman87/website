@@ -9,6 +9,7 @@ export const ACHIEVEMENTS = [
 				number: 1,
 			},
 		],
+		score: 10,
 		icon: "/maisy-no-glasses.png",
 	},
 	{
@@ -21,6 +22,7 @@ export const ACHIEVEMENTS = [
 				number: 5,
 			},
 		],
+		score: 10,
 		icon: "/maisy-no-glasses.png",
 	},
 	{
@@ -33,6 +35,7 @@ export const ACHIEVEMENTS = [
 				number: 10,
 			},
 		],
+		score: 10,
 		icon: "/maisy-no-glasses.png",
 	},
 	{
@@ -45,6 +48,7 @@ export const ACHIEVEMENTS = [
 				number: 25,
 			},
 		],
+		score: 10,
 		icon: "/maisy-no-glasses.png",
 	},
 	{
@@ -57,6 +61,7 @@ export const ACHIEVEMENTS = [
 				number: 50,
 			},
 		],
+		score: 10,
 		icon: "/maisy-no-glasses.png",
 	},
 	{
@@ -69,6 +74,7 @@ export const ACHIEVEMENTS = [
 				number: 100,
 			},
 		],
+		score: 50,
 		icon: "/maisy-no-glasses.png",
 	},
 	{
@@ -81,6 +87,7 @@ export const ACHIEVEMENTS = [
 				number: 5,
 			},
 		],
+		score: 10,
 		icon: "/shooting-star.png",
 	},
 	{
@@ -93,6 +100,7 @@ export const ACHIEVEMENTS = [
 				number: 20,
 			},
 		],
+		score: 20,
 		icon: "/shooting-star.png",
 	},
 	{
@@ -105,6 +113,7 @@ export const ACHIEVEMENTS = [
 				number: 5,
 			},
 		],
+		score: 10,
 		icon: "/carded.png",
 	},
 ] as const;

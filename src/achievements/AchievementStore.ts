@@ -12,6 +12,7 @@ export type Achievement = {
 	description: string;
 	requirements: AchievementRequirement[];
 	completed: boolean;
+	score: number;
 	icon: string;
 };
 

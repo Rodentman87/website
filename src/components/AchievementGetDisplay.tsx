@@ -40,17 +40,36 @@ const achievementTextVariants = {
 };
 
 export const AchievementGetDisplay: React.FC = () => {
-	const [achievementsToBeDisplayed, setAchievementsToBeDisplayed] =
-		React.useState([]);
+	const [toBeDisplayed, setAchievementsToBeDisplayed] = React.useState<{
+		current: Achievement | null;
+		queue: Achievement[];
+	}>({
+		current: null,
+		queue: [],
+	});
 
 	const onAchievementGet = useCallback(
 		(achievement: Achievement) => {
-			setAchievementsToBeDisplayed((prev) => [...prev, achievement]);
+			setAchievementsToBeDisplayed((prev) => {
+				if (prev.current === null) {
+					return {
+						current: achievement,
+						queue: [],
+					};
+				} else {
+					return {
+						current: prev.current,
+						queue: [...prev.queue, achievement],
+					};
+				}
+			});
 		},
 		[setAchievementsToBeDisplayed]
 	);
 
 	useOnAchievment(onAchievementGet);
+
+	console.log(toBeDisplayed);
 
 	return (
 		<div
@@ -58,17 +77,28 @@ export const AchievementGetDisplay: React.FC = () => {
 			style={{ zIndex: 100000 }}
 		>
 			<div className="flex flex-col gap-2 pt-2">
-				<AnimatePresence>
-					{achievementsToBeDisplayed.map((achievement) => (
+				<AnimatePresence mode="wait">
+					{toBeDisplayed.current && (
 						<SingleAchievement
-							achievement={achievement}
-							clearAchievement={(id) => {
-								setAchievementsToBeDisplayed((prev) =>
-									prev.filter((a) => a.id !== achievement.id)
-								);
+							key={toBeDisplayed.current.id}
+							achievement={toBeDisplayed.current}
+							clearAchievement={() => {
+								setAchievementsToBeDisplayed((prev) => {
+									if (prev.queue.length === 0) {
+										return {
+											current: null,
+											queue: [],
+										};
+									} else {
+										return {
+											current: prev.queue[0],
+											queue: prev.queue.slice(1),
+										};
+									}
+								});
 							}}
 						/>
-					))}
+					)}
 				</AnimatePresence>
 			</div>
 		</div>
@@ -77,11 +107,9 @@ export const AchievementGetDisplay: React.FC = () => {
 
 const SingleAchievement: React.FC<{
 	achievement: Achievement;
-	clearAchievement: (id: string) => void;
+	clearAchievement: () => void;
 }> = ({ achievement, clearAchievement }) => {
-	const [shouldShow, setShouldShow] = React.useState(
-		achievement.icon !== undefined ? false : true
-	);
+	const [shouldShow, setShouldShow] = React.useState(false);
 
 	return (
 		<motion.div
@@ -90,6 +118,13 @@ const SingleAchievement: React.FC<{
 			variants={achievementGetBodyVariants}
 			initial="hidden"
 			animate={shouldShow ? "shown" : "hidden"}
+			onAnimationComplete={(definition) => {
+				if (definition === "shown") {
+					setTimeout(() => {
+						clearAchievement();
+					}, 2000);
+				}
+			}}
 			exit="hidden"
 		>
 			<motion.div
@@ -111,16 +146,18 @@ const SingleAchievement: React.FC<{
 				height={54}
 				onLoad={() => {
 					setShouldShow(true);
-					setTimeout(() => {
-						clearAchievement(achievement.id);
-					}, 3500);
 				}}
 			/>
 			<motion.div
 				variants={achievementTextVariants}
 				className="flex flex-col justify-between overflow-clip"
 			>
-				<h2 className="font-bold whitespace-nowrap">{achievement.name}</h2>
+				<div className="flex flex-row items-center justify-between gap-2">
+					<h2 className="font-bold whitespace-nowrap">{achievement.name}</h2>
+					<span className="text-xl font-extrabold text-green-400">
+						+{achievement.score}
+					</span>
+				</div>
 				<p className="m-0 text-sm whitespace-nowrap">
 					{achievement.description}
 				</p>
