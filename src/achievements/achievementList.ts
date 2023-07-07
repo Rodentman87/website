@@ -63,6 +63,7 @@ export const ACHIEVEMENTS = [
 		],
 		score: 10,
 		icon: "/maisy-no-glasses.png",
+		confetti: true,
 	},
 	{
 		id: "blurry-100",
@@ -76,6 +77,7 @@ export const ACHIEVEMENTS = [
 		],
 		score: 50,
 		icon: "/maisy-no-glasses.png",
+		confetti: true,
 	},
 	{
 		id: "shooting-stars-5",
@@ -102,6 +104,7 @@ export const ACHIEVEMENTS = [
 		],
 		score: 20,
 		icon: "/comet_2604-fe0f.png",
+		confetti: true,
 	},
 	{
 		id: "carded",
@@ -115,5 +118,6 @@ export const ACHIEVEMENTS = [
 		],
 		score: 10,
 		icon: "/identification-card_1faaa.png",
+		confetti: true,
 	},
 ] as const;

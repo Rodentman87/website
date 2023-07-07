@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOnAchievment } from "hooks/useOnAchievment";
 import Image from "next/image";
 import React, { useCallback } from "react";
+import ConfettiExplosion from "react-confetti-explosion";
 
 const achievementGetBodyVariants = {
 	hidden: {
@@ -50,6 +51,7 @@ export const AchievementGetDisplay: React.FC = () => {
 
 	const onAchievementGet = useCallback(
 		(achievement: Achievement) => {
+			console.log("queueing achievement for display", achievement);
 			setAchievementsToBeDisplayed((prev) => {
 				if (prev.current === null) {
 					return {
@@ -81,6 +83,7 @@ export const AchievementGetDisplay: React.FC = () => {
 							key={toBeDisplayed.current.id}
 							achievement={toBeDisplayed.current}
 							clearAchievement={() => {
+								console.log("clearing current");
 								setAchievementsToBeDisplayed((prev) => {
 									if (prev.queue.length === 0) {
 										return {
@@ -108,6 +111,7 @@ const SingleAchievement: React.FC<{
 	clearAchievement: () => void;
 }> = ({ achievement, clearAchievement }) => {
 	const [shouldShow, setShouldShow] = React.useState(false);
+	const [showConfetti, setShowConfetti] = React.useState(false);
 
 	return (
 		<motion.div
@@ -118,13 +122,25 @@ const SingleAchievement: React.FC<{
 			animate={shouldShow ? "shown" : "hidden"}
 			onAnimationComplete={(definition) => {
 				if (definition === "shown") {
+					if (achievement.confetti) {
+						setShowConfetti(true);
+					}
 					setTimeout(() => {
 						clearAchievement();
-					}, 2000);
+						setShowConfetti(false);
+					}, 2500);
 				}
 			}}
 			exit="hidden"
 		>
+			<div className="absolute top-0 left-1/2">
+				{showConfetti && (
+					<ConfettiExplosion
+						width={window.visualViewport.width}
+						duration={2000}
+					/>
+				)}
+			</div>
 			<motion.div
 				className="absolute left-0 w-32 opacity-50 not-sr-only from-transparent to-transparent via-white bg-gradient-to-br h-36 -top-8"
 				variants={{

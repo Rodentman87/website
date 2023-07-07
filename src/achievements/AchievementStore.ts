@@ -14,6 +14,7 @@ export type Achievement = {
 	completed: boolean;
 	score: number;
 	icon: string;
+	confetti?: boolean;
 };
 
 export type AchievementRequirement =
