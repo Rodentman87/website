@@ -69,8 +69,6 @@ export const AchievementGetDisplay: React.FC = () => {
 
 	useOnAchievment(onAchievementGet);
 
-	console.log(toBeDisplayed);
-
 	return (
 		<div
 			className="fixed top-0 left-0 flex flex-row justify-center w-screen"
