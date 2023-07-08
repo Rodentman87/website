@@ -1,5 +1,7 @@
 import { Achievement } from "achievements/AchievementStore";
+import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
+import { extractColors, getBestColors } from "helpers/colors";
 import { useOnAchievment } from "hooks/useOnAchievment";
 import Image from "next/image";
 import React, { useCallback } from "react";
@@ -112,11 +114,22 @@ const SingleAchievement: React.FC<{
 }> = ({ achievement, clearAchievement }) => {
 	const [shouldShow, setShouldShow] = React.useState(false);
 	const [showConfetti, setShowConfetti] = React.useState(false);
+	const [confettiPalette, setConfettiPalette] = React.useState<
+		string[] | undefined
+	>();
+	const [primaryColorRGB, setPrimaryColorRGB] =
+		React.useState<string>("255 255 255");
+	const [secondaryColorRGB, setSecondaryColorRGB] =
+		React.useState<string>("255 255 255");
 
 	return (
 		<motion.div
 			key={achievement.id}
-			className="relative flex flex-row p-2 text-black bg-gray-300 border border-gray-400 border-solid rounded-full bg-opacity-40 backdrop-blur-md overflow-clip border-opacity-40"
+			style={{
+				zIndex: 501,
+				borderColor: `rgb(${primaryColorRGB})`,
+			}}
+			className="relative flex flex-row p-2 text-black bg-white border-2 border-solid rounded-full bg-opacity-60 backdrop-blur-lg overflow-clip border-opacity-40"
 			variants={achievementGetBodyVariants}
 			initial="hidden"
 			animate={shouldShow ? "shown" : "hidden"}
@@ -128,7 +141,7 @@ const SingleAchievement: React.FC<{
 					setTimeout(() => {
 						clearAchievement();
 						setShowConfetti(false);
-					}, 2500);
+					}, 3500);
 				}
 			}}
 			exit="hidden"
@@ -136,13 +149,20 @@ const SingleAchievement: React.FC<{
 			<div className="absolute top-0 left-1/2">
 				{showConfetti && (
 					<ConfettiExplosion
+						zIndex={500}
+						force={0.8}
+						colors={confettiPalette}
 						width={window.visualViewport.width}
 						duration={2000}
 					/>
 				)}
 			</div>
 			<motion.div
-				className="absolute left-0 w-32 opacity-50 not-sr-only from-transparent to-transparent via-white bg-gradient-to-br h-36 -top-8"
+				style={{
+					zIndex: 502,
+					backgroundImage: `linear-gradient(to bottom right, transparent 30%, #FFF, transparent 70%)`,
+				}}
+				className="absolute left-0 w-32 opacity-50 not-sr-only h-36 -top-8"
 				variants={{
 					shown: {
 						x: "650%",
@@ -169,7 +189,19 @@ const SingleAchievement: React.FC<{
 					alt={achievement.name}
 					width={54}
 					height={54}
-					onLoad={() => {
+					onLoad={async (e) => {
+						const colors = await extractColors(
+							achievement.icon,
+							e.target as HTMLImageElement
+						);
+						setConfettiPalette(colors.map((c) => c.hex()));
+						const bestColors = getBestColors(colors, Color("#FFFFFF"));
+						setPrimaryColorRGB(
+							`${bestColors.primary.red()} ${bestColors.primary.green()} ${bestColors.primary.blue()}`
+						);
+						setSecondaryColorRGB(
+							`${bestColors.secondary.red()} ${bestColors.secondary.green()} ${bestColors.secondary.blue()}`
+						);
 						setShouldShow(true);
 					}}
 				/>
@@ -180,7 +212,12 @@ const SingleAchievement: React.FC<{
 			>
 				<div className="flex flex-row items-center justify-between gap-2">
 					<h2 className="font-bold whitespace-nowrap">{achievement.name}</h2>
-					<span className="text-xl font-extrabold text-green-400">
+					<span
+						style={{
+							color: `rgb(${secondaryColorRGB})`,
+						}}
+						className="text-xl font-extrabold"
+					>
 						+{achievement.score}
 					</span>
 				</div>
