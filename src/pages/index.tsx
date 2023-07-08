@@ -1,13 +1,14 @@
 import { AudioAutoplayPrompt } from "@components/AudioAutoplayPrompt";
 import { CyclesCard } from "@components/CyclesCard";
 import { ProjectCard } from "@components/ProjectCard";
+import { Square, SquareReveal } from "@components/Square";
 import { createHmac } from "crypto";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { useAchievementStore } from "hooks/useAchievementStore";
 import { useFancyEffects } from "hooks/useFancyEffect";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BsPinAngleFill } from "react-icons/bs";
 import { getCyclesEntriesCount, getSortedPostsData } from "../../lib/posts";
 import DateDisplay from "../components/date";
@@ -98,6 +99,7 @@ export default function Home({
 	const shouldReduceMotion = useReducedMotion();
 	const [showFancy, setShowFancy] = useFancyEffects();
 	const achievementStore = useAchievementStore();
+	const [showSquare, setShowSquare] = useState(false);
 
 	const params = new URLSearchParams();
 	params.append("title", title);
@@ -150,6 +152,11 @@ export default function Home({
 				/>
 			</Head>
 			<AudioAutoplayPrompt />
+			{showSquare ? (
+				<Square onHide={() => setShowSquare(false)} />
+			) : (
+				<SquareReveal onClick={() => setShowSquare(true)} />
+			)}
 			<section className="flex flex-col items-center justify-between text-xl md:flex-row">
 				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>
 				<label className="text-sm">

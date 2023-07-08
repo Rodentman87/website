@@ -1,10 +1,11 @@
 import { Achievement } from "achievements/AchievementStore";
+import clsx from "clsx";
 import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import { useOnAchievment } from "hooks/useOnAchievment";
 import Image from "next/image";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 
 const achievementGetBodyVariants = {
@@ -120,6 +121,17 @@ const SingleAchievement: React.FC<{
 	const [secondaryColorRGB, setSecondaryColorRGB] =
 		React.useState<string>("255 255 255");
 
+	const filteredClasses = useMemo(() => {
+		const baseClasses =
+			"relative flex flex-row p-2 text-black bg-white border-2 border-solid rounded-full bg-opacity-60 backdrop-blur-lg overflow-clip border-opacity-40";
+		if (achievement.filterAchievementClasses === undefined) return baseClasses;
+		const filters = achievement.filterAchievementClasses.split(" ");
+		return baseClasses
+			.split(" ")
+			.filter((c) => !filters.includes(c))
+			.join(" ");
+	}, [achievement.filterAchievementClasses]);
+
 	return (
 		<motion.div
 			key={achievement.id}
@@ -127,7 +139,7 @@ const SingleAchievement: React.FC<{
 				zIndex: 501,
 				borderColor: `rgb(${primaryColorRGB})`,
 			}}
-			className="relative flex flex-row p-2 text-black bg-white border-2 border-solid rounded-full bg-opacity-60 backdrop-blur-lg overflow-clip border-opacity-40"
+			className={clsx(filteredClasses, achievement.customAchievementClasses)}
 			variants={achievementGetBodyVariants}
 			initial="hidden"
 			animate={shouldShow ? "shown" : "hidden"}

@@ -215,4 +215,19 @@ export const ACHIEVEMENTS = [
 		icon: "/mantelpiece-clock_1f570-fe0f.png",
 		confetti: true,
 	},
+	{
+		id: "square",
+		name: "True Square",
+		description: "This is shaping up to be a lot of achievements",
+		requirements: [
+			{
+				metricId: "square",
+			},
+		],
+		score: 100,
+		icon: "/large-red-square_1f7e5.png",
+		confetti: true,
+		customAchievementClasses: "rounded-none",
+		filterAchievementClasses: "rounded-full",
+	},
 ] as const;

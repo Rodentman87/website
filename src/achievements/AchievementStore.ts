@@ -15,6 +15,8 @@ export type Achievement = {
 	score: number;
 	icon: string;
 	confetti?: boolean;
+	customAchievementClasses?: string;
+	filterAchievementClasses?: string;
 };
 
 export type AchievementRequirement =

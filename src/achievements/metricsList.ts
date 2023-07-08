@@ -39,4 +39,9 @@ export const METRICS = [
 		name: "Opened Site Before Achievements Were Added",
 		type: "boolean",
 	},
+	{
+		id: "square",
+		name: "Square",
+		type: "boolean",
+	},
 ] as const;
