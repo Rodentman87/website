@@ -14,6 +14,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		path: "/",
 		sameSite: "none",
 		secure: true,
+		expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 10),
 	});
 
 	res.setHeader("Set-Cookie", cookie);
