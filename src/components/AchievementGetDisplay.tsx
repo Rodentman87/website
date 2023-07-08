@@ -10,7 +10,6 @@ import ConfettiExplosion from "react-confetti-explosion";
 const achievementGetBodyVariants = {
 	hidden: {
 		y: -100,
-		gap: 0,
 		transition: {
 			when: "afterChildren",
 			delay: 0.5,
@@ -18,7 +17,6 @@ const achievementGetBodyVariants = {
 	},
 	shown: {
 		y: 0,
-		gap: 2,
 		transition: {
 			when: "beforeChildren",
 		},
@@ -154,6 +152,7 @@ const SingleAchievement: React.FC<{
 						colors={confettiPalette}
 						width={window.visualViewport.width}
 						duration={2000}
+						particleCount={250}
 					/>
 				)}
 			</div>
@@ -210,7 +209,7 @@ const SingleAchievement: React.FC<{
 				variants={achievementTextVariants}
 				className="flex flex-col justify-between overflow-clip"
 			>
-				<div className="flex flex-row items-center justify-between gap-2">
+				<div className="flex flex-row items-center justify-between gap-2 pl-2">
 					<h2 className="font-bold whitespace-nowrap">{achievement.name}</h2>
 					<span
 						style={{
@@ -221,7 +220,7 @@ const SingleAchievement: React.FC<{
 						+{achievement.score}
 					</span>
 				</div>
-				<p className="m-0 text-sm whitespace-nowrap">
+				<p className="pl-2 m-0 text-sm whitespace-nowrap">
 					{achievement.description}
 				</p>
 			</motion.div>

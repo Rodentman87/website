@@ -3,9 +3,11 @@ import { CyclesCard } from "@components/CyclesCard";
 import { ProjectCard } from "@components/ProjectCard";
 import { createHmac } from "crypto";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import { useAchievementStore } from "hooks/useAchievementStore";
 import { useFancyEffects } from "hooks/useFancyEffect";
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect } from "react";
 import { BsPinAngleFill } from "react-icons/bs";
 import { getCyclesEntriesCount, getSortedPostsData } from "../../lib/posts";
 import DateDisplay from "../components/date";
@@ -95,11 +97,30 @@ export default function Home({
 }) {
 	const shouldReduceMotion = useReducedMotion();
 	const [showFancy, setShowFancy] = useFancyEffects();
+	const achievementStore = useAchievementStore();
 
 	const params = new URLSearchParams();
 	params.append("title", title);
 	params.append("description", description);
 	params.append("token", token);
+
+	useEffect(() => {
+		if (showFancy) {
+			setTimeout(
+				() => achievementStore.markProgress("fancyEffects", true),
+				1000
+			);
+		}
+		const today = new Date();
+		const month = today.getMonth();
+		const day = today.getDate();
+		if (month === 2 && day === 24) {
+			achievementStore.markProgress("birthday", true);
+		}
+		if (today.getTime() < 1688337900000) {
+			achievementStore.markProgress("timeTravel", true);
+		}
+	}, []);
 
 	return (
 		<Layout centeredHeader hideBackToHome allowLmao>

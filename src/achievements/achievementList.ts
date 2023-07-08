@@ -120,4 +120,99 @@ export const ACHIEVEMENTS = [
 		icon: "/identification-card_1faaa.png",
 		confetti: true,
 	},
+	{
+		id: "fancy",
+		name: "Fancy",
+		description: "You've enabled fancy effects!",
+		requirements: [
+			{
+				metricId: "fancyEffects",
+			},
+		],
+		score: 10,
+		icon: "/gem_stone_3d.png",
+		confetti: true,
+	},
+	{
+		id: "achievements-5",
+		name: "5 Achievements",
+		description: "You've completed 5 achievements!",
+		requirements: [
+			{
+				metricId: "achievementsComplete",
+				number: 5,
+			},
+		],
+		score: 10,
+		icon: "/trophy_1f3c6.png",
+		confetti: true,
+	},
+	{
+		id: "achievements-10",
+		name: "10 Achievements",
+		description: "Wow that's quite a few!",
+		requirements: [
+			{
+				metricId: "achievementsComplete",
+				number: 10,
+			},
+		],
+		score: 10,
+		icon: "/trophy_1f3c6.png",
+		confetti: true,
+	},
+	{
+		id: "achievements-11",
+		name: "11 Achievements",
+		description: "Yes I did copy this joke from Square's site",
+		requirements: [
+			{
+				metricId: "achievementsComplete",
+				number: 11,
+			},
+		],
+		score: 10,
+		icon: "/trophy_1f3c6.png",
+		confetti: true,
+	},
+	{
+		id: "confetti-achievements-5",
+		name: "Confetti Time",
+		description: "You've completed 5 achievements with confetti!",
+		requirements: [
+			{
+				metricId: "confettiAchievmenetsComplete",
+				number: 5,
+			},
+		],
+		score: 10,
+		icon: "/confetti-ball_1f38a.png",
+		confetti: true,
+	},
+	{
+		id: "birthday",
+		name: "Happy Birthday!",
+		description: "You've visited on my birthday!",
+		requirements: [
+			{
+				metricId: "birthday",
+			},
+		],
+		score: 10,
+		icon: "/party-popper_1f389.png",
+		confetti: true,
+	},
+	{
+		id: "time-travel",
+		name: "That's not right",
+		description: "Achievements weren't implemented yet!",
+		requirements: [
+			{
+				metricId: "timeTravel",
+			},
+		],
+		score: 10,
+		icon: "/mantelpiece-clock_1f570-fe0f.png",
+		confetti: true,
+	},
 ] as const;

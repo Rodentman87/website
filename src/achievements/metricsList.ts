@@ -14,4 +14,29 @@ export const METRICS = [
 		name: "Card Clicks",
 		type: "number",
 	},
+	{
+		id: "fancyEffects",
+		name: "Fancy Effects",
+		type: "boolean",
+	},
+	{
+		id: "achievementsComplete",
+		name: "Achievements Complete",
+		type: "number",
+	},
+	{
+		id: "confettiAchievmenetsComplete",
+		name: "Confetti Achievements Complete",
+		type: "number",
+	},
+	{
+		id: "birthday",
+		name: "Site Opened On Birthday",
+		type: "boolean",
+	},
+	{
+		id: "timeTravel",
+		name: "Opened Site Before Achievements Were Added",
+		type: "boolean",
+	},
 ] as const;

@@ -53,8 +53,17 @@ type AchievementStoreEvents = {
 export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 	achievements: Achievement[];
 	metrics: AchievementMetric[];
-	metricsProgress: Record<string, MetricProgress>;
+	private privateMetricsProgress: Record<string, MetricProgress>;
+	set metricsProgress(value: Record<string, MetricProgress>) {
+		this.privateMetricsProgress = value;
+		this.metricsProgressSubscribers.forEach((s) => s());
+	}
+	get metricsProgress() {
+		return this.privateMetricsProgress;
+	}
+	private metricsProgressSubscribers = new Set<() => void>();
 	metricToAchievementMap = new Map<string, Set<string>>();
+	skipAchievementEvents = false;
 
 	constructor() {
 		super();
@@ -74,9 +83,18 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 		});
 		this.metricsProgress = {};
 		this.metrics = METRICS as unknown as AchievementMetric[];
+		this.subscribeToMetricsProgress =
+			this.subscribeToMetricsProgress.bind(this);
 		if (typeof window !== "undefined") {
 			this.loadFromLocalStorage();
 		}
+	}
+
+	subscribeToMetricsProgress(callback: () => void) {
+		this.metricsProgressSubscribers.add(callback);
+		return () => {
+			this.metricsProgressSubscribers.delete(callback);
+		};
 	}
 
 	loadFromLocalStorage() {
@@ -89,9 +107,11 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 		const data = localStorage.getItem(ACHIEVEMENTS_KEY);
 		if (data) {
 			this.metricsProgress = JSON.parse(data);
+			this.skipAchievementEvents = true;
 			this.achievements.forEach((a) => {
-				this.checkAchievementCompleted(a.id, true);
+				this.checkAchievementCompleted(a.id);
 			});
+			this.skipAchievementEvents = false;
 		}
 	}
 
@@ -103,7 +123,7 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 		localStorage.setItem(ACHIEVEMENTS_VERSION_KEY, ACHIEVEMENTS_VERSION);
 	}
 
-	checkAchievementCompleted(achievementId: string, skipEvent = false) {
+	checkAchievementCompleted(achievementId: string) {
 		const achievement = this.achievements.find((a) => a.id === achievementId);
 		if (!achievement) {
 			return;
@@ -135,13 +155,26 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 
 		if (completed) {
 			achievement.completed = true;
-			if (!skipEvent) this.emit("achievementCompleted", achievement);
+			if (!this.skipAchievementEvents)
+				this.emit("achievementCompleted", achievement);
+			// Mark the meta-metric for achievements complete
+			this.markProgress(
+				"achievementsComplete",
+				this.achievements.filter((a) => a.completed).length,
+				true
+			);
+			this.markProgress(
+				"confettiAchievmenetsComplete",
+				this.achievements.filter((a) => a.completed && a.confetti).length,
+				true
+			);
 		}
 	}
 
 	markProgress<T extends (typeof METRICS)[number]["id"]>(
 		metricId: T,
-		value: MetricTypeMap[Extract<(typeof METRICS)[number], { id: T }>["type"]]
+		value: MetricTypeMap[Extract<(typeof METRICS)[number], { id: T }>["type"]],
+		setValue = false
 	) {
 		// Grab the metric from the list
 		const metric = this.metrics.find((m) => m.id === metricId);
@@ -150,18 +183,35 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 		}
 
 		// Update the progress
-		if (!this.metricsProgress[metricId]) {
-			this.metricsProgress[metricId] = {
-				id: metricId,
-				value,
+		if (!this.metricsProgress[metricId] || setValue) {
+			this.metricsProgress = {
+				...this.metricsProgress,
+				[metricId]: {
+					id: metricId,
+					value,
+				},
 			};
 		} else {
 			switch (metric.type) {
 				case "number":
-					(this.metricsProgress[metricId].value as number) += value;
+					this.metricsProgress = {
+						...this.metricsProgress,
+						[metricId]: {
+							id: metricId,
+							value: ((this.metricsProgress[metricId].value as number) +=
+								value as number),
+						},
+					};
 					break;
 				case "boolean":
-					this.metricsProgress[metricId].value = true;
+					this.metricsProgress = {
+						...this.metricsProgress,
+						[metricId]: {
+							id: metricId,
+							value: (this.metricsProgress[metricId].value = value as boolean),
+						},
+					};
+
 					break;
 			}
 		}
