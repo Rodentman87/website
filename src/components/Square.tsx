@@ -18,7 +18,7 @@ const sideVariants = ({
 	},
 	shrink1: {
 		width: [0, Math.max(0, width - height), width],
-		transition: { duration: 5, ease: "linear" },
+		transition: { duration: 3, ease: "linear" },
 	},
 	shrink2: {
 		width: width + 25,
@@ -47,7 +47,7 @@ const topBottomVariants = ({
 	},
 	shrink1: {
 		height: [0, Math.max(0, height - width), height],
-		transition: { duration: 5, ease: "linear" },
+		transition: { duration: 3, ease: "linear" },
 	},
 	shrink2: {
 		height: height + 25,
@@ -80,7 +80,7 @@ const squareVariants = ({
 	},
 	shrink1: {
 		opacity: 1,
-		transition: { delay: 5, duration: 0.5 },
+		transition: { delay: 3, duration: 0.5 },
 		transitionEnd: {
 			cursor: "pointer",
 		},

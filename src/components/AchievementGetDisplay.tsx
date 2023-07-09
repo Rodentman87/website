@@ -203,9 +203,8 @@ const SingleAchievement: React.FC<{
 			<motion.div
 				style={{
 					zIndex: 502,
-					backgroundImage: `linear-gradient(to bottom right, transparent 30%, #FFF, transparent 70%)`,
 				}}
-				className="absolute left-0 w-32 opacity-50 not-sr-only h-36 -top-8"
+				className="absolute left-0 w-32 opacity-50 not-sr-only h-36 -top-8 bg-gradient-to-br from-transparent to-transparent via-white from-30% to-70% via-50%"
 				variants={shimmerVariants(achievement.rarity)}
 			/>
 			<div className="relative">

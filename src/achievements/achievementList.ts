@@ -1,7 +1,19 @@
 export enum AchievementRarity {
+	/**
+	 * Normal achievement animation
+	 */
 	COMMON,
+	/**
+	 * Adds a glint effect
+	 */
 	UNCOMMON,
+	/**
+	 * Adds confetti
+	 */
 	RARE,
+	/**
+	 * Slows down the animation and adds more confetti
+	 */
 	EPIC,
 	LEGENDARY,
 }
@@ -295,6 +307,19 @@ export const ACHIEVEMENTS = [
 		],
 		score: 10,
 		icon: "/satellite_1f6f0-fe0f.png",
+	},
+	{
+		id: "locked",
+		name: "Locked",
+		description: "Yeah, this is a pretty common one",
+		rarity: AchievementRarity.UNCOMMON,
+		requirements: [
+			{
+				metricId: "lock",
+			},
+		],
+		score: 10,
+		icon: "/locked_1f512.png",
 	},
 	{
 		id: "all-achievements",

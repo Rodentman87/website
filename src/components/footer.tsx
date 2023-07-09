@@ -1,6 +1,7 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useSessionState } from "hooks/useSessionState";
-import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { SocialIcon } from "react-social-icons";
 import styles from "./layout.module.css";
 
@@ -46,6 +47,18 @@ const Footer = () => {
 						bgColor="#5865F2"
 						url="https://discord.likesdinosaurs.com"
 					/>
+				</motion.div>
+				<motion.div>
+					<Link href="/achievements">
+						<div className="bg-yellow-300 aspect-square w-[50px] rounded-full flex flex-row justify-center items-center">
+							<Image
+								src="/trophy_1f3c6.png"
+								alt="Achievements"
+								width={36}
+								height={36}
+							/>
+						</div>
+					</Link>
 				</motion.div>
 			</motion.div>
 		</footer>

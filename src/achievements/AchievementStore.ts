@@ -68,6 +68,8 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 	private metricsProgressSubscribers = new Set<() => void>();
 	metricToAchievementMap = new Map<string, Set<string>>();
 	skipAchievementEvents = false;
+	completedAchievements: string[] = [];
+	achievementCompletedListSubscribers = new Set<() => void>();
 
 	constructor() {
 		super();
@@ -89,6 +91,8 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 		this.metrics = METRICS as unknown as AchievementMetric[];
 		this.subscribeToMetricsProgress =
 			this.subscribeToMetricsProgress.bind(this);
+		this.subscribeToAchievementCompletedList =
+			this.subscribeToAchievementCompletedList.bind(this);
 		if (typeof window !== "undefined") {
 			this.loadFromLocalStorage();
 		}
@@ -98,6 +102,13 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 		this.metricsProgressSubscribers.add(callback);
 		return () => {
 			this.metricsProgressSubscribers.delete(callback);
+		};
+	}
+
+	subscribeToAchievementCompletedList(callback: () => void) {
+		this.achievementCompletedListSubscribers.add(callback);
+		return () => {
+			this.achievementCompletedListSubscribers.delete(callback);
 		};
 	}
 
@@ -161,6 +172,11 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 			achievement.completed = true;
 			if (!this.skipAchievementEvents)
 				this.emit("achievementCompleted", achievement);
+			this.completedAchievements = [
+				...this.completedAchievements,
+				achievement.id,
+			];
+			this.achievementCompletedListSubscribers.forEach((s) => s());
 			// Mark the meta-metric for achievements complete
 			this.markProgress(
 				"achievementsComplete",
