@@ -11,7 +11,7 @@ import React, { useCallback, useMemo } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 
 const confettiPop = new Howl({
-	src: ["/pop-1-35897.mp3"],
+	src: ["/pop.mp3"],
 	preload: true,
 });
 
