@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3";
-import { ACHIEVEMENTS } from "./achievementList";
+import { ACHIEVEMENTS, AchievementRarity } from "./achievementList";
 import { METRICS } from "./metricsList";
 
 const ACHIEVEMENTS_KEY = "metrics-progress";
@@ -10,11 +10,11 @@ export type Achievement = {
 	id: string;
 	name: string;
 	description: string;
+	rarity: AchievementRarity;
 	requirements: AchievementRequirement[];
 	completed: boolean;
 	score: number;
 	icon: string;
-	confetti?: boolean;
 	customAchievementClasses?: string;
 	filterAchievementClasses?: string;
 };
@@ -36,6 +36,7 @@ export type AchievementMetric = {
 	id: string;
 	name: string;
 	type: "number" | "boolean";
+	isMetaMetric?: boolean;
 };
 
 interface MetricTypeMap {
@@ -167,7 +168,9 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 			);
 			this.markProgress(
 				"confettiAchievmenetsComplete",
-				this.achievements.filter((a) => a.completed && a.confetti).length,
+				this.achievements.filter(
+					(a) => a.completed && a.rarity >= AchievementRarity.RARE
+				).length,
 				true
 			);
 		}

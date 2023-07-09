@@ -23,11 +23,13 @@ export const METRICS = [
 		id: "achievementsComplete",
 		name: "Achievements Complete",
 		type: "number",
+		isMetaMetric: true,
 	},
 	{
 		id: "confettiAchievmenetsComplete",
 		name: "Confetti Achievements Complete",
 		type: "number",
+		isMetaMetric: true,
 	},
 	{
 		id: "birthday",

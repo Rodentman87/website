@@ -1,14 +1,21 @@
 import { Achievement } from "achievements/AchievementStore";
+import { AchievementRarity } from "achievements/achievementList";
 import clsx from "clsx";
 import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import { useOnAchievment } from "hooks/useOnAchievment";
+import { Howl } from "howler";
 import Image from "next/image";
 import React, { useCallback, useMemo } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 
-const achievementGetBodyVariants = {
+const confettiPop = new Howl({
+	src: ["/pop-1-35897.mp3"],
+	preload: true,
+});
+
+const achievementGetBodyVariants = (rarity: AchievementRarity) => ({
 	hidden: {
 		y: -100,
 		transition: {
@@ -20,11 +27,12 @@ const achievementGetBodyVariants = {
 		y: 0,
 		transition: {
 			when: "beforeChildren",
+			duration: rarity >= AchievementRarity.EPIC ? 1 : 0.5,
 		},
 	},
-};
+});
 
-const achievementTextVariants = {
+const achievementTextVariants = (rarity: AchievementRarity) => ({
 	hidden: {
 		maxWidth: 0,
 		marginRight: 0,
@@ -36,10 +44,26 @@ const achievementTextVariants = {
 		maxWidth: "400px",
 		marginRight: "1rem",
 		transition: {
-			duration: 0.75,
+			duration: rarity >= AchievementRarity.EPIC ? 1.25 : 0.75,
 		},
 	},
-};
+});
+
+const shimmerVariants = (rarity: AchievementRarity) => ({
+	hidden: {
+		x: "-100%",
+		transition: {
+			duration: 0.8,
+		},
+	},
+	shown: {
+		x: rarity >= AchievementRarity.UNCOMMON ? "650%" : "-100%",
+		transition: {
+			duration: 0.8,
+			delay: rarity >= AchievementRarity.UNCOMMON ? 1 : 0.5,
+		},
+	},
+});
 
 export const AchievementGetDisplay: React.FC = () => {
 	const [toBeDisplayed, setAchievementsToBeDisplayed] = React.useState<{
@@ -84,7 +108,6 @@ export const AchievementGetDisplay: React.FC = () => {
 							key={toBeDisplayed.current.id}
 							achievement={toBeDisplayed.current}
 							clearAchievement={() => {
-								console.log("clearing current");
 								setAchievementsToBeDisplayed((prev) => {
 									if (prev.queue.length === 0) {
 										return {
@@ -107,19 +130,25 @@ export const AchievementGetDisplay: React.FC = () => {
 	);
 };
 
+interface AnimationState {
+	shouldShow: boolean;
+	showConfetti: boolean;
+	confettiPalette: string[] | undefined;
+	primaryColorRGB: string;
+	secondaryColorRGB: string;
+}
+
 const SingleAchievement: React.FC<{
 	achievement: Achievement;
 	clearAchievement: () => void;
 }> = ({ achievement, clearAchievement }) => {
-	const [shouldShow, setShouldShow] = React.useState(false);
-	const [showConfetti, setShowConfetti] = React.useState(false);
-	const [confettiPalette, setConfettiPalette] = React.useState<
-		string[] | undefined
-	>();
-	const [primaryColorRGB, setPrimaryColorRGB] =
-		React.useState<string>("255 255 255");
-	const [secondaryColorRGB, setSecondaryColorRGB] =
-		React.useState<string>("255 255 255");
+	const [animationState, setAnimationState] = React.useState<AnimationState>({
+		shouldShow: false,
+		showConfetti: false,
+		confettiPalette: undefined,
+		primaryColorRGB: "255 255 255",
+		secondaryColorRGB: "255 255 255",
+	});
 
 	const filteredClasses = useMemo(() => {
 		const baseClasses =
@@ -137,34 +166,37 @@ const SingleAchievement: React.FC<{
 			key={achievement.id}
 			style={{
 				zIndex: 501,
-				borderColor: `rgb(${primaryColorRGB})`,
+				borderColor: `rgb(${animationState.primaryColorRGB})`,
 			}}
 			className={clsx(filteredClasses, achievement.customAchievementClasses)}
-			variants={achievementGetBodyVariants}
+			variants={achievementGetBodyVariants(achievement.rarity)}
 			initial="hidden"
-			animate={shouldShow ? "shown" : "hidden"}
+			animate={animationState.shouldShow ? "shown" : false}
 			onAnimationComplete={(definition) => {
 				if (definition === "shown") {
-					if (achievement.confetti) {
-						setShowConfetti(true);
+					if (achievement.rarity >= AchievementRarity.RARE) {
+						setAnimationState((old) => ({ ...old, showConfetti: true }));
+						confettiPop.play();
 					}
 					setTimeout(() => {
 						clearAchievement();
-						setShowConfetti(false);
+						setAnimationState((old) => ({ ...old, showConfetti: false }));
 					}, 3500);
 				}
 			}}
 			exit="hidden"
 		>
 			<div className="absolute top-0 left-1/2">
-				{showConfetti && (
+				{animationState.showConfetti && (
 					<ConfettiExplosion
 						zIndex={500}
 						force={0.8}
-						colors={confettiPalette}
+						colors={animationState.confettiPalette}
 						width={window.visualViewport.width}
 						duration={2000}
-						particleCount={250}
+						particleCount={
+							achievement.rarity >= AchievementRarity.EPIC ? 250 : 100
+						}
 					/>
 				)}
 			</div>
@@ -174,15 +206,7 @@ const SingleAchievement: React.FC<{
 					backgroundImage: `linear-gradient(to bottom right, transparent 30%, #FFF, transparent 70%)`,
 				}}
 				className="absolute left-0 w-32 opacity-50 not-sr-only h-36 -top-8"
-				variants={{
-					shown: {
-						x: "650%",
-						transition: { duration: 0.8, delay: 0.5 },
-					},
-				}}
-				initial={{
-					x: "-100%",
-				}}
+				variants={shimmerVariants(achievement.rarity)}
 			/>
 			<div className="relative">
 				<Image
@@ -205,27 +229,27 @@ const SingleAchievement: React.FC<{
 							achievement.icon,
 							e.target as HTMLImageElement
 						);
-						setConfettiPalette(colors.map((c) => c.hex()));
 						const bestColors = getBestColors(colors, Color("#FFFFFF"));
-						setPrimaryColorRGB(
-							`${bestColors.primary.red()} ${bestColors.primary.green()} ${bestColors.primary.blue()}`
-						);
-						setSecondaryColorRGB(
-							`${bestColors.secondary.red()} ${bestColors.secondary.green()} ${bestColors.secondary.blue()}`
-						);
-						setShouldShow(true);
+
+						setAnimationState((old) => ({
+							...old,
+							shouldShow: true,
+							confettiPalette: colors.map((c) => c.hex()),
+							primaryColorRGB: `${bestColors.primary.red()} ${bestColors.primary.green()} ${bestColors.primary.blue()}`,
+							secondaryColorRGB: `${bestColors.secondary.red()} ${bestColors.secondary.green()} ${bestColors.secondary.blue()}`,
+						}));
 					}}
 				/>
 			</div>
 			<motion.div
-				variants={achievementTextVariants}
+				variants={achievementTextVariants(achievement.rarity)}
 				className="flex flex-col justify-between overflow-clip"
 			>
 				<div className="flex flex-row items-center justify-between gap-2 pl-2">
 					<h2 className="font-bold whitespace-nowrap">{achievement.name}</h2>
 					<span
 						style={{
-							color: `rgb(${secondaryColorRGB})`,
+							color: `rgb(${animationState.secondaryColorRGB})`,
 						}}
 						className="text-xl font-extrabold"
 					>

@@ -1,5 +1,6 @@
-import { Achievement } from "achievements/AchievementStore";
-import { ACHIEVEMENTS } from "achievements/achievementList";
+import { Achievement, AchievementMetric } from "achievements/AchievementStore";
+import { ACHIEVEMENTS, AchievementRarity } from "achievements/achievementList";
+import { METRICS } from "achievements/metricsList";
 import Color from "color";
 import { extractColors, getBestColors } from "helpers/colors";
 import { useAchievementMetrics } from "hooks/useAchievementMetrics";
@@ -37,6 +38,60 @@ export default function AchievmentsDebug() {
 						</button>
 					</p>
 				</div>
+				<div className="flex flex-col gap-2 p-2 mb-2 bg-gray-100 rounded-md shadow-md">
+					<h2>Metrics</h2>
+					{(METRICS as unknown as AchievementMetric[]).map((metric) => {
+						const progress = metricsProgress[metric.id];
+
+						return (
+							<div
+								key={metric.id}
+								className="relative p-2 bg-white rounded-md shadow-md"
+							>
+								<div className="flex flex-row justify-between">
+									<h3 className="text-2xl font-semibold">
+										{metric.name}{" "}
+										<span className="text-base italic">({metric.id})</span>
+									</h3>
+									{metric.type === "boolean" && (
+										<input
+											disabled={metric.isMetaMetric}
+											aria-label={metric.name}
+											className="w-6 h-6 p-2 mt-1 mr-1 bg-gray-100 rounded-md accent-purple-400 disabled:accent-slate-300"
+											type="checkbox"
+											checked={progress?.value ?? false}
+											onChange={(e) =>
+												achievementStore.markProgress(
+													metric.id as any,
+													e.target.checked,
+													true
+												)
+											}
+										/>
+									)}
+								</div>
+								{metric.type === "number" && (
+									<input
+										disabled={metric.isMetaMetric}
+										aria-label={metric.name}
+										className="w-full p-2 mt-1 bg-gray-100 rounded-md disabled:bg-gray-300"
+										type="number"
+										value={progress?.value ?? 0}
+										min={0}
+										step={1}
+										onChange={(e) =>
+											achievementStore.markProgress(
+												metric.id as any,
+												parseInt(e.target.value),
+												true
+											)
+										}
+									/>
+								)}
+							</div>
+						);
+					})}
+				</div>
 				<div className="flex flex-col gap-2 p-2 bg-gray-100 rounded-md shadow-md">
 					<h2>Achievements</h2>
 					{(ACHIEVEMENTS as unknown as Achievement[]).map((achievement) => {
@@ -64,7 +119,19 @@ export default function AchievmentsDebug() {
 									<p className="m-0">Description: {achievement.description}</p>
 									<p className="m-0">Score: {achievement.score}</p>
 									<p className="m-0">
-										Confetti: {achievement.confetti ? "Yes" : "No"}
+										Rarity: {AchievementRarity[achievement.rarity]}
+									</p>
+									<p className="m-0">
+										Extra Classes:{" "}
+										{achievement.customAchievementClasses ?? (
+											<span className="italic">None</span>
+										)}
+									</p>
+									<p className="m-0">
+										Filtered Classes:{" "}
+										{achievement.filterAchievementClasses ?? (
+											<span className="italic">None</span>
+										)}
 									</p>
 									{achievement.requirements.map((requirement) => {
 										return (
