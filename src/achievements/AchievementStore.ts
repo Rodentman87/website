@@ -17,6 +17,7 @@ export type Achievement = {
 	icon: string;
 	customAchievementClasses?: string;
 	filterAchievementClasses?: string;
+	ignoreCompletion?: boolean;
 };
 
 export type AchievementRequirement =
@@ -163,7 +164,8 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 			// Mark the meta-metric for achievements complete
 			this.markProgress(
 				"achievementsComplete",
-				this.achievements.filter((a) => a.completed).length,
+				this.achievements.filter((a) => a.completed && !a.ignoreCompletion)
+					.length,
 				true
 			);
 			this.markProgress(

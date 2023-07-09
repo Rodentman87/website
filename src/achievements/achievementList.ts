@@ -273,8 +273,7 @@ export const ACHIEVEMENTS = [
 	{
 		id: "log-it",
 		name: "Log It",
-		description:
-			"You've opened the console and called logIt(), nice investigation skills!",
+		description: "I see you snooping around in there!",
 		rarity: AchievementRarity.EPIC,
 		requirements: [
 			{
