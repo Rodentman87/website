@@ -17,6 +17,7 @@
 		"color": "^4.2.3",
 		"colorthief": "^2.4.0",
 		"date-fns": "^2.16.1",
+		"distance-from": "^1.1.2",
 		"eventemitter3": "^5.0.1",
 		"framer-motion": "^10.2.5",
 		"gray-matter": "^4.0.2",

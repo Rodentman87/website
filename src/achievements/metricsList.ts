@@ -46,4 +46,24 @@ export const METRICS = [
 		name: "Square",
 		type: "boolean",
 	},
+	{
+		id: "fiveTabs",
+		name: "5 Tabs Open At Once",
+		type: "boolean",
+	},
+	{
+		id: "prideMonth",
+		name: "Pride Month",
+		type: "boolean",
+	},
+	{
+		id: "console",
+		name: "Console",
+		type: "boolean",
+	},
+	{
+		id: "iss",
+		name: "ISS",
+		type: "boolean",
+	},
 ] as const;

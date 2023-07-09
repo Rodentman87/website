@@ -240,8 +240,82 @@ export const ACHIEVEMENTS = [
 		],
 		score: 100,
 		icon: "/large-red-square_1f7e5.png",
-
 		customAchievementClasses: "rounded-none",
 		filterAchievementClasses: "rounded-full",
+		ignoreCompletion: true,
+	},
+	{
+		id: "tabs",
+		name: "Tabbed",
+		description: "You've opened my home page on 5 separate tabs!",
+		rarity: AchievementRarity.LEGENDARY,
+		requirements: [
+			{
+				metricId: "fiveTabs",
+			},
+		],
+		score: 20,
+		icon: "/bookmark-tabs_1f4d1.png",
+	},
+	{
+		id: "prideMonth",
+		name: "Pride Month",
+		description: "You've visited during Pride Month!",
+		rarity: AchievementRarity.LEGENDARY,
+		requirements: [
+			{
+				metricId: "prideMonth",
+			},
+		],
+		score: 50,
+		icon: "/rainbow_1f308.png",
+	},
+	{
+		id: "log-it",
+		name: "Log It",
+		description:
+			"You've opened the console and called logIt(), nice investigation skills!",
+		rarity: AchievementRarity.EPIC,
+		requirements: [
+			{
+				metricId: "console",
+			},
+		],
+		score: 10,
+		icon: "/wood_1fab5.png",
+	},
+	{
+		id: "iss",
+		name: "ISS",
+		description: "You've visited while the ISS was over Houston!",
+		rarity: AchievementRarity.EPIC,
+		requirements: [
+			{
+				metricId: "iss",
+			},
+		],
+		score: 10,
+		icon: "/satellite_1f6f0-fe0f.png",
+	},
+	{
+		id: "all-achievements",
+		name: "Completionist",
+		description: "You've completed all achievements!",
+		rarity: AchievementRarity.LEGENDARY,
+		requirements: [
+			{
+				metricId: "achievementsComplete",
+				number: 0,
+			},
+		],
+		score: 100,
+		icon: "/hundred-points_1f4af.png",
+		ignoreCompletion: true,
 	},
 ] as const;
+
+(
+	ACHIEVEMENTS.find((a) => a.id === "all-achievements")!.requirements[0] as {
+		number: number;
+	}
+).number = ACHIEVEMENTS.filter((a) => !("ignoreCompletion" in a)).length;

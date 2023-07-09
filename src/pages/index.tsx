@@ -3,6 +3,7 @@ import { CyclesCard } from "@components/CyclesCard";
 import { ProjectCard } from "@components/ProjectCard";
 import { Square, SquareReveal } from "@components/Square";
 import { createHmac } from "crypto";
+import distanceFrom from "distance-from";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { useAchievementStore } from "hooks/useAchievementStore";
 import { useFancyEffects } from "hooks/useFancyEffect";
@@ -106,6 +107,7 @@ export default function Home({
 	params.append("description", description);
 	params.append("token", token);
 
+	// Achievement related stuff
 	useEffect(() => {
 		if (showFancy) {
 			setTimeout(
@@ -122,6 +124,47 @@ export default function Home({
 		if (today.getTime() < 1688337900000) {
 			achievementStore.markProgress("timeTravel", true);
 		}
+		window["logIt"] = () => {
+			console.log("🪵");
+			achievementStore.markProgress("console", true);
+		};
+		fetch("/api/iss")
+			.then((data) => data.json())
+			.then((data) => {
+				const iss = data as { latitude: number; longitude: number };
+				const JSC = [29.5622, -95.0908];
+				// @ts-expect-error I don't want to type this
+				const distance: number = distanceFrom(JSC)
+					.to([iss.latitude, iss.longitude])
+					.in("mi");
+				console.log("distance", distance);
+				if (distance < 700) {
+					achievementStore.markProgress("iss", true);
+				}
+			});
+		// Check how many other tabs are open
+		const myId = Math.random().toString();
+		const channel = new BroadcastChannel("tab-count");
+		let tabs = [myId];
+		channel.onmessage = (e) => {
+			if (e.data !== "echo") {
+				tabs.push(e.data);
+			}
+		};
+		channel.postMessage("echo");
+		setTimeout(() => {
+			console.log("tabs", tabs);
+			achievementStore.markProgress("fiveTabs", tabs.length >= 5, true);
+			channel.onmessage = (e) => {
+				if (e.data === "echo") {
+					console.log("sending", myId);
+					channel.postMessage(myId);
+				}
+			};
+		}, 1000);
+		return () => {
+			channel.close();
+		};
 	}, []);
 
 	return (
