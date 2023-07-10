@@ -64,7 +64,7 @@ export default function AchievmentsList() {
 									borderColor: `rgb(${primaryColorRGB})`,
 								}}
 								className={clsx(
-									"relative p-2 bg-white bg-opacity-25 border-2 border-solid rounded-md shadow-md backdrop-blur-sm overflow-clip",
+									"relative p-2 bg-white bg-opacity-25 border-2 border-solid rounded-md shadow-md overflow-clip",
 									{
 										"cursor-pointer":
 											achievement.id === "locked" && !isCompleted,
