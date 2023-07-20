@@ -93,7 +93,12 @@ export default function Layout({
 								height={144}
 							/>
 						</motion.div>
-						<motion.h1 layoutId="headername" className={"font-black text-5xl"}>
+						<motion.h1
+							layoutId="headername"
+							className={
+								"font-black text-3xl sm:text-4xl md:text-5xl whitespace-nowrap"
+							}
+						>
 							<motion.span
 								className={clsx(
 									"relative text-black transition-all duration-1000 inline-block",
@@ -101,7 +106,17 @@ export default function Layout({
 										"text-opacity-0": showHandwrittenName,
 									}
 								)}
-								animate={showHandwrittenName ? { width: 200 } : {}}
+								animate={
+									showHandwrittenName
+										? {
+												width:
+													typeof window !== "undefined" &&
+													window.visualViewport.width > 768
+														? 200
+														: 150,
+										  }
+										: {}
+								}
 							>
 								{firstName}
 								{showHandwrittenName && (
