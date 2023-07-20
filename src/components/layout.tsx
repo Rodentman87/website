@@ -7,10 +7,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Portal } from "react-portal";
 import utilStyles from "../styles/utils.module.css";
+import { HandwrittenName } from "./HandwrittenName";
 import Footer from "./footer";
 import styles from "./layout.module.css";
 
-export const name = "Maisy Dinosaur";
+export const firstName = "Maisy";
+export const lastName = "Dinosaur";
+export const name = firstName + " " + lastName;
 export const siteTitle = "Dinos are kinda cool";
 
 export default function Layout({
@@ -30,6 +33,8 @@ export default function Layout({
 }) {
 	const [lmao, setLmao] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
+	const [showHandwrittenName, setShowHandwrittenName] =
+		useState(centeredHeader);
 	const achievementStore = useAchievementStore();
 
 	useEffect(() => {
@@ -88,8 +93,26 @@ export default function Layout({
 								height={144}
 							/>
 						</motion.div>
-						<motion.h1 layoutId="headername" className={utilStyles.heading2Xl}>
-							{name}
+						<motion.h1 layoutId="headername" className={"font-black text-5xl"}>
+							<motion.span
+								className={clsx(
+									"relative text-black transition-all duration-1000 inline-block",
+									{
+										"text-opacity-0": showHandwrittenName,
+									}
+								)}
+								animate={showHandwrittenName ? { width: 200 } : {}}
+							>
+								{firstName}
+								{showHandwrittenName && (
+									<HandwrittenName
+										onAnimationDone={() =>
+											setTimeout(() => setShowHandwrittenName(false), 1000)
+										}
+									/>
+								)}
+							</motion.span>{" "}
+							{lastName}
 						</motion.h1>
 					</>
 				) : (
