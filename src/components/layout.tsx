@@ -107,17 +107,6 @@ export default function Layout({
 										"text-opacity-0": showHandwrittenName,
 									}
 								)}
-								animate={
-									showHandwrittenName
-										? {
-												width:
-													typeof window !== "undefined" &&
-													window.visualViewport.width > 768
-														? 200
-														: 150,
-										  }
-										: {}
-								}
 							>
 								{firstName}
 								{showHandwrittenName && (
