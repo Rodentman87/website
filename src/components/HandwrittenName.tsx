@@ -52,7 +52,8 @@ export const HandwrittenName: React.FC<{
 }> = ({ onAnimationDone }) => {
 	return (
 		<motion.svg
-			className="absolute top-0 left-0 w-full origin-top-left not-sr-only"
+			aria-hidden="true"
+			className="absolute top-0 left-0 w-full origin-top-left"
 			viewBox="0 0 199 76"
 			fill="none"
 			exit={{ opacity: 0, transition: { duration: 1 } }}
