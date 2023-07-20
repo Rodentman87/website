@@ -100,6 +100,7 @@ export default function Layout({
 							}
 						>
 							<motion.span
+								onClick={() => setShowHandwrittenName(true)}
 								className={clsx(
 									"relative text-black transition-all duration-1000 inline-block",
 									{
@@ -122,7 +123,7 @@ export default function Layout({
 								{showHandwrittenName && (
 									<HandwrittenName
 										onAnimationDone={() =>
-											setTimeout(() => setShowHandwrittenName(false), 1000)
+											setTimeout(() => setShowHandwrittenName(false), 1500)
 										}
 									/>
 								)}

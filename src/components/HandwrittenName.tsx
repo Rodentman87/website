@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-const duration = 5;
+const duration = 3;
 
 const mainTextVariants = (i: number) => ({
 	hidden: {
@@ -15,11 +15,11 @@ const mainTextVariants = (i: number) => ({
 			pathLength: {
 				ease: "easeOut",
 				duration: duration,
-				delay: i * 0.1 + 0.2,
+				delay: i * 0.1 + 0.4,
 			},
 			opacity: {
 				duration: 0.01,
-				delay: i * 0.1 + 0.2,
+				delay: i * 0.1 + 0.4,
 			},
 		},
 	},
@@ -37,11 +37,11 @@ const dotVariants = {
 			pathLength: {
 				ease: "easeOut",
 				duration: 0.5,
-				delay: duration,
+				delay: duration + 0.7,
 			},
 			opacity: {
 				duration: 0.01,
-				delay: duration,
+				delay: duration + 0.7,
 			},
 		},
 	},
@@ -110,6 +110,19 @@ export const HandwrittenName: React.FC<{
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				onAnimationComplete={() => onAnimationDone()}
+			/>
+			<motion.path
+				initial={{ opacity: 0, pathLength: 0 }}
+				animate={{ opacity: 1, pathLength: 1 }}
+				transition={{
+					opacity: { duration: 0.01, delay: 0.2 },
+					pathLength: { duration: 0.25, delay: 0.2, ease: "easeInOut" },
+				}}
+				d="M2.4106 69H190"
+				stroke="black"
+				strokeWidth="5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 		</motion.svg>
 	);
