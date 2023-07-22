@@ -121,6 +121,9 @@ export default function Home({
 		if (month === 2 && day === 24) {
 			achievementStore.markProgress("birthday", true);
 		}
+		if (month === 5) {
+			achievementStore.markProgress("prideMonth", true);
+		}
 		if (today.getTime() < 1688337900000) {
 			achievementStore.markProgress("timeTravel", true);
 		}
@@ -154,7 +157,7 @@ export default function Home({
 		channel.postMessage("echo");
 		setTimeout(() => {
 			console.log("tabs", tabs);
-			if(tabs.length >= 5)
+			if (tabs.length >= 5)
 				achievementStore.markProgress("fiveTabs", true, true);
 			channel.onmessage = (e) => {
 				if (e.data === "echo") {
