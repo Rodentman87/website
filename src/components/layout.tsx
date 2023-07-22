@@ -95,9 +95,7 @@ export default function Layout({
 						</motion.div>
 						<motion.h1
 							layoutId="headername"
-							className={
-								"font-black text-3xl sm:text-4xl md:text-5xl whitespace-nowrap"
-							}
+							className="text-3xl font-black sm:text-4xl md:text-5xl whitespace-nowrap"
 						>
 							<motion.span
 								onClick={() => setShowHandwrittenName(true)}
