@@ -86,6 +86,7 @@ export const HandwrittenName: React.FC<{
 		>
 			{colorsToUse.map((color, index) => (
 				<motion.path
+					key={index}
 					variants={mainTextVariants(index, colorsToUse.length + 1)}
 					initial="hidden"
 					animate="visible"
@@ -97,6 +98,7 @@ export const HandwrittenName: React.FC<{
 				/>
 			))}
 			<motion.path
+				key="last_stroke"
 				variants={mainTextVariants(colorsToUse.length, colorsToUse.length + 1)}
 				initial="hidden"
 				animate="visible"
@@ -107,6 +109,7 @@ export const HandwrittenName: React.FC<{
 				strokeLinejoin="round"
 			/>
 			<motion.path
+				key="dot"
 				variants={dotVariants}
 				initial="hidden"
 				animate="visible"
@@ -118,6 +121,7 @@ export const HandwrittenName: React.FC<{
 				onAnimationComplete={() => onAnimationDone()}
 			/>
 			<motion.path
+				key="line"
 				initial={{ opacity: 0, pathLength: 0 }}
 				animate={{ opacity: 1, pathLength: 1 }}
 				transition={{

@@ -41,13 +41,6 @@ const Footer = () => {
 				<motion.div layoutId="email" variants={item} custom={{ i: 2 }}>
 					<SocialIcon url="mailto:maisy@likesdinosaurs.com" />
 				</motion.div>
-				<motion.div layoutId="discord" variants={item} custom={{ i: 3 }}>
-					<SocialIcon
-						network="discord"
-						bgColor="#5865F2"
-						url="https://discord.likesdinosaurs.com"
-					/>
-				</motion.div>
 				<motion.div>
 					<Link href="/achievements">
 						<div className="bg-yellow-300 aspect-square w-[50px] rounded-full flex flex-row justify-center items-center">
