@@ -7,6 +7,8 @@ const spotify = SpotifyApi.withClientCredentials(
 );
 
 let cachedResult = null;
+let cachedSpotifyResult = null;
+let cachedSpotifyResultId = null;
 
 interface StatusResult {
 	status: string;
@@ -66,14 +68,18 @@ export async function getSongData() {
 		cachedResult = body;
 		setTimeout(() => {
 			cachedResult = null;
-		}, 1000 * 5);
+		}, 1000);
 		statusResult = body;
 	}
 	const spotifyActivity = statusResult.activities.find(
 		(activity) => activity.type === 2
 	);
 	if (!spotifyActivity) return null;
-	const song = await spotify.tracks.get(spotifyActivity.sync_id);
+	if (spotifyActivity.sync_id !== cachedSpotifyResultId) {
+		cachedSpotifyResult = await spotify.tracks.get(spotifyActivity.sync_id);
+		cachedSpotifyResultId = spotifyActivity.sync_id;
+	}
+	const song = cachedSpotifyResult;
 	return {
 		start: spotifyActivity.timestamps.start,
 		end: spotifyActivity.timestamps.end,

@@ -32,7 +32,7 @@ export const SpotifyStatus: React.FC = () => {
 
 	React.useEffect(() => {
 		fetchSong();
-		const interval = setInterval(fetchSong, 5000);
+		const interval = setInterval(fetchSong, 2500);
 		return () => clearInterval(interval);
 	}, []);
 
@@ -48,12 +48,20 @@ export const SpotifyStatus: React.FC = () => {
 					}}
 					className="relative overflow-hidden border border-gray-500 border-solid shadow-md rounded-2xl w-96"
 				>
-					<img
-						alt={status.song.album.name}
-						src={status.song.album.images[0].url}
-						className="absolute top-0 left-0 w-full -translate-y-1/2"
-					/>
-					<div className="flex flex-row items-stretch justify-start gap-2 p-2 bg-white bg-opacity-50 backdrop-blur-2xl">
+					<motion.div
+						key={status.song.album.images[0].url}
+						initial={{ y: 20 }}
+						animate={{ y: 0 }}
+						transition={{ delay: 0.05, duration: 0.5 }}
+						className="absolute top-0 left-0 w-full"
+					>
+						<img
+							alt={status.song.album.name}
+							src={status.song.album.images[0].url}
+							className="absolute top-0 left-0 -translate-y-1/2"
+						/>
+					</motion.div>
+					<div className="flex flex-row items-stretch justify-start gap-2 p-2 bg-white bg-opacity-60 backdrop-blur-xl">
 						<a
 							target="_blank"
 							href="https://open.spotify.com/"
@@ -74,7 +82,7 @@ export const SpotifyStatus: React.FC = () => {
 									status.song.album.images[0].url,
 									e.target as HTMLImageElement
 								);
-								const bestColors = getBestColors(colors, Color("#FFFFFF"));
+								const bestColors = getBestColors(colors, Color("#d1d5db"), 2);
 								setColors({
 									primary: bestColors.primary.hex(),
 									secondary: bestColors.secondary.hex(),
@@ -84,7 +92,7 @@ export const SpotifyStatus: React.FC = () => {
 						<div className="flex flex-col justify-start min-w-0 grow">
 							<a
 								title={status.song.name}
-								style={{ color: colors.primary }}
+								style={{ color: colors.secondary }}
 								className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 								target="_blank"
 								href={status.song.external_urls.spotify}
@@ -158,17 +166,18 @@ const ProgressBar: React.FC<{ colors: Colors; data: StatusResponse }> = ({
 
 	return (
 		<div className="flex flex-col justify-end w-full grow">
-			<div className="relative w-full h-2 overflow-hidden bg-gray-500 rounded-full">
+			<div className="relative overflow-hidden rounded-full">
+				<div className="relative w-full h-2 overflow-hidden bg-white rounded-full opacity-40"></div>
 				<div
 					style={{
-						backgroundColor: colors.primary,
+						backgroundColor: colors.secondary,
 						width: `${(elapsed / total) * 100}%`,
 					}}
 					className="absolute top-0 left-0 h-full rounded-full"
 				></div>
 			</div>
 			<div className="flex flex-row justify-between">
-				<span className="text-xs">{msToMinutesAndSeconds(elapsed)}</span>
+				<span className="text-xs">{msToMinutesAndSeconds(elapsed - 1500)}</span>
 				<span className="text-xs">
 					{msToMinutesAndSeconds(data.song.duration_ms)}
 				</span>
