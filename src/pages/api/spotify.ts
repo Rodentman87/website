@@ -76,7 +76,12 @@ export async function getSongData() {
 	);
 	if (!spotifyActivity) return null;
 	if (spotifyActivity.sync_id !== cachedSpotifyResultId) {
-		cachedSpotifyResult = await spotify.tracks.get(spotifyActivity.sync_id);
+		try {
+			cachedSpotifyResult = await spotify.tracks.get(spotifyActivity.sync_id);
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
 		cachedSpotifyResultId = spotifyActivity.sync_id;
 	}
 	const song = cachedSpotifyResult;
