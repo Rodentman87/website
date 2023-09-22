@@ -205,7 +205,7 @@ export default function Home({
 			) : (
 				<SquareReveal onClick={() => setShowSquare(true)} />
 			)}
-			<div className="fixed bottom-2 left-2">
+			<div className="fixed invisible bottom-2 left-2 2xl:visible">
 				<SpotifyStatus />
 			</div>
 			<section className="flex flex-col items-center justify-between text-xl md:flex-row">
