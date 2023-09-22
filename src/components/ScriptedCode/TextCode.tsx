@@ -72,21 +72,29 @@ export function getScriptFromText(text: string) {
 			}
 		} else if (currentCodeLine.startsWith("If")) {
 			const condition = currentCodeLine.replace(/If (.+?),/, "$1");
+			stepInfo.indicateRange = [3, 3 + condition.length];
+			const lengthOfBlock = findLengthOfBlock(lines, currentLine);
 			if (evaluateCondition(condition, currentVariables)) {
 				stepInfo.replacePointer = "👍";
+				stepInfo.backgroundColor = "rgb(187 247 208)";
 			} else {
-				currentLine += findLengthOfBlock(lines, currentLine);
+				currentLine += lengthOfBlock;
 				stepInfo.replacePointer = "👎";
+				stepInfo.backgroundColor = "rgb(254 202 202)";
 			}
 		} else if (currentCodeLine.startsWith("While")) {
 			const condition = currentCodeLine.replace(/While (.+?),/, "$1");
+			stepInfo.indicateRange = [6, 6 + condition.length];
+			const lengthOfBlock = findLengthOfBlock(lines, currentLine);
 			if (evaluateCondition(condition, currentVariables)) {
 				stepInfo.replacePointer = "👍";
+				stepInfo.backgroundColor = "rgb(187 247 208)";
 				returnToLine = currentLine;
 				returnAfterLine = currentLine + findLengthOfBlock(lines, currentLine);
 			} else {
-				currentLine += findLengthOfBlock(lines, currentLine);
+				currentLine += lengthOfBlock;
 				stepInfo.replacePointer = "👎";
+				stepInfo.backgroundColor = "rgb(254 202 202)";
 			}
 		}
 

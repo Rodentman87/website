@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef } from "react";
 import {
@@ -10,6 +11,8 @@ import { useShikiHighlighter } from "../ShikiProvider";
 
 export interface ScriptLine {
 	indicateLine: number;
+	indicateRange?: [number, number];
+	backgroundColor?: string;
 	variables?: Record<string, any>;
 	consoleLine?: string;
 	replacePointer?: string;
@@ -90,7 +93,24 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 										</motion.span>
 										<motion.span
 											layoutId="line-indicator-bg"
-											className="absolute left-0 h-full w-96 from-green-200 bg-gradient-to-r"
+											className={clsx(
+												"absolute h-full font-mono from-blue-100 bg-gradient-to-r",
+												{
+													"to-blue-100": currentScriptLine.indicateRange,
+												}
+											)}
+											style={{
+												left:
+													"calc(100% + " +
+													(currentScriptLine.indicateRange?.[0] ?? 0) +
+													"ch)",
+												width: currentScriptLine.indicateRange
+													? currentScriptLine.indicateRange[1] -
+													  currentScriptLine.indicateRange[0] +
+													  "ch"
+													: "24rem",
+												background: currentScriptLine.backgroundColor,
+											}}
 										/>
 									</>
 								)}
