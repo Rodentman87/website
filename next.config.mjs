@@ -12,4 +12,15 @@ const withMDX = nextmdx({
 		providerImportSource: "@mdx-js/react",
 	},
 });
-export default withMDX({});
+export default withMDX({
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "i.scdn.co",
+				port: "",
+				pathname: "/image/**",
+			},
+		],
+	},
+});
