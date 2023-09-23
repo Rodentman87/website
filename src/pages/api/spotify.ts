@@ -48,8 +48,8 @@ interface StatusResult {
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
-		const songData = await getSongData();
-		return res.status(200).json(songData);
+		// const songData = await getSongData();
+		return res.status(200).json(null);
 	} else {
 		return res.status(405);
 	}
