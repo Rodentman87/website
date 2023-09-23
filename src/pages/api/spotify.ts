@@ -69,12 +69,12 @@ export async function getSongData() {
 		(activity) => activity.type === 2
 	);
 	if (!spotifyActivity) return null;
-	let song = null;
+	let song = await kv.get("spotifyResult");
 	if (spotifyActivity.sync_id !== (await kv.get("spotifyResultId"))) {
-		await kv.set("spotifyResultId", spotifyActivity.sync_id, { ex: 1 });
+		await kv.set("spotifyResultId", spotifyActivity.sync_id);
 		try {
 			const result = await spotify.tracks.get(spotifyActivity.sync_id);
-			await kv.set("spotifyResult", result, { ex: 1 });
+			await kv.set("spotifyResult", result);
 			song = result;
 		} catch (e) {
 			console.error(e);
