@@ -172,6 +172,9 @@ export default function Home({
 		};
 	}, []);
 
+	const showSpotifyWidget =
+		typeof window !== "undefined" && window.innerWidth > 1500;
+
 	return (
 		<Layout centeredHeader hideBackToHome allowLmao>
 			<Head>
@@ -205,8 +208,8 @@ export default function Home({
 			) : (
 				<SquareReveal onClick={() => setShowSquare(true)} />
 			)}
-			<div className="fixed invisible bottom-2 left-2 2xl:visible">
-				<SpotifyStatus />
+			<div className="fixed bottom-2 left-2">
+				{showSpotifyWidget && <SpotifyStatus />}
 			</div>
 			<section className="flex flex-col items-center justify-between text-xl md:flex-row">
 				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>

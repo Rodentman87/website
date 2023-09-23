@@ -1,14 +1,11 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { kv } from "@vercel/kv";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const spotify = SpotifyApi.withClientCredentials(
 	process.env.SPOTIFY_CLIENT_ID,
 	process.env.SPOTIFY_CLIENT_SECRET
 );
-
-let cachedResult = null;
-let cachedSpotifyResult = null;
-let cachedSpotifyResultId = null;
 
 interface StatusResult {
 	status: string;
@@ -59,33 +56,31 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 }
 
 export async function getSongData() {
-	let statusResult = cachedResult;
+	let statusResult = await kv.get<StatusResult>("statusResult");
 	if (!statusResult) {
 		const res = await fetch(
 			"https://api.statusbadges.me/presence/152566937442975744"
 		);
 		const body = (await res.json()) as StatusResult;
-		cachedResult = body;
-		setTimeout(() => {
-			cachedResult = null;
-		}, 1000);
+		await kv.set("statusResult", body, { ex: 1 });
 		statusResult = body;
 	}
 	const spotifyActivity = statusResult.activities.find(
 		(activity) => activity.type === 2
 	);
 	if (!spotifyActivity) return null;
-	if (spotifyActivity.sync_id !== cachedSpotifyResultId) {
-		cachedSpotifyResultId = spotifyActivity.sync_id;
-		cachedSpotifyResult = null;
+	let song = null;
+	if (spotifyActivity.sync_id !== (await kv.get("spotifyResultId"))) {
+		await kv.set("spotifyResultId", spotifyActivity.sync_id, { ex: 1 });
 		try {
-			cachedSpotifyResult = await spotify.tracks.get(spotifyActivity.sync_id);
+			const result = await spotify.tracks.get(spotifyActivity.sync_id);
+			await kv.set("spotifyResult", result, { ex: 1 });
+			song = result;
 		} catch (e) {
 			console.error(e);
 			return null;
 		}
 	}
-	const song = cachedSpotifyResult;
 	if (song === null) return null;
 	return {
 		start: spotifyActivity.timestamps.start,
