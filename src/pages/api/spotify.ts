@@ -77,6 +77,7 @@ export async function getSongData() {
 			await kv.set("spotifyResult", result);
 			song = result;
 		} catch (e) {
+			await kv.set("spotifyResult", null);
 			console.error(e);
 			return null;
 		}
