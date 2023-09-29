@@ -1,4 +1,4 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk";
 import { kv } from "@vercel/kv";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -71,9 +71,8 @@ export async function getSongData() {
 		(activity) => activity.type === 2
 	);
 	if (!spotifyActivity) return null;
-	let song = await kv.get("spotifyResult");
-	if (spotifyActivity.sync_id !== (await kv.get("spotifyResultId"))) {
-		await kv.set("spotifyResultId", spotifyActivity.sync_id);
+	let song = (await kv.get("spotifyResult")) as Track | null;
+	if (song === null || spotifyActivity.sync_id !== song.id) {
 		try {
 			const result = await spotify.tracks.get(spotifyActivity.sync_id);
 			await kv.set("spotifyResult", result);
