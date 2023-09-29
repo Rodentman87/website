@@ -7,6 +7,8 @@ const spotify = SpotifyApi.withClientCredentials(
 	process.env.SPOTIFY_CLIENT_SECRET
 );
 
+let cachedStatusResult: StatusResult | null = null;
+
 interface StatusResult {
 	status: string;
 	guild_id: string;
@@ -48,23 +50,23 @@ interface StatusResult {
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
-		// const songData = await getSongData();
-		return res.status(200).json(null);
+		const songData = await getSongData();
+		res.setHeader("Cache-Control", "public, s-maxage=2");
+		return res.status(200).json(songData);
 	} else {
 		return res.status(405);
 	}
 }
 
 export async function getSongData() {
-	let statusResult = await kv.get<StatusResult>("statusResult");
-	if (!statusResult) {
+	if (!cachedStatusResult) {
 		const res = await fetch(
 			"https://api.statusbadges.me/presence/152566937442975744"
 		);
 		const body = (await res.json()) as StatusResult;
-		await kv.set("statusResult", body, { ex: 1 });
-		statusResult = body;
+		cachedStatusResult = body;
 	}
+	const statusResult = cachedStatusResult;
 	const spotifyActivity = statusResult.activities.find(
 		(activity) => activity.type === 2
 	);
