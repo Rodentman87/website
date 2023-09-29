@@ -32,7 +32,7 @@ export const SpotifyStatus: React.FC = () => {
 
 	React.useEffect(() => {
 		fetchSong();
-		const interval = setInterval(fetchSong, 2500);
+		const interval = setInterval(fetchSong, 5000);
 		return () => clearInterval(interval);
 	}, []);
 
