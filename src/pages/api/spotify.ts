@@ -1,11 +1,4 @@
-import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk";
-import { kv } from "@vercel/kv";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const spotify = SpotifyApi.withClientCredentials(
-	process.env.SPOTIFY_CLIENT_ID,
-	process.env.SPOTIFY_CLIENT_SECRET
-);
 
 let cachedStatusResult: StatusResult | null = null;
 
@@ -50,43 +43,24 @@ interface StatusResult {
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
-		const songData = await getSongData();
+		if (!cachedStatusResult) {
+			const res = await fetch(
+				"https://api.statusbadges.me/presence/152566937442975744"
+			);
+			const body = (await res.json()) as StatusResult;
+			cachedStatusResult = body;
+			setTimeout(() => {
+				cachedStatusResult = null;
+			}, 2000);
+		}
+		const statusResult = cachedStatusResult;
+		const spotifyActivity = statusResult.activities.find(
+			(activity) => activity.type === 2
+		);
+		if (!spotifyActivity) return null;
 		res.setHeader("Cache-Control", "public, s-maxage=2");
-		return res.status(200).json(songData);
+		return res.status(200).json(spotifyActivity);
 	} else {
 		return res.status(405);
 	}
-}
-
-export async function getSongData() {
-	if (!cachedStatusResult) {
-		const res = await fetch(
-			"https://api.statusbadges.me/presence/152566937442975744"
-		);
-		const body = (await res.json()) as StatusResult;
-		cachedStatusResult = body;
-	}
-	const statusResult = cachedStatusResult;
-	const spotifyActivity = statusResult.activities.find(
-		(activity) => activity.type === 2
-	);
-	if (!spotifyActivity) return null;
-	let song = (await kv.get("spotifyResult")) as Track | null;
-	if (song === null || spotifyActivity.sync_id !== song.id) {
-		try {
-			const result = await spotify.tracks.get(spotifyActivity.sync_id);
-			await kv.set("spotifyResult", result);
-			song = result;
-		} catch (e) {
-			await kv.set("spotifyResult", null);
-			console.error(e);
-			return null;
-		}
-	}
-	if (song === null) return null;
-	return {
-		start: spotifyActivity.timestamps.start,
-		end: spotifyActivity.timestamps.end,
-		song: song,
-	};
 }

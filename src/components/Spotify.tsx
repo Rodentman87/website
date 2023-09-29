@@ -3,13 +3,37 @@ import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { BsSpotify } from "react-icons/bs";
 
 interface StatusResponse {
-	start: number;
-	end: number;
-	song: Track;
+	type: number;
+	name: string;
+	url?: string;
+	created_at: number;
+	timestamps?: {
+		start: number;
+		end?: number;
+	};
+	application_id?: string;
+	details?: string;
+	state?: string;
+	emoji?: {
+		name?: string;
+		id?: string;
+		animated?: boolean;
+	};
+	party?: {
+		id?: string;
+		size?: [number, number];
+	};
+	assets?: {
+		large_image?: string;
+		large_text?: string;
+		small_image?: string;
+		small_text?: string;
+	};
+	sync_id?: string;
 }
 
 interface Colors {
@@ -19,16 +43,31 @@ interface Colors {
 
 export const SpotifyStatus: React.FC = () => {
 	const [status, setStatus] = React.useState<StatusResponse | null>(null);
+	const [song, setSong] = React.useState<Track | null>(null);
+	const songId = useRef<string | null>(null);
 	const [colors, setColors] = React.useState<Colors>({
 		primary: "#FFFFFF",
 		secondary: "#FFFFFF",
 	});
 
-	const fetchSong = React.useCallback(() => {
-		fetch("/api/spotify")
-			.then((res) => res.json())
-			.then((data) => setStatus(data));
-	}, []);
+	const fetchSong = React.useCallback(async () => {
+		const status = (await fetch("/api/spotify").then((res) =>
+			res.json()
+		)) as StatusResponse | null;
+		if (status) {
+			if (songId.current === null || songId.current !== status.sync_id) {
+				const song = (await fetch(`/api/song/${status.sync_id}`).then((res) =>
+					res.json()
+				)) as Track | null;
+				setSong(song);
+				songId.current = status.sync_id;
+			}
+			setStatus(status);
+		} else {
+			setStatus(null);
+			setSong(null);
+		}
+	}, [song, status]);
 
 	React.useEffect(() => {
 		fetchSong();
@@ -49,15 +88,15 @@ export const SpotifyStatus: React.FC = () => {
 					className="relative overflow-hidden border border-gray-500 border-solid shadow-md rounded-2xl w-96"
 				>
 					<motion.div
-						key={status.song.album.images[0].url}
+						key={song.album.images[0].url}
 						initial={{ y: 20 }}
 						animate={{ y: 0 }}
 						transition={{ delay: 0.05, duration: 0.5 }}
 						className="absolute top-0 left-0 w-full"
 					>
 						<img
-							alt={status.song.album.name}
-							src={status.song.album.images[0].url}
+							alt={song.album.name}
+							src={song.album.images[0].url}
 							className="absolute top-0 left-0 -translate-y-1/2"
 						/>
 					</motion.div>
@@ -70,16 +109,16 @@ export const SpotifyStatus: React.FC = () => {
 							<BsSpotify size={24} color={colors.primary} />
 						</a>
 						<Image
-							key={status.song.album.images[0].url}
+							key={song.album.images[0].url}
 							quality={100}
-							alt={status.song.album.name}
+							alt={song.album.name}
 							width={96}
 							height={96}
-							src={status.song.album.images[0].url}
+							src={song.album.images[0].url}
 							className="rounded-lg"
 							onLoad={async (e) => {
 								const colors = await extractColors(
-									status.song.album.images[0].url,
+									song.album.images[0].url,
 									e.target as HTMLImageElement
 								);
 								const bestColors = getBestColors(colors, Color("#d1d5db"), 2);
@@ -91,17 +130,17 @@ export const SpotifyStatus: React.FC = () => {
 						/>
 						<div className="flex flex-col justify-start min-w-0 grow">
 							<a
-								title={status.song.name}
+								title={song.name}
 								style={{ color: colors.secondary }}
 								className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 								target="_blank"
-								href={status.song.external_urls.spotify}
+								href={song.external_urls.spotify}
 							>
-								{status.song.name}
+								{song.name}
 							</a>
-							<ArtistLine colors={colors} data={status} />
-							<AlbumLine colors={colors} data={status} />
-							<ProgressBar colors={colors} data={status} />
+							<ArtistLine colors={colors} song={song} />
+							<AlbumLine colors={colors} song={song} />
+							<ProgressBar colors={colors} status={status} song={song} />
 						</div>
 					</div>
 				</motion.div>
@@ -110,50 +149,51 @@ export const SpotifyStatus: React.FC = () => {
 	);
 };
 
-const ArtistLine: React.FC<{ colors: Colors; data: StatusResponse }> = ({
-	data,
+const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
+	song,
 	colors,
 }) => {
 	return (
 		<span className="overflow-hidden text-xs font-semibold whitespace-nowrap text-ellipsis">
 			by{" "}
 			<a
-				title={data.song.artists[0].name}
+				title={song.artists[0].name}
 				style={{ color: colors.primary }}
 				target="_blank"
-				href={data.song.artists[0].external_urls.spotify}
+				href={song.artists[0].external_urls.spotify}
 			>
-				{data.song.artists[0].name}
+				{song.artists[0].name}
 			</a>
 		</span>
 	);
 };
 
-const AlbumLine: React.FC<{ colors: Colors; data: StatusResponse }> = ({
-	data,
+const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
+	song,
 	colors,
 }) => {
 	return (
 		<span className="overflow-hidden text-xs font-semibold whitespace-nowrap text-ellipsis">
 			on{" "}
 			<a
-				title={data.song.album.name}
+				title={song.album.name}
 				style={{ color: colors.primary }}
 				target="_blank"
-				href={data.song.album.external_urls.spotify}
+				href={song.album.external_urls.spotify}
 			>
-				{data.song.album.name}
+				{song.album.name}
 			</a>
 		</span>
 	);
 };
 
-const ProgressBar: React.FC<{ colors: Colors; data: StatusResponse }> = ({
-	data,
-	colors,
-}) => {
-	const total = data.end - data.start;
-	const elapsed = Math.min(Date.now() - data.start, total);
+const ProgressBar: React.FC<{
+	colors: Colors;
+	song: Track;
+	status: StatusResponse;
+}> = ({ song, status, colors }) => {
+	const total = status.timestamps.end - status.timestamps.start;
+	const elapsed = Math.min(Date.now() - status.timestamps.start, total);
 
 	const [_, setRerender] = React.useState(0);
 
@@ -179,7 +219,7 @@ const ProgressBar: React.FC<{ colors: Colors; data: StatusResponse }> = ({
 			<div className="flex flex-row justify-between">
 				<span className="text-xs">{msToMinutesAndSeconds(elapsed - 1500)}</span>
 				<span className="text-xs">
-					{msToMinutesAndSeconds(data.song.duration_ms)}
+					{msToMinutesAndSeconds(song.duration_ms)}
 				</span>
 			</div>
 		</div>
