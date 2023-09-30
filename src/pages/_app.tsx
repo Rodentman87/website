@@ -1,6 +1,7 @@
 import { AchievementGetDisplay } from "@components/AchievementGetDisplay";
 import { AudioSystem } from "@components/AudioLink";
 import { MDXProvider } from "@mdx-js/react";
+import { Analytics } from "@vercel/analytics/react";
 import { AchievementStore } from "achievements/AchievementStore";
 import { AchievementStoreContext } from "hooks/useAchievementStore";
 import { AppProps } from "next/app";
@@ -47,6 +48,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					<AchievementStoreContext.Provider value={achievementStore}>
 						<AchievementGetDisplay />
 						<Component {...pageProps} />
+						<Analytics />
 					</AchievementStoreContext.Provider>
 				</AudioSystem>
 			</MDXProvider>
