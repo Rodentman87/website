@@ -85,14 +85,19 @@ export const SpotifyStatus: React.FC = () => {
 					style={{
 						backgroundColor: colors.secondary,
 					}}
-					className="relative overflow-hidden border border-gray-500 border-solid shadow-md rounded-2xl w-96"
+					className="relative border border-gray-500 border-solid shadow-md rounded-2xl w-96"
 				>
+					<motion.span
+						className="absolute text-sm -top-6 left-2"
+						initial={{ y: 15, opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						transition={{ delay: 1 }}
+					>
+						I'm currently listening to:
+					</motion.span>
 					<motion.div
 						key={song.album.images[0].url}
-						initial={{ y: 20 }}
-						animate={{ y: 0 }}
-						transition={{ delay: 0.05, duration: 0.5 }}
-						className="absolute top-0 left-0 w-full"
+						className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl"
 					>
 						<img
 							alt={song.album.name}
@@ -100,7 +105,7 @@ export const SpotifyStatus: React.FC = () => {
 							className="absolute top-0 left-0 -translate-y-1/2"
 						/>
 					</motion.div>
-					<div className="flex flex-row items-stretch justify-start gap-2 p-2 bg-white bg-opacity-60 backdrop-blur-xl">
+					<div className="flex flex-row items-stretch justify-start gap-2 p-2 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl">
 						<a
 							target="_blank"
 							href="https://open.spotify.com/"
