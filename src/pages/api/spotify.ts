@@ -58,7 +58,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			(activity) => activity.type === 2
 		);
 		if (!spotifyActivity) return null;
-		res.setHeader("Cache-Control", "public, s-maxage=2");
+		res.setHeader("Cache-Control", "public, s-maxage=5");
 		return res.status(200).json(spotifyActivity);
 	} else {
 		return res.status(405);
