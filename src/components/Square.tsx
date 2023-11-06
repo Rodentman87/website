@@ -142,6 +142,14 @@ export const Square: React.FC<{ onHide: () => void }> = ({ onHide }) => {
 	const [animationStep, setAnimationStep] = React.useState<AnimationStep>(
 		AnimationStep.Shrink1
 	);
+	const [showHint, setShowHint] = React.useState(false);
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setShowHint(true);
+		}, 10000);
+		return () => clearTimeout(timeout);
+	});
 
 	const achievementStore = useAchievementStore();
 
@@ -170,6 +178,9 @@ export const Square: React.FC<{ onHide: () => void }> = ({ onHide }) => {
 						setAnimationStep(AnimationStep.Hidden);
 					}, 500);
 				} else {
+					if (attempts === 0) {
+						setShowHint(true);
+					}
 					setAttempts(attempts + 1);
 					setTimeout(() => {
 						setAnimationStep(AnimationStep.Grow);
@@ -266,6 +277,26 @@ export const Square: React.FC<{ onHide: () => void }> = ({ onHide }) => {
 						{enteredCode.join(" ")}
 					</div>
 				</motion.div>
+			</motion.div>
+			{/* Link */}
+			<motion.div
+				className="absolute p-1 px-2 text-xs bg-white rounded-md bottom-2 right-2"
+				initial={"hidden"}
+				animate={showHint ? "visible" : "hidden"}
+				variants={{
+					hidden: {
+						opacity: 0,
+						y: 50,
+					},
+					visible: {
+						opacity: 1,
+						y: 0,
+					},
+				}}
+			>
+				<a target="_blank" href="https://www.squareisnot.cool/">
+					Don't know where to find the code?
+				</a>
 			</motion.div>
 		</div>
 	);
