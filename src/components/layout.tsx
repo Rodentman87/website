@@ -129,7 +129,7 @@ export default function Layout({
 							<motion.img
 								layoutId="headersvg"
 								src="/maisy-mask.jpg"
-								ref={meRef}
+								ref={meRef as any}
 								className={`${styles.headerImage} ${utilStyles.borderCircle}`}
 								alt={name}
 								width={108}
