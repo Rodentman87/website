@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useSessionState } from "hooks/useSessionState";
 import Image from "next/image";
 import Link from "next/link";
+import { MutableRefObject } from "react";
 import { SocialIcon } from "react-social-icons";
 import styles from "./layout.module.css";
 
@@ -15,7 +16,11 @@ const item = {
 	hidden: { opacity: 0 },
 };
 
-const Footer = () => {
+const Footer = ({
+	achievementButtonRef,
+}: {
+	achievementButtonRef?: MutableRefObject<HTMLDivElement>;
+}) => {
 	// Use this state here so that the icons don't pop in an out on every page transition
 	const [renderedOnce, setRenderedOnce] = useSessionState(
 		"footer-rendered",
@@ -41,7 +46,7 @@ const Footer = () => {
 				<motion.div layoutId="email" variants={item} custom={{ i: 2 }}>
 					<SocialIcon url="mailto:maisy@likesdinosaurs.com" />
 				</motion.div>
-				<motion.div>
+				<motion.div ref={achievementButtonRef}>
 					<Link href="/achievements">
 						<div className="bg-yellow-300 aspect-square w-[50px] rounded-full flex flex-row justify-center items-center">
 							<Image

@@ -23,6 +23,8 @@ export default function Layout({
 	backButtonText,
 	backButtonLink,
 	allowLmao,
+	meRef,
+	achievementButtonRef,
 }: {
 	children: any;
 	centeredHeader?: boolean;
@@ -30,6 +32,8 @@ export default function Layout({
 	backButtonText?: string;
 	backButtonLink?: string;
 	allowLmao?: boolean;
+	meRef?: React.MutableRefObject<HTMLElement>;
+	achievementButtonRef?: React.MutableRefObject<HTMLDivElement>;
 }) {
 	const [lmao, setLmao] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
@@ -80,6 +84,7 @@ export default function Layout({
 								"z-20",
 								{ "cursor-pointer": allowLmao }
 							)}
+							ref={meRef as any}
 						>
 							<Image
 								alt={name}
@@ -124,6 +129,7 @@ export default function Layout({
 							<motion.img
 								layoutId="headersvg"
 								src="/maisy-mask.jpg"
+								ref={meRef}
 								className={`${styles.headerImage} ${utilStyles.borderCircle}`}
 								alt={name}
 								width={108}
@@ -146,7 +152,7 @@ export default function Layout({
 					</Link>
 				</div>
 			)}
-			<Footer />
+			<Footer achievementButtonRef={achievementButtonRef} />
 		</div>
 	);
 }

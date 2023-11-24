@@ -322,6 +322,19 @@ export const ACHIEVEMENTS = [
 		icon: "/locked_1f512.png",
 	},
 	{
+		id: "finder",
+		name: "Lost and Found",
+		description: "Oh there it is!",
+		rarity: AchievementRarity.LEGENDARY,
+		requirements: [
+			{
+				metricId: "finder",
+			},
+		],
+		score: 100,
+		icon: "/magnifying-glass-tilted-right_1f50e.png",
+	},
+	{
 		id: "all-achievements",
 		name: "Completionist",
 		description: "You've completed all achievements!",

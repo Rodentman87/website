@@ -9,12 +9,13 @@ import { useAchievementStore } from "hooks/useAchievementStore";
 import { useFancyEffects } from "hooks/useFancyEffect";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPinAngleFill } from "react-icons/bs";
 import { getCyclesEntriesCount, getSortedPostsData } from "../../lib/posts";
 import DateDisplay from "../components/date";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
+import { FinderData } from "./finder";
 
 export async function getServerSideProps({ req }) {
 	const allPostsData = getSortedPostsData();
@@ -171,11 +172,52 @@ export default function Home({
 		};
 	}, []);
 
+	const meRef = React.useRef<HTMLDivElement>(null);
+	const achievementButtonRef = React.useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		let cancel = false;
+		const handler = () => {
+			if (cancel) return;
+			const boundingRect = meRef.current.getBoundingClientRect();
+			const buttonBoundingRect =
+				achievementButtonRef.current.getBoundingClientRect();
+			const chromeHeight = window.outerHeight - window.innerHeight;
+			const chromeWidth = window.outerWidth - window.innerWidth;
+			const item: FinderData = {
+				mainWindowLeft: window.screenLeft,
+				mainWindowTop: window.screenTop,
+				chromeHeight,
+				chromeWidth,
+				meX: boundingRect.left,
+				meY: boundingRect.top,
+				meWidth: meRef.current.offsetWidth,
+				meHeight: meRef.current.offsetHeight,
+				achievementButtonX: buttonBoundingRect.left,
+				achievementButtonY: buttonBoundingRect.top,
+				achievementButtonWidth: achievementButtonRef.current.offsetWidth,
+				achievementButtonHeight: achievementButtonRef.current.offsetHeight,
+			};
+			localStorage.setItem("finderData", JSON.stringify(item));
+			window.requestAnimationFrame(handler);
+		};
+		window.requestAnimationFrame(handler);
+		return () => {
+			cancel = true;
+			localStorage.removeItem("finderData");
+		};
+	}, []);
+
 	const showSpotifyWidget =
 		typeof window !== "undefined" && window.innerWidth > 1500;
 
 	return (
-		<Layout centeredHeader hideBackToHome allowLmao>
+		<Layout
+			centeredHeader
+			hideBackToHome
+			allowLmao
+			meRef={meRef}
+			achievementButtonRef={achievementButtonRef}
+		>
 			<Head>
 				<title>{siteTitle}</title>
 				<meta name="og:title" content={siteTitle} />
@@ -211,7 +253,17 @@ export default function Home({
 				{showSpotifyWidget && <SpotifyStatus />}
 			</div> */}
 			<section className="flex flex-col items-center justify-between text-xl md:flex-row">
-				<p>Hi! My name is Maisy, and I do stuff sometimes.</p>
+				<p>
+					Hi! My name is Maisy, and I do stuff sometimes.{" "}
+					<button
+						className="transition-opacity opacity-0 hover:opacity-100"
+						onClick={() => {
+							window.open("/finder", "", "width=400, height=400");
+						}}
+					>
+						🔎
+					</button>
+				</p>
 				<label className="text-sm">
 					Enable fancy effects
 					<input

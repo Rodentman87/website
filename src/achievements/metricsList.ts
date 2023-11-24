@@ -71,4 +71,9 @@ export const METRICS = [
 		name: "Lock",
 		type: "boolean",
 	},
+	{
+		id: "finder",
+		name: "Finder",
+		type: "boolean",
+	},
 ] as const;
