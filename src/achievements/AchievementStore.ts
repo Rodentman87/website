@@ -128,6 +128,18 @@ export class AchievementStore extends EventEmitter<AchievementStoreEvents> {
 			});
 			this.skipAchievementEvents = false;
 		}
+		window.addEventListener("storage", (e) => {
+			if (e.key !== ACHIEVEMENTS_KEY) return;
+			const data = localStorage.getItem(ACHIEVEMENTS_KEY);
+			if (data) {
+				this.metricsProgress = JSON.parse(data);
+				this.skipAchievementEvents = true;
+				this.achievements.forEach((a) => {
+					this.checkAchievementCompleted(a.id);
+				});
+				this.skipAchievementEvents = false;
+			}
+		});
 	}
 
 	saveToLocalStorage() {
