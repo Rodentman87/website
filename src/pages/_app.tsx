@@ -11,7 +11,7 @@ import "../styles/global.css";
 
 const achievementStore = new AchievementStore();
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
 	const [highlighter, setHighlighter] = useState(null);
 
 	useEffect(() => {

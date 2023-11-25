@@ -113,7 +113,7 @@ export const CyclesCard: React.FC<{
 					},
 				}}
 				className={clsx(
-					"relative flex flex-col gap-2 p-4 text-gray-200 bg-gray-900 rounded-md shadow-[0px_0px_0px_1px_rgba(123,43,227,0.15)] hover:shadow-[0px_0px_50px_1px_rgba(123,43,227,0.15)]",
+					"relative grow flex flex-col gap-2 p-4 text-gray-200 bg-gray-900 rounded-md shadow-[0px_0px_0px_1px_rgba(123,43,227,0.15)] hover:shadow-[0px_0px_50px_1px_rgba(123,43,227,0.15)]",
 					{
 						"z-30": showAbove,
 						"transition-shadow duration-[10s] delay-[8s]": isHovered,
@@ -168,7 +168,6 @@ export const CyclesCard: React.FC<{
 						<Starfield starCount={starsPerLayer} addDustCloud={i % 2 === 0} />
 					</motion.div>
 				))}
-				{/* Text */}
 				<div className="z-10 flex flex-row items-center gap-2">
 					<motion.h3
 						variants={{

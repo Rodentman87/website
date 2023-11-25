@@ -4,6 +4,7 @@ import { useAchievementStore } from "hooks/useAchievementStore";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useFinderItem } from "pages/finder";
 import { useEffect, useState } from "react";
 import { Portal } from "react-portal";
 import utilStyles from "../styles/utils.module.css";
@@ -23,8 +24,6 @@ export default function Layout({
 	backButtonText,
 	backButtonLink,
 	allowLmao,
-	meRef,
-	achievementButtonRef,
 }: {
 	children: any;
 	centeredHeader?: boolean;
@@ -32,14 +31,13 @@ export default function Layout({
 	backButtonText?: string;
 	backButtonLink?: string;
 	allowLmao?: boolean;
-	meRef?: React.MutableRefObject<HTMLElement>;
-	achievementButtonRef?: React.MutableRefObject<HTMLDivElement>;
 }) {
 	const [lmao, setLmao] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
 	const [showHandwrittenName, setShowHandwrittenName] =
 		useState(centeredHeader);
 	const achievementStore = useAchievementStore();
+	const meRef = useFinderItem("me");
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -152,7 +150,7 @@ export default function Layout({
 					</Link>
 				</div>
 			)}
-			<Footer achievementButtonRef={achievementButtonRef} />
+			<Footer />
 		</div>
 	);
 }

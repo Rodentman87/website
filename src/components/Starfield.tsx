@@ -1,3 +1,4 @@
+import { useMeasure } from "@uidotdev/usehooks";
 import { useFancyEffects } from "hooks/useFancyEffect";
 import React, { useEffect, useRef } from "react";
 
@@ -6,27 +7,28 @@ export const Starfield: React.FC<{
 	addDustCloud?: boolean;
 	dustCloudResolution?: number;
 }> = ({ starCount, addDustCloud, dustCloudResolution }) => {
-	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const fillState = useRef({
 		filling: false,
 		filled: false,
+		filledSize: "",
 	});
 	const [shouldShowFancy] = useFancyEffects();
 
+	const [containerRef, { width, height }] = useMeasure();
+
 	useEffect(() => {
+		if (`${width}x${height}` !== fillState.current.filledSize) {
+			fillState.current.filled = false;
+		}
 		const canvas = canvasRef.current;
-		const container = containerRef.current;
-		if (
-			!canvas ||
-			!container ||
-			fillState.current.filling ||
-			fillState.current.filled
-		)
+		if (!canvas || fillState.current.filling || fillState.current.filled)
 			return;
 
-		canvas.width = container.clientWidth;
-		canvas.height = container.clientHeight;
+		canvas.width = width;
+		canvas.height = height;
+		fillState.current.filling = true;
+		fillState.current.filledSize = `${width}x${height}`;
 
 		const ctx = canvas.getContext("2d");
 		// Draw stars
@@ -66,7 +68,7 @@ export const Starfield: React.FC<{
 		}
 		fillState.current.filling = false;
 		fillState.current.filled = true;
-	}, [canvasRef.current]);
+	}, [canvasRef.current, width, height]);
 
 	return (
 		<div ref={containerRef} className="absolute top-0 left-0 w-full h-full ">

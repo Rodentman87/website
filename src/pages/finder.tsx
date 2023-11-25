@@ -1,20 +1,38 @@
 import { useAchievementStore } from "hooks/useAchievementStore";
 import Head from "next/head";
-import React from "react";
+import React, { MutableRefObject, useLayoutEffect } from "react";
 
 export interface FinderData {
 	mainWindowLeft: number;
 	mainWindowTop: number;
 	chromeHeight: number;
 	chromeWidth: number;
-	meX: number;
-	meY: number;
-	meWidth: number;
-	meHeight: number;
-	achievementButtonX: number;
-	achievementButtonY: number;
-	achievementButtonWidth: number;
-	achievementButtonHeight: number;
+	items: Record<string, FinderItemData>;
+}
+
+export const FinderItemContext = React.createContext<{
+	setItem: (id: string, data: MutableRefObject<HTMLElement>) => void;
+	clearItem: (id: string) => void;
+}>(null as any);
+
+export function useFinderItem(id: string): MutableRefObject<any> {
+	const ref = React.useRef<HTMLElement>();
+	const context = React.useContext(FinderItemContext);
+	if (context === null) return;
+	useLayoutEffect(() => {
+		context.setItem(id, ref);
+		return () => {
+			context.clearItem(id);
+		};
+	});
+	return ref;
+}
+
+export interface FinderItemData {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
 }
 
 function moveWindowSmooth(x: number, y: number, duration: number) {
@@ -72,68 +90,45 @@ export default function Finder() {
 				: "null"
 		)
 	);
-	const faceRef = React.useRef<HTMLDivElement | null>(null);
-	const buttonRef = React.useRef<HTMLButtonElement | null>(null);
 	const achievementStore = useAchievementStore();
 	const moved = React.useRef(false);
+	const itemRefs = React.useRef<Record<string, MutableRefObject<HTMLElement>>>(
+		{}
+	);
 
 	React.useEffect(() => {
 		if (finderData.current) {
-			faceRef.current.style.width = finderData.current.meWidth + "px";
-			faceRef.current.style.height = finderData.current.meHeight + "px";
-			buttonRef.current.style.width =
-				finderData.current.achievementButtonWidth + "px";
-			buttonRef.current.style.height =
-				finderData.current.achievementButtonHeight + "px";
-			if (!moved.current) {
+			const me = finderData.current.items["me"];
+			if (!moved.current && me) {
 				moved.current = true;
-				const imageX =
-					finderData.current.mainWindowLeft + finderData.current.meX;
+				const imageX = finderData.current.mainWindowLeft + me.x;
 				const imageY =
 					finderData.current.mainWindowTop +
-					finderData.current.meY +
+					me.y +
 					finderData.current.chromeHeight;
 				const thisChromeHeight = window.outerHeight - window.innerHeight;
 				moveWindowSmooth(
-					imageX - (window.innerWidth - finderData.current.meWidth) / 2,
-					imageY -
-						(window.innerHeight - finderData.current.meHeight) / 2 -
-						thisChromeHeight,
+					imageX - (window.innerWidth - me.width) / 2,
+					imageY - (window.innerHeight - me.height) / 2 - thisChromeHeight,
 					250
 				);
 			}
 		}
 		const handleFinderData = (event: StorageEvent) => {
 			if (event.key === "finderData") {
-				if (event.newValue == null) {
-					finderData.current = null;
-					faceRef.current.style.width = "0px";
-					faceRef.current.style.height = "0px";
-					buttonRef.current.style.width = "0px";
-					buttonRef.current.style.height = "0px";
-					return;
-				}
 				finderData.current = JSON.parse(event.newValue);
-				faceRef.current.style.width = finderData.current.meWidth + "px";
-				faceRef.current.style.height = finderData.current.meHeight + "px";
-				buttonRef.current.style.width =
-					finderData.current.achievementButtonWidth + "px";
-				buttonRef.current.style.height =
-					finderData.current.achievementButtonHeight + "px";
-				if (!moved.current) {
+				const me = finderData.current.items["me"];
+				if (!moved.current && me) {
 					moved.current = true;
-					const imageX =
-						finderData.current.mainWindowLeft + finderData.current.meX;
+					const imageX = finderData.current.mainWindowLeft + me.x;
 					const imageY =
 						finderData.current.mainWindowTop +
-						finderData.current.meY +
+						me.y +
 						finderData.current.chromeHeight;
 					const thisChromeHeight = window.outerHeight - window.innerHeight;
 					moveWindowSmooth(
-						imageX - (window.innerWidth - finderData.current.meWidth) / 2,
-						imageY -
-							(window.innerHeight - finderData.current.meHeight) / 2 -
-							thisChromeHeight,
+						imageX - (window.innerWidth - me.width) / 2,
+						imageY - (window.innerHeight - me.height) / 2 - thisChromeHeight,
 						250
 					);
 				}
@@ -154,35 +149,33 @@ export default function Finder() {
 			const finderY = window.screenTop;
 			const thisChromeHeight = window.outerHeight - window.innerHeight;
 			const thisChromeWidth = window.outerWidth - window.innerWidth;
-			if (finderData.current && faceRef.current) {
-				const imageX =
-					-finderX +
-					finderData.current.mainWindowLeft +
-					finderData.current.meX +
-					finderData.current.chromeWidth -
-					thisChromeWidth;
-				const imageY =
-					-finderY +
-					finderData.current.mainWindowTop +
-					finderData.current.meY +
-					finderData.current.chromeHeight -
-					thisChromeHeight;
-				faceRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
-				const buttonX =
-					-finderX +
-					finderData.current.mainWindowLeft +
-					finderData.current.achievementButtonX +
-					finderData.current.chromeWidth -
-					thisChromeWidth;
-				const buttonY =
-					-finderY +
-					finderData.current.mainWindowTop +
-					finderData.current.achievementButtonY +
-					finderData.current.chromeHeight -
-					thisChromeHeight;
-				buttonRef.current.style.transform = `translate(${buttonX}px, ${buttonY}px)`;
+			if (finderData.current) {
+				for (const key in itemRefs.current) {
+					const item = finderData.current.items[key];
+					const ref = itemRefs.current[key];
+					if (!item) {
+						ref.current.style.transform = `translate(0px, 0px)`;
+						ref.current.style.width = "0px";
+						ref.current.style.height = "0px";
+						continue;
+					}
+					const itemX =
+						-finderX +
+						finderData.current.mainWindowLeft +
+						item.x +
+						finderData.current.chromeWidth -
+						thisChromeWidth;
+					const itemY =
+						-finderY +
+						finderData.current.mainWindowTop +
+						item.y +
+						finderData.current.chromeHeight -
+						thisChromeHeight;
+					ref.current.style.transform = `translate(${itemX}px, ${itemY}px)`;
+					ref.current.style.width = item.width + "px";
+					ref.current.style.height = item.height + "px";
+				}
 			}
-
 			window.requestAnimationFrame(handler);
 		}
 		window.requestAnimationFrame(handler);
@@ -196,35 +189,59 @@ export default function Finder() {
 			<Head>
 				<title>Eye Spy</title>
 			</Head>
-			<img
-				src="/maisy-no-glasses.png"
-				ref={faceRef as any}
-				className="fixed top-0 left-0"
-				style={{
-					width: 0,
-					height: 0,
-				}}
-			/>
-			<button
-				ref={buttonRef}
-				onClick={() => {
-					achievementStore.markProgress("finder", true);
-					const thisChromeHeight = window.outerHeight - window.innerHeight;
-					resizeWindowSmooth(600, 100 + thisChromeHeight, 250);
-				}}
-				className="fixed top-0 left-0 flex flex-row items-center justify-center bg-yellow-300 rounded-full"
-				style={{
-					width: 0,
-					height: 0,
-				}}
-			>
-				<img
-					src="/magnifying-glass-tilted-right_1f50e.png"
-					alt="Achievements"
-					width={36}
-					height={36}
-				/>
-			</button>
+			<FinderSync items={itemRefs} id="me">
+				{({ ref }) => (
+					<img
+						src="/maisy-no-glasses.png"
+						ref={ref}
+						className="fixed top-0 left-0"
+						style={{
+							width: 0,
+							height: 0,
+						}}
+					/>
+				)}
+			</FinderSync>
+			<FinderSync items={itemRefs} id="achievementButton">
+				{({ ref }) => (
+					<button
+						ref={ref}
+						onClick={() => {
+							achievementStore.markProgress("finder", true);
+							const thisChromeHeight = window.outerHeight - window.innerHeight;
+							resizeWindowSmooth(600, 100 + thisChromeHeight, 250);
+						}}
+						className="fixed top-0 left-0 flex flex-row items-center justify-center bg-yellow-300 rounded-full"
+						style={{
+							width: 0,
+							height: 0,
+						}}
+					>
+						<img
+							src="/magnifying-glass-tilted-right_1f50e.png"
+							alt="Achievements"
+							width={36}
+							height={36}
+						/>
+					</button>
+				)}
+			</FinderSync>
 		</>
 	);
 }
+
+const FinderSync: React.FC<{
+	items: MutableRefObject<Record<string, MutableRefObject<HTMLElement>>>;
+	id: string;
+	children: ({ ref }: { ref: MutableRefObject<any> }) => React.ReactElement;
+}> = ({ items, id, children }) => {
+	const ref = React.useRef<HTMLElement>();
+	useLayoutEffect(() => {
+		items.current[id] = ref;
+		return () => {
+			delete items.current[id];
+		};
+	}, []);
+
+	return children({ ref });
+};
