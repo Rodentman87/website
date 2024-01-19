@@ -283,7 +283,7 @@ export default function Home({
 					</label>
 				</section>
 				<section className="mb-4">
-					<h2 className="mb-4">Courses </h2>
+					<h2 className="mb-4">Courses</h2>
 					<Link href={"lessons/basics"} className="no-underline">
 						<motion.div
 							whileHover={"hover"}

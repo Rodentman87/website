@@ -9,6 +9,7 @@ import { Howl } from "howler";
 import Image from "next/image";
 import React, { useCallback, useMemo } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
+import { WavyRainbowText } from "./RainbowText";
 
 const confettiPop = new Howl({
 	src: ["/pop.mp3"],
@@ -292,7 +293,20 @@ const SingleAchievement: React.FC<{
 					className="flex flex-col justify-between overflow-clip"
 				>
 					<div className="flex flex-row items-center justify-between gap-2 pl-2">
-						<h2 className="font-bold whitespace-nowrap">{achievement.name}</h2>
+						<h2 className="font-bold whitespace-nowrap">
+							{achievement.rarity === AchievementRarity.LEGENDARY ? (
+								<WavyRainbowText
+									size={1}
+									text={achievement.name}
+									gradientColors={
+										animationState.confettiPalette &&
+										animationState.confettiPalette.slice(0, 6)
+									}
+								/>
+							) : (
+								achievement.name
+							)}
+						</h2>
 						<span
 							style={{
 								color: `rgb(${animationState.secondaryColorRGB})`,

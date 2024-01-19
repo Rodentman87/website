@@ -1,0 +1,21 @@
+@keyframes wave {
+	0%,
+	100% {
+		transform: translateY(calc(5px * var(--size)));
+		rotate: 0deg;
+	}
+	25% {
+		rotate: -5deg;
+	}
+	50% {
+		transform: translateY(calc(-5px * var(--size)));
+		rotate: 0deg;
+	}
+	75% {
+		rotate: 5deg;
+	}
+}
+.wave {
+	animation: wave var(--speed) cubic-bezier(0.37, 0, 0.63, 1) infinite;
+	animation-delay: calc(var(--index) * -55ms);
+}
