@@ -19,3 +19,11 @@
 	animation: wave var(--speed) cubic-bezier(0.37, 0, 0.63, 1) infinite;
 	animation-delay: calc(var(--index) * -55ms);
 }
+@supports (background-clip: text) {
+	.clip-text {
+		background-clip: text;
+	}
+	.wave {
+		color: transparent;
+	}
+}

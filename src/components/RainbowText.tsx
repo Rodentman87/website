@@ -37,7 +37,7 @@ export const WavyRainbowText: React.FC<WavyRainbowTextProps> = ({
 
 	return (
 		<span
-			className={"bg-clip-text"}
+			className={styles["clip-text"]}
 			style={
 				{
 					["--size"]: size,
@@ -54,7 +54,6 @@ export const WavyRainbowText: React.FC<WavyRainbowTextProps> = ({
 							["--index"]: i * 4,
 							display: "inline-block",
 							minWidth: char === " " ? "1ch" : undefined,
-							color: "transparent",
 						} as React.CSSProperties
 					}
 					key={i}
