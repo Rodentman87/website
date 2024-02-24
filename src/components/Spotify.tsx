@@ -64,8 +64,6 @@ export const SpotifyStatus: React.FC = () => {
 					setSong(song);
 					songId.current = newStatus.sync_id;
 				}
-			} else {
-				setSong(null);
 			}
 			setStatus(newStatus);
 		},
