@@ -2,6 +2,7 @@ import { Track } from "@spotify/web-api-ts-sdk";
 import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
+import { useAchievementStore } from "hooks/useAchievementStore";
 import Image from "next/image";
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { BsSpotify } from "react-icons/bs";
@@ -61,6 +62,8 @@ export const SpotifyStatus: React.FC = () => {
 		}
 	}, [containerRef]);
 
+	const achievementStore = useAchievementStore();
+
 	const setStatusAndFetchSong = React.useCallback(
 		async (newStatus: StatusResponse) => {
 			if (newStatus) {
@@ -68,6 +71,13 @@ export const SpotifyStatus: React.FC = () => {
 					const song = (await fetch(`/api/song/${newStatus.sync_id}`).then(
 						(res) => res.json()
 					)) as Track | null;
+					if (
+						song.artists.some(
+							(artist) => artist.id === "1HOeqtP7tHkKNJNLzQ2tnr"
+						)
+					) {
+						achievementStore.markProgress("ee", true);
+					}
 					setSong(song);
 					songId.current = newStatus.sync_id;
 				}

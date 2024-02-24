@@ -335,6 +335,19 @@ export const ACHIEVEMENTS = [
 		icon: "/magnifying-glass-tilted-right_1f50e.png",
 	},
 	{
+		id: "ee",
+		name: "Everything Everything",
+		description: "Yes I listen to them a lot",
+		rarity: AchievementRarity.LEGENDARY,
+		requirements: [
+			{
+				metricId: "ee",
+			},
+		],
+		score: 100,
+		icon: "/musical-notes_1f3b6.png",
+	},
+	{
 		id: "all-achievements",
 		name: "Completionist",
 		description: "You've completed all achievements!",

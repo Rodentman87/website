@@ -76,4 +76,9 @@ export const METRICS = [
 		name: "Finder",
 		type: "boolean",
 	},
+	{
+		id: "ee",
+		name: "Everything Everything",
+		type: "boolean",
+	},
 ] as const;
