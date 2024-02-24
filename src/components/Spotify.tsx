@@ -195,15 +195,30 @@ export const SpotifyStatus: React.FC = () => {
 							}}
 						/>
 						<div className="flex flex-col justify-start min-w-0 grow">
-							<a
-								title={song.name}
-								style={{ color: colors.secondary }}
-								className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
-								target="_blank"
-								href={song.external_urls.spotify}
-							>
-								{song.name}
-							</a>
+							<AnimatePresence mode="popLayout">
+								<motion.a
+									key={song.name}
+									initial={{
+										x: -10,
+										opacity: 0,
+									}}
+									animate={{
+										x: 0,
+										opacity: 1,
+									}}
+									exit={{
+										x: 10,
+										opacity: 0,
+									}}
+									title={song.name}
+									style={{ color: colors.secondary }}
+									className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
+									target="_blank"
+									href={song.external_urls.spotify}
+								>
+									{song.name}
+								</motion.a>
+							</AnimatePresence>
 							<ArtistLine colors={colors} song={song} />
 							<AlbumLine colors={colors} song={song} />
 							<ProgressBar colors={colors} status={status} song={song} />
@@ -278,14 +293,29 @@ const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
 	return (
 		<span className="overflow-hidden text-xs font-semibold whitespace-nowrap text-ellipsis">
 			by{" "}
-			<a
-				title={song.artists[0].name}
-				style={{ color: colors.primary }}
-				target="_blank"
-				href={song.artists[0].external_urls.spotify}
-			>
-				{song.artists[0].name}
-			</a>
+			<AnimatePresence mode="popLayout">
+				<motion.a
+					key={song.artists[0].name}
+					initial={{
+						x: -10,
+						opacity: 0,
+					}}
+					animate={{
+						x: 0,
+						opacity: 1,
+					}}
+					exit={{
+						x: 10,
+						opacity: 0,
+					}}
+					title={song.artists[0].name}
+					style={{ color: colors.primary }}
+					target="_blank"
+					href={song.artists[0].external_urls.spotify}
+				>
+					{song.artists[0].name}
+				</motion.a>
+			</AnimatePresence>
 		</span>
 	);
 };
@@ -297,14 +327,29 @@ const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
 	return (
 		<span className="overflow-hidden text-xs font-semibold whitespace-nowrap text-ellipsis">
 			on{" "}
-			<a
-				title={song.album.name}
-				style={{ color: colors.primary }}
-				target="_blank"
-				href={song.album.external_urls.spotify}
-			>
-				{song.album.name}
-			</a>
+			<AnimatePresence mode="popLayout">
+				<motion.a
+					key={song.album.name}
+					initial={{
+						x: -10,
+						opacity: 0,
+					}}
+					animate={{
+						x: 0,
+						opacity: 1,
+					}}
+					exit={{
+						x: 10,
+						opacity: 0,
+					}}
+					title={song.album.name}
+					style={{ color: colors.primary }}
+					target="_blank"
+					href={song.album.external_urls.spotify}
+				>
+					{song.album.name}
+				</motion.a>
+			</AnimatePresence>
 		</span>
 	);
 };
@@ -333,13 +378,26 @@ const ProgressBar: React.FC<{
 		<div className="flex flex-col justify-end w-full grow">
 			<div className="relative overflow-hidden rounded-full">
 				<div className="relative w-full h-2 overflow-hidden bg-white rounded-full opacity-40"></div>
-				<motion.div
-					animate={{
-						width: `${(elapsed / total) * 100}%`,
-						backgroundColor: colors.secondary,
-					}}
-					className="absolute top-0 left-0 h-full rounded-full"
-				></motion.div>
+				<AnimatePresence>
+					<motion.div
+						key={song.id}
+						initial={{
+							opacity: 1,
+						}}
+						animate={{
+							width: `${(elapsed / total) * 100}%`,
+							backgroundColor: colors.secondary,
+							opacity: 1,
+						}}
+						exit={{
+							opacity: 0,
+							transition: {
+								duration: 1.5,
+							},
+						}}
+						className="absolute top-0 left-0 h-full rounded-full"
+					></motion.div>
+				</AnimatePresence>
 			</div>
 			<div className="flex flex-row justify-between">
 				<span className="text-xs">{msToMinutesAndSeconds(elapsed)}</span>
