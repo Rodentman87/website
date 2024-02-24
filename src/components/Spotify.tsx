@@ -183,11 +183,13 @@ export const SpotifyStatus: React.FC = () => {
 							src={song.album.images[0].url}
 							className="rounded-lg"
 							onLoad={async (e) => {
+								await new Promise((resolve) => setTimeout(resolve, 250));
 								const colors = await extractColors(
 									song.album.images[0].url,
 									e.target as HTMLImageElement
 								);
 								const bestColors = getBestColors(colors, Color("#d1d5db"), 2);
+								console.log("Best colors:", bestColors);
 								setColors({
 									primary: bestColors.primary.hex(),
 									secondary: bestColors.secondary.hex(),
@@ -204,6 +206,7 @@ export const SpotifyStatus: React.FC = () => {
 									}}
 									animate={{
 										x: 0,
+										color: colors.secondary,
 										opacity: 1,
 									}}
 									exit={{
@@ -211,7 +214,6 @@ export const SpotifyStatus: React.FC = () => {
 										opacity: 0,
 									}}
 									title={song.name}
-									style={{ color: colors.secondary }}
 									className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 									target="_blank"
 									href={song.external_urls.spotify}
@@ -242,7 +244,7 @@ const SmoothSwapImage: React.FC<{
 	const [showOldImage, setShowOldImage] = React.useState(true);
 
 	return (
-		<div className="relative">
+		<div className="relative shrink-0">
 			<Image
 				alt={alt}
 				width={width}
@@ -302,6 +304,7 @@ const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
 					}}
 					animate={{
 						x: 0,
+						color: colors.primary,
 						opacity: 1,
 					}}
 					exit={{
@@ -309,7 +312,6 @@ const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
 						opacity: 0,
 					}}
 					title={song.artists[0].name}
-					style={{ color: colors.primary }}
 					target="_blank"
 					href={song.artists[0].external_urls.spotify}
 				>
@@ -336,6 +338,7 @@ const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
 					}}
 					animate={{
 						x: 0,
+						color: colors.primary,
 						opacity: 1,
 					}}
 					exit={{
@@ -343,7 +346,6 @@ const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
 						opacity: 0,
 					}}
 					title={song.album.name}
-					style={{ color: colors.primary }}
 					target="_blank"
 					href={song.album.external_urls.spotify}
 				>
