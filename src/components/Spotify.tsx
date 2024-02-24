@@ -216,8 +216,6 @@ const ProgressBar: React.FC<{
 				<motion.div
 					animate={{
 						width: `${(elapsed / total) * 100}%`,
-					}}
-					style={{
 						backgroundColor: colors.secondary,
 					}}
 					className="absolute top-0 left-0 h-full rounded-full"
