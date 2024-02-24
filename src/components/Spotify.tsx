@@ -213,13 +213,15 @@ const ProgressBar: React.FC<{
 		<div className="flex flex-col justify-end w-full grow">
 			<div className="relative overflow-hidden rounded-full">
 				<div className="relative w-full h-2 overflow-hidden bg-white rounded-full opacity-40"></div>
-				<div
-					style={{
-						backgroundColor: colors.secondary,
+				<motion.div
+					animate={{
 						width: `${(elapsed / total) * 100}%`,
 					}}
+					style={{
+						backgroundColor: colors.secondary,
+					}}
 					className="absolute top-0 left-0 h-full rounded-full"
-				></div>
+				></motion.div>
 			</div>
 			<div className="flex flex-row justify-between">
 				<span className="text-xs">{msToMinutesAndSeconds(elapsed - 1500)}</span>
