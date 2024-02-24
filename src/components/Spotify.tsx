@@ -41,7 +41,11 @@ interface Colors {
 	secondary: string;
 }
 
+const ME = "152566937442975744";
+const ENDPOINT = "wss://api.lanyard.rest/socket";
+
 export const SpotifyStatus: React.FC = () => {
+	const [socket, setSocket] = React.useState<WebSocket | null>(null);
 	const [status, setStatus] = React.useState<StatusResponse | null>(null);
 	const [song, setSong] = React.useState<Track | null>(null);
 	const songId = useRef<string | null>(null);
@@ -50,29 +54,71 @@ export const SpotifyStatus: React.FC = () => {
 		secondary: "#FFFFFF",
 	});
 
-	const fetchSong = React.useCallback(async () => {
-		const status = (await fetch("/api/spotify").then((res) =>
-			res.json()
-		)) as StatusResponse | null;
-		if (status) {
-			if (songId.current === null || songId.current !== status.sync_id) {
-				const song = (await fetch(`/api/song/${status.sync_id}`).then((res) =>
-					res.json()
-				)) as Track | null;
-				setSong(song);
-				songId.current = status.sync_id;
+	const setStatusAndFetchSong = React.useCallback(
+		async (newStatus: StatusResponse) => {
+			if (newStatus) {
+				if (songId.current === null || songId.current !== newStatus.sync_id) {
+					const song = (await fetch(`/api/song/${newStatus.sync_id}`).then(
+						(res) => res.json()
+					)) as Track | null;
+					setSong(song);
+					songId.current = newStatus.sync_id;
+				}
+			} else {
+				setSong(null);
 			}
-			setStatus(status);
-		} else {
-			setStatus(null);
-			setSong(null);
-		}
-	}, [song, status]);
+			setStatus(newStatus);
+		},
+		[]
+	);
 
-	React.useEffect(() => {
-		fetchSong();
-		const interval = setInterval(fetchSong, 5000);
-		return () => clearInterval(interval);
+	useEffect(() => {
+		const ws = new WebSocket(ENDPOINT);
+
+		ws.addEventListener("open", () => {});
+
+		ws.addEventListener("message", ({ data }) => {
+			const { op, t, d } = JSON.parse(data);
+
+			switch (op) {
+				case 1:
+					// Hello
+					console.log(d);
+					const { heartbeat_interval } = d;
+					ws.send(
+						JSON.stringify({
+							op: 2,
+							d: {
+								subscribe_to_id: ME,
+							},
+						})
+					);
+
+					setInterval(() => {
+						ws.send(
+							JSON.stringify({
+								op: 3,
+							})
+						);
+					}, heartbeat_interval);
+					break;
+				case 0:
+					// Event
+					if (t === "INIT_STATE" || t === "PRESENCE_UPDATE") {
+						setStatusAndFetchSong(
+							d.activities.find((activity: any) => activity.type === 2)
+						);
+					}
+					break;
+			}
+		});
+
+		ws.addEventListener("close", () => {
+			setSocket(null);
+		});
+
+		setSocket(ws);
+		return () => ws.close();
 	}, []);
 
 	return (
