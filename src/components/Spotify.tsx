@@ -146,12 +146,10 @@ export const SpotifyStatus: React.FC = () => {
 					>
 						I'm currently listening to:
 					</motion.span>
-					<motion.div
-						key={song.album.images[0].url}
-						className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl"
-					>
-						<div className="absolute top-0 left-0 -translate-y-1/2">
+					<motion.div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
+						<div className="absolute top-0 left-0 -translate-y-1/4">
 							<SmoothSwapImage
+								key={imageWidth}
 								width={imageWidth}
 								height={imageWidth}
 								alt={song.album.name}
@@ -216,7 +214,7 @@ const SmoothSwapImage: React.FC<{
 	onLoad?: React.ReactEventHandler<HTMLImageElement>;
 }> = ({ src, onLoad, width, height, alt, className }) => {
 	const [oldSrc, setOldSrc] = React.useState(src);
-	const [showOldImage, setShowOldImage] = React.useState(false);
+	const [showOldImage, setShowOldImage] = React.useState(true);
 
 	return (
 		<div className="relative">
@@ -232,28 +230,33 @@ const SmoothSwapImage: React.FC<{
 					onLoad?.(e);
 				}}
 			/>
-			<motion.div
-				animate={{
-					opacity: showOldImage ? 1 : 0,
-					transition: {
-						duration: showOldImage ? 0.1 : 0.5,
-					},
-				}}
-				onAnimationComplete={() => {
+			<AnimatePresence
+				onExitComplete={() => {
 					setOldSrc(src);
 					// We set it to show old true right now, but this will actually be the new image, we just need to make sure it's ready
 					setShowOldImage(true);
 				}}
-				className="absolute top-0 bottom-0 left-0 right-0 z-10"
 			>
-				<Image
-					alt=""
-					width={width}
-					height={height}
-					src={oldSrc}
-					className={className}
-				/>
-			</motion.div>
+				{showOldImage && (
+					<motion.div
+						initial={{
+							opacity: 1,
+						}}
+						exit={{
+							opacity: 0,
+						}}
+						className="absolute top-0 bottom-0 left-0 right-0 z-10"
+					>
+						<Image
+							alt=""
+							width={width}
+							height={height}
+							src={oldSrc}
+							className={className}
+						/>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 };
@@ -302,7 +305,10 @@ const ProgressBar: React.FC<{
 	status: StatusResponse;
 }> = ({ song, status, colors }) => {
 	const total = status.timestamps.end - status.timestamps.start;
-	const elapsed = Math.min(Date.now() - status.timestamps.start, total);
+	const elapsed = Math.max(
+		Math.min(Date.now() - status.timestamps.start, total),
+		0
+	); // Clamp to 0 and total
 
 	const [_, setRerender] = React.useState(0);
 
@@ -326,7 +332,7 @@ const ProgressBar: React.FC<{
 				></motion.div>
 			</div>
 			<div className="flex flex-row justify-between">
-				<span className="text-xs">{msToMinutesAndSeconds(elapsed - 1500)}</span>
+				<span className="text-xs">{msToMinutesAndSeconds(elapsed)}</span>
 				<span className="text-xs">
 					{msToMinutesAndSeconds(song.duration_ms)}
 				</span>
