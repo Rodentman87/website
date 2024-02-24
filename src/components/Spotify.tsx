@@ -3,7 +3,7 @@ import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { BsSpotify } from "react-icons/bs";
 
 interface StatusResponse {
@@ -53,6 +53,13 @@ export const SpotifyStatus: React.FC = () => {
 		primary: "#FFFFFF",
 		secondary: "#FFFFFF",
 	});
+	const containerRef = React.useRef<HTMLDivElement>(null);
+	const [imageWidth, setImageWidth] = React.useState(400);
+	useLayoutEffect(() => {
+		if (containerRef.current) {
+			setImageWidth(containerRef.current.clientWidth);
+		}
+	}, [containerRef]);
 
 	const setStatusAndFetchSong = React.useCallback(
 		async (newStatus: StatusResponse) => {
@@ -81,7 +88,6 @@ export const SpotifyStatus: React.FC = () => {
 			switch (op) {
 				case 1:
 					// Hello
-					console.log(d);
 					const { heartbeat_interval } = d;
 					ws.send(
 						JSON.stringify({
@@ -123,6 +129,7 @@ export const SpotifyStatus: React.FC = () => {
 		<AnimatePresence>
 			{status && (
 				<motion.div
+					ref={containerRef}
 					initial={{ opacity: 0, y: 25 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: 25 }}
@@ -143,11 +150,15 @@ export const SpotifyStatus: React.FC = () => {
 						key={song.album.images[0].url}
 						className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl"
 					>
-						<img
-							alt={song.album.name}
-							src={song.album.images[0].url}
-							className="absolute top-0 left-0 -translate-y-1/2"
-						/>
+						<div className="absolute top-0 left-0 -translate-y-1/2">
+							<SmoothSwapImage
+								width={imageWidth}
+								height={imageWidth}
+								alt={song.album.name}
+								src={song.album.images[0].url}
+								className=""
+							/>
+						</div>
 					</motion.div>
 					<div className="flex flex-row items-stretch justify-start gap-2 p-2 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl">
 						<a
@@ -157,9 +168,7 @@ export const SpotifyStatus: React.FC = () => {
 						>
 							<BsSpotify size={24} color={colors.primary} />
 						</a>
-						<Image
-							key={song.album.images[0].url}
-							quality={100}
+						<SmoothSwapImage
 							alt={song.album.name}
 							width={96}
 							height={96}
@@ -195,6 +204,57 @@ export const SpotifyStatus: React.FC = () => {
 				</motion.div>
 			)}
 		</AnimatePresence>
+	);
+};
+
+const SmoothSwapImage: React.FC<{
+	src: string;
+	className: string;
+	alt?: string;
+	width?: number;
+	height?: number;
+	onLoad?: React.ReactEventHandler<HTMLImageElement>;
+}> = ({ src, onLoad, width, height, alt, className }) => {
+	const [oldSrc, setOldSrc] = React.useState(src);
+	const [showOldImage, setShowOldImage] = React.useState(false);
+
+	return (
+		<div className="relative">
+			<Image
+				alt={alt}
+				width={width}
+				height={height}
+				src={src}
+				className={className}
+				onLoad={(e) => {
+					// Fade out old image
+					setShowOldImage(false);
+					onLoad?.(e);
+				}}
+			/>
+			<motion.div
+				animate={{
+					opacity: showOldImage ? 1 : 0,
+					transition: {
+						duration: showOldImage ? 0.1 : 0.5,
+					},
+				}}
+				onAnimationComplete={() => {
+					setOldSrc(src);
+					// We set it to show old true right now, but this will actually be the new image, we just need to make sure it's ready
+					setShowOldImage(true);
+				}}
+				className="absolute top-0 bottom-0 left-0 right-0 z-10"
+			>
+				<Image
+					alt=""
+					width={width}
+					height={height}
+					src={oldSrc}
+					className={className}
+				/>
+			</motion.div>
+		</div>
 	);
 };
 
