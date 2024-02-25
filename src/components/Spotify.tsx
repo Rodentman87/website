@@ -143,10 +143,7 @@ export const SpotifyStatus: React.FC = () => {
 					initial={{ opacity: 0, y: 25 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: 25 }}
-					style={{
-						backgroundColor: colors.secondary,
-					}}
-					className="relative border border-gray-500 border-solid shadow-md rounded-2xl w-96"
+					className="relative border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
 				>
 					<motion.span
 						className="absolute text-sm -top-6 left-2"
@@ -168,7 +165,7 @@ export const SpotifyStatus: React.FC = () => {
 							/>
 						</div>
 					</motion.div>
-					<div className="flex flex-row items-stretch justify-start gap-2 p-2 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl">
+					<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
 						<a
 							target="_blank"
 							href="https://open.spotify.com/"
@@ -181,7 +178,7 @@ export const SpotifyStatus: React.FC = () => {
 							width={96}
 							height={96}
 							src={song.album.images[0].url}
-							className="rounded-lg"
+							className="rounded-lg shadow-md"
 							onLoad={async (e) => {
 								await new Promise((resolve) => setTimeout(resolve, 250));
 								const colors = await extractColors(
@@ -413,7 +410,7 @@ const ProgressBar: React.FC<{
 
 function msToMinutesAndSeconds(ms: number) {
 	const minutes = Math.floor(ms / 60000);
-	const seconds = padLeft(((ms % 60000) / 1000).toFixed(0), 2);
+	const seconds = padLeft(Math.floor((ms % 60000) / 1000).toString(), 2);
 	return `${minutes}:${seconds}`;
 }
 
