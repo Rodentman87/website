@@ -2,54 +2,20 @@ import { Track } from "@spotify/web-api-ts-sdk";
 import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
-import { useAchievementStore } from "hooks/useAchievementStore";
 import Image from "next/image";
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { BsSpotify } from "react-icons/bs";
-
-interface StatusResponse {
-	type: number;
-	name: string;
-	url?: string;
-	created_at: number;
-	timestamps?: {
-		start: number;
-		end?: number;
-	};
-	application_id?: string;
-	details?: string;
-	state?: string;
-	emoji?: {
-		name?: string;
-		id?: string;
-		animated?: boolean;
-	};
-	party?: {
-		id?: string;
-		size?: [number, number];
-	};
-	assets?: {
-		large_image?: string;
-		large_text?: string;
-		small_image?: string;
-		small_text?: string;
-	};
-	sync_id?: string;
-}
+import { StatusResponse } from "./ActivityCard";
 
 interface Colors {
 	primary: string;
 	secondary: string;
 }
 
-const ME = "152566937442975744";
-const ENDPOINT = "wss://api.lanyard.rest/socket";
-
-export const SpotifyStatus: React.FC = () => {
-	const [socket, setSocket] = React.useState<WebSocket | null>(null);
-	const [status, setStatus] = React.useState<StatusResponse | null>(null);
-	const [song, setSong] = React.useState<Track | null>(null);
-	const songId = useRef<string | null>(null);
+export const SpotifyStatus: React.FC<{
+	song: Track;
+	status: StatusResponse;
+}> = ({ song, status }) => {
 	const [colors, setColors] = React.useState<Colors>({
 		primary: "#FFFFFF",
 		secondary: "#FFFFFF",
@@ -61,79 +27,6 @@ export const SpotifyStatus: React.FC = () => {
 			setImageWidth(containerRef.current.clientWidth);
 		}
 	}, [containerRef]);
-
-	const achievementStore = useAchievementStore();
-
-	const setStatusAndFetchSong = React.useCallback(
-		async (newStatus: StatusResponse) => {
-			if (newStatus) {
-				if (songId.current === null || songId.current !== newStatus.sync_id) {
-					const song = (await fetch(`/api/song/${newStatus.sync_id}`).then(
-						(res) => res.json()
-					)) as Track | null;
-					if (
-						song.artists.some(
-							(artist) => artist.id === "1HOeqtP7tHkKNJNLzQ2tnr"
-						)
-					) {
-						achievementStore.markProgress("ee", true);
-					}
-					setSong(song);
-					songId.current = newStatus.sync_id;
-				}
-			}
-			setStatus(newStatus);
-		},
-		[]
-	);
-
-	useEffect(() => {
-		const ws = new WebSocket(ENDPOINT);
-
-		ws.addEventListener("open", () => {});
-
-		ws.addEventListener("message", ({ data }) => {
-			const { op, t, d } = JSON.parse(data);
-
-			switch (op) {
-				case 1:
-					// Hello
-					const { heartbeat_interval } = d;
-					ws.send(
-						JSON.stringify({
-							op: 2,
-							d: {
-								subscribe_to_id: ME,
-							},
-						})
-					);
-
-					setInterval(() => {
-						ws.send(
-							JSON.stringify({
-								op: 3,
-							})
-						);
-					}, heartbeat_interval);
-					break;
-				case 0:
-					// Event
-					if (t === "INIT_STATE" || t === "PRESENCE_UPDATE") {
-						setStatusAndFetchSong(
-							d.activities.find((activity: any) => activity.type === 2)
-						);
-					}
-					break;
-			}
-		});
-
-		ws.addEventListener("close", () => {
-			setSocket(null);
-		});
-
-		setSocket(ws);
-		return () => ws.close();
-	}, []);
 
 	return (
 		<AnimatePresence>
@@ -186,7 +79,6 @@ export const SpotifyStatus: React.FC = () => {
 									e.target as HTMLImageElement
 								);
 								const bestColors = getBestColors(colors, Color("#d1d5db"), 2);
-								console.log("Best colors:", bestColors);
 								setColors({
 									primary: bestColors.primary.hex(),
 									secondary: bestColors.secondary.hex(),

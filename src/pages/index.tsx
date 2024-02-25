@@ -1,7 +1,7 @@
+import { ActivityCard } from "@components/ActivityCard/ActivityCard";
 import { AudioAutoplayPrompt } from "@components/AudioAutoplayPrompt";
 import { CyclesCard } from "@components/CyclesCard";
 import { ProjectCard } from "@components/ProjectCard";
-import { SpotifyStatus } from "@components/Spotify";
 import { Square, SquareReveal } from "@components/Square";
 import { createHmac } from "crypto";
 import distanceFrom from "distance-from";
@@ -256,7 +256,7 @@ export default function Home({
 					<SquareReveal onClick={() => setShowSquare(true)} />
 				)}
 				<div className="fixed bottom-2 left-2">
-					{showSpotifyWidget && <SpotifyStatus />}
+					{showSpotifyWidget && <ActivityCard />}
 				</div>
 				<section className="flex flex-col items-center justify-between text-xl md:flex-row">
 					<p>
