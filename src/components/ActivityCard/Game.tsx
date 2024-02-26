@@ -768,6 +768,7 @@ interface Colors {
 export const GameStatus: React.FC<{
 	status: StatusResponse;
 }> = ({ status }) => {
+	console.log(status);
 	const gameId = GAME_MAP[status.application_id!];
 	const [colors, setColors] = React.useState<Colors>({
 		primary: "#FFFFFF",
@@ -837,7 +838,7 @@ export const GameStatus: React.FC<{
 					src={coverImage}
 					className="rounded-lg shadow-md"
 				/>
-				<div className="flex flex-col justify-between min-w-0 grow">
+				<div className="flex flex-col justify-start min-w-0 gap-1 grow">
 					<AnimatePresence mode="popLayout">
 						<motion.a
 							key={status.name}
@@ -861,6 +862,72 @@ export const GameStatus: React.FC<{
 						>
 							{status.name}
 						</motion.a>
+						{status.details && (
+							<motion.span
+								initial={{
+									x: -10,
+									opacity: 0,
+								}}
+								animate={{
+									x: 0,
+									color: colors.primary,
+									opacity: 1,
+								}}
+								exit={{
+									x: 10,
+									opacity: 0,
+								}}
+								className="text-xs"
+							>
+								{status.details}
+							</motion.span>
+						)}
+						{status.state && (
+							<motion.span
+								key={status.state}
+								initial={{
+									x: -10,
+									opacity: 0,
+								}}
+								animate={{
+									x: 0,
+									color: colors.primary,
+									opacity: 1,
+								}}
+								exit={{
+									x: 10,
+									opacity: 0,
+								}}
+								className="text-xs"
+							>
+								{status.state}{" "}
+								<AnimatePresence>
+									{status.party && (
+										<>
+											(
+											<motion.span
+												key="current"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+											>
+												{status.party.size[0]}
+											</motion.span>{" "}
+											of{" "}
+											<motion.span
+												key="max"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+											>
+												{status.party.size[1]}
+											</motion.span>
+											)
+										</>
+									)}
+								</AnimatePresence>
+							</motion.span>
+						)}
 					</AnimatePresence>
 					<Timer status={status} />
 				</div>
@@ -940,7 +1007,7 @@ const Timer: React.FC<{
 	}, []);
 
 	return (
-		<div className="flex flex-col justify-end">
+		<div className="flex flex-col justify-end grow">
 			<div className="flex flex-row justify-between">
 				<span className="text-xs">{msToMinutesAndSeconds(elapsed)}</span>
 			</div>
