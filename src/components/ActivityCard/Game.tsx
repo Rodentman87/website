@@ -6,6 +6,8 @@ import React, { useEffect } from "react";
 import { StatusResponse } from "./ActivityCard";
 
 const GAME_MAP = {
+	// Overwatch
+	"356875221078245376": "2357570",
 	// Terraria
 	"356943499456937984": "105600",
 	// The Lord of the Rings Online™
