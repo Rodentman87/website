@@ -814,6 +814,18 @@ export const GameStatus: React.FC<{
 						alt=""
 						src={largeImage}
 						className=""
+						onLoad={async (e) => {
+							await new Promise((resolve) => setTimeout(resolve, 250));
+							const colors = await extractColors(
+								coverImage,
+								e.target as HTMLImageElement
+							);
+							const bestColors = getBestColors(colors, Color("#f0b6b6"), 2);
+							setColors({
+								primary: bestColors.primary.hex(),
+								secondary: bestColors.secondary.hex(),
+							});
+						}}
 					/>
 				</div>
 			</motion.div>
@@ -824,18 +836,6 @@ export const GameStatus: React.FC<{
 					height={64}
 					src={coverImage}
 					className="rounded-lg shadow-md"
-					onLoad={async (e) => {
-						await new Promise((resolve) => setTimeout(resolve, 250));
-						const colors = await extractColors(
-							coverImage,
-							e.target as HTMLImageElement
-						);
-						const bestColors = getBestColors(colors, Color("#f0b6b6"), 2);
-						setColors({
-							primary: bestColors.primary.hex(),
-							secondary: bestColors.secondary.hex(),
-						});
-					}}
 				/>
 				<div className="flex flex-col justify-between min-w-0 grow">
 					<AnimatePresence mode="popLayout">
@@ -949,9 +949,10 @@ const Timer: React.FC<{
 };
 
 function msToMinutesAndSeconds(ms: number) {
-	const minutes = Math.floor(ms / 60000);
+	const hours = Math.floor(ms / 3600000);
+	const minutes = padLeft(Math.floor((ms % 3600000) / 60000).toString(), 2);
 	const seconds = padLeft(Math.floor((ms % 60000) / 1000).toString(), 2);
-	return `${minutes}:${seconds}`;
+	return `${hours}:${minutes}:${seconds}`;
 }
 
 function padLeft(str: string, size: number) {
