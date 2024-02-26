@@ -1,4 +1,5 @@
 import { Track } from "@spotify/web-api-ts-sdk";
+import { AnimatePresence } from "framer-motion";
 import { useAchievementStore } from "hooks/useAchievementStore";
 import React from "react";
 import { GameStatus } from "./Game";
@@ -8,6 +9,7 @@ const ME = "152566937442975744";
 const ENDPOINT = "wss://api.lanyard.rest/socket";
 
 export interface StatusResponse {
+	id: string;
 	type: number;
 	name: string;
 	url?: string;
@@ -39,6 +41,8 @@ export interface StatusResponse {
 
 export const ActivityCard: React.FC = () => {
 	const [status, setStatus] = React.useState<StatusResponse | null>(null);
+	const [spotifyStatus, setSpotifyStatus] =
+		React.useState<StatusResponse | null>(null);
 	const [song, setSong] = React.useState<Track | null>(null);
 	const songId = React.useRef<string | null>(null);
 
@@ -62,7 +66,7 @@ export const ActivityCard: React.FC = () => {
 					songId.current = newStatus.sync_id;
 				}
 			}
-			setStatus(newStatus);
+			setSpotifyStatus(newStatus);
 		},
 		[]
 	);
@@ -106,8 +110,16 @@ export const ActivityCard: React.FC = () => {
 						if (spotifyStatus) {
 							setStatusAndFetchSong(spotifyStatus);
 						} else {
+							setSpotifyStatus(null);
+						}
+						const gameStatus = d.activities.find(
+							(activity: any) => activity.type === 0
+						);
+						if (gameStatus) {
 							// If no spotify status, get the first status
-							setStatus(d.activities[0]);
+							setStatus(gameStatus);
+						} else {
+							setStatus(null);
 						}
 					}
 					break;
@@ -117,13 +129,16 @@ export const ActivityCard: React.FC = () => {
 		return () => ws.close();
 	}, []);
 
-	console.log(status);
-
-	if (!status) return null;
-	switch (status.type) {
-		case 2:
-			return <SpotifyStatus song={song} status={status} />;
-		case 0:
-			return <GameStatus status={status} />;
-	}
+	return (
+		<AnimatePresence>
+			{status && <GameStatus key={status.id} status={status} />}
+			{spotifyStatus && (
+				<SpotifyStatus
+					key={spotifyStatus.id}
+					song={song}
+					status={spotifyStatus}
+				/>
+			)}
+		</AnimatePresence>
+	);
 };

@@ -788,86 +788,84 @@ export const GameStatus: React.FC<{
 	const largeImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
 
 	return (
-		<AnimatePresence>
-			{status && (
-				<motion.div
-					ref={containerRef}
-					initial={{ opacity: 0, y: 25 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: 25 }}
-					className="relative border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
-				>
-					<motion.span
-						className="absolute text-sm -top-6 left-2"
-						initial={{ y: 15, opacity: 0 }}
-						animate={{ y: 0, opacity: 1 }}
-						transition={{ delay: 1 }}
-					>
-						I'm currently playing:
-					</motion.span>
-					<motion.div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
-						<div className="absolute top-0 left-0 translate-x-1">
-							<SmoothSwapImage
-								key={imageWidth}
-								width={imageWidth}
-								height={imageWidth}
-								alt=""
-								src={largeImage}
-								className=""
-							/>
-						</div>
-					</motion.div>
-					<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
-						<SmoothSwapImage
-							alt={status.name}
-							width={64}
-							height={64}
-							src={coverImage}
-							className="rounded-lg shadow-md"
-							onLoad={async (e) => {
-								await new Promise((resolve) => setTimeout(resolve, 250));
-								const colors = await extractColors(
-									coverImage,
-									e.target as HTMLImageElement
-								);
-								const bestColors = getBestColors(colors, Color("#f0b6b6"), 2);
-								setColors({
-									primary: bestColors.primary.hex(),
-									secondary: bestColors.secondary.hex(),
-								});
+		<motion.div
+			key="game"
+			layout
+			ref={containerRef}
+			initial={{ opacity: 0, x: -25 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -25 }}
+			className="relative mt-8 border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
+		>
+			<motion.span
+				className="absolute text-sm -top-6 left-2"
+				initial={{ y: 15, opacity: 0 }}
+				animate={{ y: 0, opacity: 1 }}
+				transition={{ delay: 1 }}
+			>
+				I'm currently playing:
+			</motion.span>
+			<motion.div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
+				<div className="absolute top-0 left-0 translate-x-1">
+					<SmoothSwapImage
+						key={imageWidth}
+						width={imageWidth}
+						height={imageWidth}
+						alt=""
+						src={largeImage}
+						className=""
+					/>
+				</div>
+			</motion.div>
+			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
+				<SmoothSwapImage
+					alt={status.name}
+					width={64}
+					height={64}
+					src={coverImage}
+					className="rounded-lg shadow-md"
+					onLoad={async (e) => {
+						await new Promise((resolve) => setTimeout(resolve, 250));
+						const colors = await extractColors(
+							coverImage,
+							e.target as HTMLImageElement
+						);
+						const bestColors = getBestColors(colors, Color("#f0b6b6"), 2);
+						setColors({
+							primary: bestColors.primary.hex(),
+							secondary: bestColors.secondary.hex(),
+						});
+					}}
+				/>
+				<div className="flex flex-col justify-between min-w-0 grow">
+					<AnimatePresence mode="popLayout">
+						<motion.a
+							key={status.name}
+							initial={{
+								x: -10,
+								opacity: 0,
 							}}
-						/>
-						<div className="flex flex-col justify-between min-w-0 grow">
-							<AnimatePresence mode="popLayout">
-								<motion.a
-									key={status.name}
-									initial={{
-										x: -10,
-										opacity: 0,
-									}}
-									animate={{
-										x: 0,
-										color: colors.secondary,
-										opacity: 1,
-									}}
-									exit={{
-										x: 10,
-										opacity: 0,
-									}}
-									title={status.name}
-									className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
-									target="_blank"
-									href={steamLink}
-								>
-									{status.name}
-								</motion.a>
-							</AnimatePresence>
-							<Timer status={status} />
-						</div>
-					</div>
-				</motion.div>
-			)}
-		</AnimatePresence>
+							animate={{
+								x: 0,
+								color: colors.secondary,
+								opacity: 1,
+							}}
+							exit={{
+								x: 10,
+								opacity: 0,
+							}}
+							title={status.name}
+							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
+							target="_blank"
+							href={steamLink}
+						>
+							{status.name}
+						</motion.a>
+					</AnimatePresence>
+					<Timer status={status} />
+				</div>
+			</div>
+		</motion.div>
 	);
 };
 
