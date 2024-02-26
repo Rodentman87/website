@@ -4,6 +4,7 @@ import { useAchievementStore } from "hooks/useAchievementStore";
 import React from "react";
 import { GameStatus } from "./Game";
 import { SpotifyStatus } from "./Spotify";
+import { WatchDisStatus } from "./WatchDis";
 
 const ME = "152566937442975744";
 const ENDPOINT = "wss://api.lanyard.rest/socket";
@@ -41,6 +42,8 @@ export interface StatusResponse {
 
 export const ActivityCard: React.FC = () => {
 	const [status, setStatus] = React.useState<StatusResponse | null>(null);
+	const [watchDisStatus, setWatchDisStatus] =
+		React.useState<StatusResponse | null>(null);
 	const [spotifyStatus, setSpotifyStatus] =
 		React.useState<StatusResponse | null>(null);
 	const [song, setSong] = React.useState<Track | null>(null);
@@ -103,6 +106,7 @@ export const ActivityCard: React.FC = () => {
 				case 0:
 					// Event
 					if (t === "INIT_STATE" || t === "PRESENCE_UPDATE") {
+						console.log(d);
 						// Get status with spotify status first
 						const spotifyStatus = d.activities.find(
 							(activity: any) => activity.type === 2
@@ -116,10 +120,18 @@ export const ActivityCard: React.FC = () => {
 							(activity: any) => activity.type === 0
 						);
 						if (gameStatus) {
-							// If no spotify status, get the first status
 							setStatus(gameStatus);
 						} else {
 							setStatus(null);
+						}
+						const watchDisStatus = d.activities.find(
+							(activity: any) =>
+								activity.application_id === "1028036359803375717"
+						);
+						if (watchDisStatus) {
+							setWatchDisStatus(watchDisStatus);
+						} else {
+							setWatchDisStatus(null);
 						}
 					}
 					break;
@@ -138,6 +150,9 @@ export const ActivityCard: React.FC = () => {
 					song={song}
 					status={spotifyStatus}
 				/>
+			)}
+			{watchDisStatus && (
+				<WatchDisStatus key={watchDisStatus.name} status={watchDisStatus} />
 			)}
 		</AnimatePresence>
 	);

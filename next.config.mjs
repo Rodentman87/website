@@ -33,6 +33,18 @@ export default withMDX({
 				port: "",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "*.watchdis.tv",
+				port: "",
+				pathname: "/**",
+			},
+			{
+				protocol: "https",
+				hostname: "i.ytimg.com",
+				port: "",
+				pathname: "/**",
+			},
 		],
 	},
 });

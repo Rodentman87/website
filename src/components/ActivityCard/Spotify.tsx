@@ -127,49 +127,29 @@ const SmoothSwapImage: React.FC<{
 	height?: number;
 	onLoad?: React.ReactEventHandler<HTMLImageElement>;
 }> = ({ src, onLoad, width, height, alt, className }) => {
-	const [oldSrc, setOldSrc] = React.useState(src);
-	const [showOldImage, setShowOldImage] = React.useState(true);
-
 	return (
 		<div className="relative shrink-0">
-			<Image
-				alt={alt}
-				width={width}
-				height={height}
-				src={src}
-				className={className}
-				onLoad={(e) => {
-					// Fade out old image
-					setShowOldImage(false);
-					onLoad?.(e);
-				}}
-			/>
-			<AnimatePresence
-				onExitComplete={() => {
-					setOldSrc(src);
-					// We set it to show old true right now, but this will actually be the new image, we just need to make sure it's ready
-					setShowOldImage(true);
-				}}
-			>
-				{showOldImage && (
-					<motion.div
-						initial={{
-							opacity: 1,
+			<AnimatePresence mode="popLayout">
+				<motion.div
+					key={src}
+					initial={{
+						opacity: 1,
+					}}
+					exit={{
+						opacity: 0,
+					}}
+				>
+					<Image
+						alt={alt}
+						width={width}
+						height={height}
+						src={src}
+						className={className}
+						onLoad={(e) => {
+							onLoad?.(e);
 						}}
-						exit={{
-							opacity: 0,
-						}}
-						className="absolute top-0 bottom-0 left-0 right-0 z-10"
-					>
-						<Image
-							alt=""
-							width={width}
-							height={height}
-							src={oldSrc}
-							className={className}
-						/>
-					</motion.div>
-				)}
+					/>
+				</motion.div>
 			</AnimatePresence>
 		</div>
 	);
