@@ -64,7 +64,10 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 
 	const renderedCode = useMemo(() => {
 		if (!highlighter) return;
-		return highlighter.codeToHtml(code, { lang: language });
+		return highlighter.codeToHtml(code, {
+			lang: language,
+			theme: "solarized-light",
+		});
 	}, [highlighter, code, language]);
 
 	const numberOfLines = useMemo(() => {

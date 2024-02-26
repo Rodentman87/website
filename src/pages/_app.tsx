@@ -16,10 +16,9 @@ export default function App({ Component, pageProps, router }: AppProps) {
 
 	useEffect(() => {
 		import("shiki").then((shiki) => {
-			shiki.setCDN("https://unpkg.com/shiki/");
 			shiki
 				.getHighlighter({
-					theme: "solarized-light",
+					themes: ["solarized-light"],
 					langs: ["typescript", "javascript", "json"],
 				})
 				.then((highlighter) => {
