@@ -1,3 +1,4 @@
+import { Tooltip } from "@components/Tooltip";
 import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
@@ -10,6 +11,8 @@ const GAME_MAP = {
 	"356875221078245376": "2357570",
 	// Terraria
 	"356943499456937984": "105600",
+	// tModLoader
+	"844487120416407573": "105600",
 	// The Lord of the Rings Online™
 	"451540469470593024": "212500",
 	// Rocket League
@@ -768,7 +771,6 @@ interface Colors {
 export const GameStatus: React.FC<{
 	status: StatusResponse;
 }> = ({ status }) => {
-	console.log(status);
 	const gameId = GAME_MAP[status.application_id!];
 	const [colors, setColors] = React.useState<Colors>({
 		primary: "#FFFFFF",
@@ -831,13 +833,17 @@ export const GameStatus: React.FC<{
 				</div>
 			</motion.div>
 			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
-				<SmoothSwapImage
-					alt={status.name}
-					width={64}
-					height={64}
-					src={coverImage}
-					className="rounded-lg shadow-md"
-				/>
+				{status.assets ? (
+					<RichImages status={status} />
+				) : (
+					<SmoothSwapImage
+						alt={status.name}
+						width={64}
+						height={64}
+						src={coverImage}
+						className="rounded-lg shadow-md"
+					/>
+				)}
 				<div className="flex flex-col justify-start min-w-0 gap-1 grow">
 					<AnimatePresence mode="popLayout">
 						<motion.a
@@ -911,7 +917,7 @@ export const GameStatus: React.FC<{
 							>
 								{status.state}{" "}
 								<AnimatePresence>
-									{status.party && (
+									{status.party && status.party.size && (
 										<>
 											(
 											<motion.span
@@ -938,26 +944,72 @@ export const GameStatus: React.FC<{
 							</motion.span>
 						)}
 					</AnimatePresence>
-					<Timer status={status} />
+					{status.timestamps && <Timer status={status} />}
 				</div>
 			</div>
 		</motion.div>
 	);
 };
 
-const SmoothSwapImage: React.FC<{
-	src: string;
-	className: string;
-	alt?: string;
-	width?: number;
-	height?: number;
-	onLoad?: React.ReactEventHandler<HTMLImageElement>;
-}> = ({ src, onLoad, width, height, alt, className }) => {
+const RichImages: React.FC<{
+	status: StatusResponse;
+}> = ({ status }) => {
+	const largeImage = `https://cdn.discordapp.com/app-assets/${status.application_id}/${status.assets.large_image}.png`;
+	const smallImage = `https://cdn.discordapp.com/app-assets/${status.application_id}/${status.assets.small_image}.png`;
+
+	return (
+		<div className="relative">
+			<Tooltip content={status.assets.large_text}>
+				{(ref) => (
+					<SmoothSwapImage
+						ref={ref as any}
+						alt={status.name}
+						width={96}
+						height={96}
+						src={largeImage}
+						className="rounded-lg shadow-md"
+					/>
+				)}
+			</Tooltip>
+
+			{status.assets.small_image && (
+				<Tooltip content={status.assets.small_text}>
+					{(ref) => (
+						<div
+							ref={ref as any}
+							className="absolute z-10 overflow-hidden rounded-full -bottom-2 -right-2"
+						>
+							<SmoothSwapImage
+								alt={status.name}
+								width={32}
+								height={32}
+								src={smallImage}
+								className="rounded-full"
+							/>
+						</div>
+					)}
+				</Tooltip>
+			)}
+		</div>
+	);
+};
+
+const SmoothSwapImage = React.forwardRef<
+	HTMLDivElement,
+	{
+		src: string;
+		className: string;
+		alt?: string;
+		width?: number;
+		height?: number;
+		onLoad?: React.ReactEventHandler<HTMLImageElement>;
+	}
+>(({ src, onLoad, width, height, alt, className }, ref) => {
 	const [oldSrc, setOldSrc] = React.useState(src);
 	const [showOldImage, setShowOldImage] = React.useState(true);
 
 	return (
-		<div className="relative shrink-0">
+		<div className="relative shrink-0" ref={ref}>
 			<Image
 				alt={alt}
 				width={width}
@@ -999,7 +1051,7 @@ const SmoothSwapImage: React.FC<{
 			</AnimatePresence>
 		</div>
 	);
-};
+});
 
 const Timer: React.FC<{
 	status: StatusResponse;

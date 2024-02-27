@@ -9,6 +9,7 @@
 		"gen:licenses": "license-report --only=prod --output=json > licenses.json"
 	},
 	"dependencies": {
+		"@floating-ui/react": "^0.26.9",
 		"@mdx-js/loader": "^2.1.5",
 		"@mdx-js/react": "^2.1.5",
 		"@next/mdx": "^13.0.3",

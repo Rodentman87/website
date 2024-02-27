@@ -106,7 +106,6 @@ export const ActivityCard: React.FC = () => {
 				case 0:
 					// Event
 					if (t === "INIT_STATE" || t === "PRESENCE_UPDATE") {
-						console.log(d);
 						// Get status with spotify status first
 						const spotifyStatus = d.activities.find(
 							(activity: any) => activity.type === 2
