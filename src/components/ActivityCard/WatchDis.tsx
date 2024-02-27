@@ -125,6 +125,9 @@ export const WatchDisStatus: React.FC<{
 								x: 10,
 								opacity: 0,
 							}}
+							style={{
+								textShadow: "0px 0px 3px white",
+							}}
 							title={name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 						>
@@ -149,34 +152,12 @@ export const WatchDisStatus: React.FC<{
 									x: 10,
 									opacity: 0,
 								}}
+								style={{
+									textShadow: "0px 0px 3px white",
+								}}
 								className="text-xs"
 							>
-								{status.state}{" "}
-								<AnimatePresence>
-									{status.party && (
-										<>
-											(
-											<motion.span
-												key="current"
-												initial={{ opacity: 0 }}
-												animate={{ opacity: 1 }}
-												exit={{ opacity: 0 }}
-											>
-												{status.party.size[0]}
-											</motion.span>{" "}
-											of{" "}
-											<motion.span
-												key="max"
-												initial={{ opacity: 0 }}
-												animate={{ opacity: 1 }}
-												exit={{ opacity: 0 }}
-											>
-												{status.party.size[1]}
-											</motion.span>
-											)
-										</>
-									)}
-								</AnimatePresence>
+								{status.state}
 							</motion.span>
 						)}
 					</AnimatePresence>

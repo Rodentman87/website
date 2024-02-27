@@ -855,6 +855,9 @@ export const GameStatus: React.FC<{
 								x: 10,
 								opacity: 0,
 							}}
+							style={{
+								textShadow: "0px 0px 3px white",
+							}}
 							title={status.name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 							target="_blank"
@@ -877,6 +880,9 @@ export const GameStatus: React.FC<{
 									x: 10,
 									opacity: 0,
 								}}
+								style={{
+									textShadow: "0px 0px 3px white",
+								}}
 								className="text-xs"
 							>
 								{status.details}
@@ -897,6 +903,9 @@ export const GameStatus: React.FC<{
 								exit={{
 									x: 10,
 									opacity: 0,
+								}}
+								style={{
+									textShadow: "0px 0px 3px white",
 								}}
 								className="text-xs"
 							>

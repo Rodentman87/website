@@ -78,7 +78,7 @@ export const SpotifyStatus: React.FC<{
 							song.album.images[0].url,
 							e.target as HTMLImageElement
 						);
-						const bestColors = getBestColors(colors, Color("#d1d5db"), 2);
+						const bestColors = getBestColors(colors, Color("#CCCCCC"), 2);
 						setColors({
 							primary: bestColors.primary.hex(),
 							secondary: bestColors.secondary.hex(),
@@ -101,6 +101,9 @@ export const SpotifyStatus: React.FC<{
 							exit={{
 								x: 10,
 								opacity: 0,
+							}}
+							style={{
+								textShadow: "0px 0px 3px white",
 							}}
 							title={song.name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
@@ -178,6 +181,9 @@ const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
 						x: 10,
 						opacity: 0,
 					}}
+					style={{
+						textShadow: "0px 0px 3px white",
+					}}
 					title={song.artists[0].name}
 					target="_blank"
 					href={song.artists[0].external_urls.spotify}
@@ -211,6 +217,9 @@ const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
 					exit={{
 						x: 10,
 						opacity: 0,
+					}}
+					style={{
+						textShadow: "0px 0px 3px white",
 					}}
 					title={song.album.name}
 					target="_blank"
