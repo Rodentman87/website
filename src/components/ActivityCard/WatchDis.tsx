@@ -15,8 +15,8 @@ export const WatchDisStatus: React.FC<{
 }> = ({ status }) => {
 	console.log(status);
 	const [colors, setColors] = React.useState<Colors>({
-		primary: "#FFFFFF",
-		secondary: "#FFFFFF",
+		primary: "#000000",
+		secondary: "#000000",
 	});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [imageWidth, setImageWidth] = React.useState(400);
@@ -27,7 +27,6 @@ export const WatchDisStatus: React.FC<{
 	}, [containerRef]);
 
 	const [imageSize, setImageSize] = React.useState({ width: 64, height: 96 });
-	const lastColorWasDefault = React.useRef(true);
 
 	const imageLink = React.useMemo(() => {
 		const [, query, base] = /mp:external\/.*?\/(.*?)?\/?https\/(.*)/.exec(
@@ -71,7 +70,6 @@ export const WatchDisStatus: React.FC<{
 								imageLink,
 								e.target as HTMLImageElement
 							);
-							lastColorWasDefault.current = colors.primary === "#FFFFFF";
 							const bestColors = getBestColors(newColors, Color("#f0b6b6"), 2);
 							setColors({
 								primary: bestColors.primary.hex(),
@@ -105,7 +103,7 @@ export const WatchDisStatus: React.FC<{
 						height: imageSize.height,
 					}}
 				/>
-				<div className="flex flex-col justify-start min-w-0 gap-1 grow">
+				<div className="flex flex-col justify-start min-w-0 grow">
 					<AnimatePresence mode="popLayout">
 						<motion.span
 							key={name}
@@ -117,9 +115,6 @@ export const WatchDisStatus: React.FC<{
 								x: 0,
 								color: colors.secondary,
 								opacity: 1,
-								transition: {
-									duration: lastColorWasDefault.current ? 0 : 0.5,
-								},
 							}}
 							exit={{
 								x: 10,

@@ -773,8 +773,8 @@ export const GameStatus: React.FC<{
 }> = ({ status }) => {
 	const gameId = GAME_MAP[status.application_id!];
 	const [colors, setColors] = React.useState<Colors>({
-		primary: "#FFFFFF",
-		secondary: "#FFFFFF",
+		primary: "#000000",
+		secondary: "#000000",
 	});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [imageWidth, setImageWidth] = React.useState(400);
@@ -844,7 +844,7 @@ export const GameStatus: React.FC<{
 						className="rounded-lg shadow-md"
 					/>
 				)}
-				<div className="flex flex-col justify-start min-w-0 gap-1 grow">
+				<div className="flex flex-col justify-start min-w-0 grow">
 					<AnimatePresence mode="popLayout">
 						<motion.a
 							key={status.name}
