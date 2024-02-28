@@ -139,9 +139,6 @@ export const WatchDisStatus: React.FC<{
 									x: 0,
 									color: colors.primary,
 									opacity: 1,
-									transition: {
-										duration: lastColorWasDefault.current ? 0 : 0.5,
-									},
 								}}
 								exit={{
 									x: 10,
