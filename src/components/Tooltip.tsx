@@ -48,12 +48,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
 						style={floatingStyles}
 					>
 						{content}
-						<FloatingArrow
-							ref={arrowRef}
-							context={context}
-							fill="white"
-							className="shadow-md"
-						/>
+						<FloatingArrow ref={arrowRef} context={context} fill="white" />
 					</motion.div>
 				)}
 			</AnimatePresence>
