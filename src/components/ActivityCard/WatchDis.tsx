@@ -127,9 +127,6 @@ export const WatchDisStatus: React.FC<{
 								x: 10,
 								opacity: 0,
 							}}
-							style={{
-								textShadow: "0px 0px 3px white",
-							}}
 							title={name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 						>
@@ -150,9 +147,6 @@ export const WatchDisStatus: React.FC<{
 								exit={{
 									x: 10,
 									opacity: 0,
-								}}
-								style={{
-									textShadow: "0px 0px 3px white",
 								}}
 								className="text-xs"
 							>
