@@ -44,7 +44,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						ref={refs.setFloating}
-						className="fixed z-50 px-2 py-1 text-xs bg-white border border-gray-200 border-solid rounded-md shadow-md whitespace-nowrap"
+						className="fixed z-50 px-2 py-1 text-xs text-black bg-white border border-gray-200 border-solid rounded-md shadow-md whitespace-nowrap"
 						style={floatingStyles}
 					>
 						{content}
