@@ -1,10 +1,13 @@
 import { Tooltip } from "@components/Tooltip";
-import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
 import React, { useEffect } from "react";
-import { StatusResponse } from "./ActivityCard";
+import {
+	COLOR_CONRTAST_MINIMUM,
+	CONTRAST_AGAINST,
+	StatusResponse,
+} from "./ActivityCard";
 
 const GAME_MAP = {
 	// Overwatch
@@ -824,7 +827,11 @@ export const GameStatus: React.FC<{
 								coverImage,
 								e.target as HTMLImageElement
 							);
-							const bestColors = getBestColors(colors, Color("#f0b6b6"), 2);
+							const bestColors = getBestColors(
+								colors,
+								CONTRAST_AGAINST,
+								COLOR_CONRTAST_MINIMUM
+							);
 							setColors({
 								primary: bestColors.primary.hex(),
 								secondary: bestColors.secondary.hex(),
@@ -833,7 +840,7 @@ export const GameStatus: React.FC<{
 					/>
 				</div>
 			</motion.div>
-			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
+			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-black bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
 				{status.assets ? (
 					<RichImages status={status} />
 				) : (

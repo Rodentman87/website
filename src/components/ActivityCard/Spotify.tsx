@@ -1,11 +1,14 @@
 import { Track } from "@spotify/web-api-ts-sdk";
-import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
 import React, { useEffect, useLayoutEffect } from "react";
 import { BsSpotify } from "react-icons/bs";
-import { StatusResponse } from "./ActivityCard";
+import {
+	COLOR_CONRTAST_MINIMUM,
+	CONTRAST_AGAINST,
+	StatusResponse,
+} from "./ActivityCard";
 
 interface Colors {
 	primary: string;
@@ -36,10 +39,10 @@ export const SpotifyStatus: React.FC<{
 			initial={{ opacity: 0, x: -25 }}
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: -25 }}
-			className="relative mt-8 border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
+			className="relative mt-8 text-white border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
 		>
 			<motion.span
-				className="absolute text-sm -top-6 left-2"
+				className="absolute text-sm text-black -top-6 left-2"
 				initial={{ y: 15, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ delay: 1 }}
@@ -58,7 +61,7 @@ export const SpotifyStatus: React.FC<{
 					/>
 				</div>
 			</motion.div>
-			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
+			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-gray-800 bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
 				<a
 					target="_blank"
 					href="https://open.spotify.com/"
@@ -78,7 +81,11 @@ export const SpotifyStatus: React.FC<{
 							song.album.images[0].url,
 							e.target as HTMLImageElement
 						);
-						const bestColors = getBestColors(colors, Color("#CCCCCC"), 2);
+						const bestColors = getBestColors(
+							colors,
+							CONTRAST_AGAINST,
+							COLOR_CONRTAST_MINIMUM
+						);
 						setColors({
 							primary: bestColors.primary.hex(),
 							secondary: bestColors.secondary.hex(),
@@ -101,9 +108,6 @@ export const SpotifyStatus: React.FC<{
 							exit={{
 								x: 10,
 								opacity: 0,
-							}}
-							style={{
-								textShadow: "0px 0px 3px white",
 							}}
 							title={song.name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
@@ -181,9 +185,6 @@ const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
 						x: 10,
 						opacity: 0,
 					}}
-					style={{
-						textShadow: "0px 0px 3px white",
-					}}
 					title={song.artists[0].name}
 					target="_blank"
 					href={song.artists[0].external_urls.spotify}
@@ -217,9 +218,6 @@ const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
 					exit={{
 						x: 10,
 						opacity: 0,
-					}}
-					style={{
-						textShadow: "0px 0px 3px white",
 					}}
 					title={song.album.name}
 					target="_blank"
@@ -255,7 +253,7 @@ const ProgressBar: React.FC<{
 	return (
 		<div className="flex flex-col justify-end w-full grow">
 			<div className="relative overflow-hidden rounded-full">
-				<div className="relative w-full h-2 overflow-hidden bg-white rounded-full opacity-40"></div>
+				<div className="relative w-full h-2 overflow-hidden bg-black rounded-full opacity-40"></div>
 				<AnimatePresence>
 					<motion.div
 						key={song.id}

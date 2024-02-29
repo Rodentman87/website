@@ -1,4 +1,5 @@
 import { Track } from "@spotify/web-api-ts-sdk";
+import Color from "color";
 import { AnimatePresence } from "framer-motion";
 import { useAchievementStore } from "hooks/useAchievementStore";
 import React from "react";
@@ -8,6 +9,9 @@ import { WatchDisStatus } from "./WatchDis";
 
 const ME = "152566937442975744";
 const ENDPOINT = "wss://api.lanyard.rest/socket";
+
+export const COLOR_CONRTAST_MINIMUM = 4.5;
+export const CONTRAST_AGAINST = Color("#222222");
 
 export interface StatusResponse {
 	id: string;

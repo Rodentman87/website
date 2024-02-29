@@ -1,9 +1,12 @@
-import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
 import React from "react";
-import { StatusResponse } from "./ActivityCard";
+import {
+	COLOR_CONRTAST_MINIMUM,
+	CONTRAST_AGAINST,
+	StatusResponse,
+} from "./ActivityCard";
 
 interface Colors {
 	primary: string;
@@ -70,7 +73,11 @@ export const WatchDisStatus: React.FC<{
 								imageLink,
 								e.target as HTMLImageElement
 							);
-							const bestColors = getBestColors(newColors, Color("#f0b6b6"), 2);
+							const bestColors = getBestColors(
+								newColors,
+								CONTRAST_AGAINST,
+								COLOR_CONRTAST_MINIMUM
+							);
 							setColors({
 								primary: bestColors.primary.hex(),
 								secondary: bestColors.secondary.hex(),
@@ -79,7 +86,7 @@ export const WatchDisStatus: React.FC<{
 					/>
 				</div>
 			</motion.div>
-			<div className="relative flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
+			<div className="relative flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-black bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
 				<div className="absolute top-2 left-2">
 					<SmoothSwapImage
 						autoWidth
