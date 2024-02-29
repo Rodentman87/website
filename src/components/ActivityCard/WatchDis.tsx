@@ -18,8 +18,8 @@ export const WatchDisStatus: React.FC<{
 }> = ({ status }) => {
 	console.log(status);
 	const [colors, setColors] = React.useState<Colors>({
-		primary: "#000000",
-		secondary: "#000000",
+		primary: "#FFFFFF",
+		secondary: "#FFFFFF",
 	});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [imageWidth, setImageWidth] = React.useState(400);

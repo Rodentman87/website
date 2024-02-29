@@ -777,8 +777,8 @@ export const GameStatus: React.FC<{
 }> = ({ status }) => {
 	const gameId = GAME_MAP[status.application_id!];
 	const [colors, setColors] = React.useState<Colors>({
-		primary: "#000000",
-		secondary: "#000000",
+		primary: "#FFFFFF",
+		secondary: "#FFFFFF",
 	});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [imageWidth, setImageWidth] = React.useState(400);

@@ -20,8 +20,8 @@ export const SpotifyStatus: React.FC<{
 	status: StatusResponse;
 }> = ({ song, status }) => {
 	const [colors, setColors] = React.useState<Colors>({
-		primary: "#000000",
-		secondary: "#000000",
+		primary: "#FFFFFF",
+		secondary: "#FFFFFF",
 	});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [imageWidth, setImageWidth] = React.useState(400);
