@@ -1,5 +1,5 @@
 import { Track } from "@spotify/web-api-ts-sdk";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, Transition, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
 import React, { useEffect, useLayoutEffect } from "react";
@@ -14,6 +14,14 @@ interface Colors {
 	primary: string;
 	secondary: string;
 }
+
+const TRANSITION_CONFIG: Transition = {
+	duration: 0.5,
+	ease: "anticipate",
+};
+const SWAP_TRANSITION_CONFIG: Transition = {
+	delay: TRANSITION_CONFIG.duration + 0.1,
+};
 
 export const SpotifyStatus: React.FC<{
 	song: Track;
@@ -30,11 +38,34 @@ export const SpotifyStatus: React.FC<{
 			setImageWidth(containerRef.current.clientWidth);
 		}
 	}, [containerRef]);
+	const [isHovered, setIsHovered] = React.useState(false);
+	const [isTimedExpanded, setIsTimedExpanded] = React.useState(false);
+	const lastSongData = React.useRef<{ artist: string; album: string } | null>(
+		null
+	);
+
+	useEffect(() => {
+		if (
+			song.artists[0].name !== lastSongData.current?.artist ||
+			song.album.name !== lastSongData.current?.album
+		) {
+			setIsTimedExpanded(true);
+			lastSongData.current = {
+				artist: song.artists[0].name,
+				album: song.album.name,
+			};
+			const timeout = setTimeout(() => {
+				setIsTimedExpanded(false);
+			}, 5000);
+			return () => clearTimeout(timeout);
+		}
+	}, [song.id]);
+
+	const isExpanded = isHovered || isTimedExpanded;
 
 	return (
 		<motion.div
 			key="spotify"
-			layout
 			ref={containerRef}
 			initial={{ opacity: 0, x: -25 }}
 			animate={{ opacity: 1, x: 0 }}
@@ -61,7 +92,11 @@ export const SpotifyStatus: React.FC<{
 					/>
 				</div>
 			</motion.div>
-			<div className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-gray-800 bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
+			<motion.div
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
+				className="flex flex-row items-stretch justify-start gap-2 p-2 transition-colors duration-500 bg-gray-800 bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70"
+			>
 				<a
 					target="_blank"
 					href="https://open.spotify.com/"
@@ -71,8 +106,10 @@ export const SpotifyStatus: React.FC<{
 				</a>
 				<SmoothSwapImage
 					alt={song.album.name}
-					width={96}
-					height={96}
+					width={isExpanded ? 96 : 64}
+					height={isExpanded ? 96 : 64}
+					imageHeight={96}
+					imageWidth={96}
 					src={song.album.images[0].url}
 					className="rounded-lg shadow-md"
 					onLoad={async (e) => {
@@ -93,7 +130,7 @@ export const SpotifyStatus: React.FC<{
 					}}
 				/>
 				<div className="flex flex-col justify-start min-w-0 grow">
-					<AnimatePresence mode="popLayout">
+					<AnimatePresence mode="wait">
 						<motion.a
 							key={song.name}
 							initial={{
@@ -108,6 +145,7 @@ export const SpotifyStatus: React.FC<{
 							exit={{
 								x: 10,
 								opacity: 0,
+								transition: SWAP_TRANSITION_CONFIG,
 							}}
 							title={song.name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
@@ -117,11 +155,16 @@ export const SpotifyStatus: React.FC<{
 							{song.name}
 						</motion.a>
 					</AnimatePresence>
-					<ArtistLine colors={colors} song={song} />
-					<AlbumLine colors={colors} song={song} />
-					<ProgressBar colors={colors} status={status} song={song} />
+					<ArtistLine isExpanded={isExpanded} colors={colors} song={song} />
+					<AlbumLine isExpanded={isExpanded} colors={colors} song={song} />
+					<ProgressBar
+						isExpanded={isExpanded}
+						colors={colors}
+						status={status}
+						song={song}
+					/>
 				</div>
-			</div>
+			</motion.div>
 		</motion.div>
 	);
 };
@@ -132,101 +175,143 @@ const SmoothSwapImage: React.FC<{
 	alt?: string;
 	width?: number;
 	height?: number;
+	imageWidth?: number;
+	imageHeight?: number;
 	onLoad?: React.ReactEventHandler<HTMLImageElement>;
-}> = ({ src, onLoad, width, height, alt, className }) => {
+}> = ({
+	src,
+	onLoad,
+	width,
+	height,
+	alt,
+	className,
+	imageWidth,
+	imageHeight,
+}) => {
 	return (
 		<div className="relative shrink-0">
-			<AnimatePresence mode="popLayout">
-				<motion.div
-					key={src}
-					initial={{
-						opacity: 1,
-					}}
-					exit={{
-						opacity: 0,
-					}}
-				>
-					<Image
-						alt={alt}
-						width={width}
-						height={height}
-						src={src}
-						className={className}
-						onLoad={(e) => {
-							onLoad?.(e);
+			<motion.div
+				animate={{
+					width: width,
+					height: height,
+					transition: TRANSITION_CONFIG,
+				}}
+			>
+				<AnimatePresence mode="popLayout">
+					<motion.div
+						key={src}
+						initial={{
+							opacity: 1,
 						}}
-					/>
-				</motion.div>
-			</AnimatePresence>
+						exit={{
+							opacity: 0,
+						}}
+					>
+						<Image
+							alt={alt}
+							width={imageWidth ?? width}
+							height={imageHeight ?? height}
+							src={src}
+							className={className}
+							onLoad={(e) => {
+								onLoad?.(e);
+							}}
+						/>
+					</motion.div>
+				</AnimatePresence>
+			</motion.div>
 		</div>
 	);
 };
 
-const ArtistLine: React.FC<{ colors: Colors; song: Track }> = ({
-	song,
-	colors,
-}) => {
+const ArtistLine: React.FC<{
+	colors: Colors;
+	song: Track;
+	isExpanded: boolean;
+}> = ({ song, colors, isExpanded }) => {
 	return (
-		<span className="overflow-hidden text-xs font-semibold whitespace-nowrap text-ellipsis">
-			by{" "}
-			<AnimatePresence mode="popLayout">
-				<motion.a
-					key={song.artists[0].name}
-					initial={{
-						x: -10,
-						opacity: 0,
-					}}
-					animate={{
-						x: 0,
-						color: colors.primary,
-						opacity: 1,
-					}}
-					exit={{
-						x: 10,
-						opacity: 0,
-					}}
-					title={song.artists[0].name}
-					target="_blank"
-					href={song.artists[0].external_urls.spotify}
-				>
-					{song.artists[0].name}
-				</motion.a>
-			</AnimatePresence>
-		</span>
+		<AnimatePresence>
+			<motion.span
+				animate={{
+					opacity: isExpanded ? 1 : 0,
+					height: isExpanded ? "auto" : 0,
+					transition: TRANSITION_CONFIG,
+				}}
+				className="overflow-visible text-xs font-semibold whitespace-nowrap text-ellipsis"
+			>
+				by{" "}
+				<AnimatePresence mode="wait">
+					<motion.a
+						key={song.artists[0].name}
+						initial={{
+							x: -10,
+							opacity: 0,
+						}}
+						animate={{
+							x: 0,
+							color: colors.primary,
+							opacity: 1,
+						}}
+						exit={{
+							x: 10,
+							opacity: 0,
+							transition: SWAP_TRANSITION_CONFIG,
+						}}
+						title={song.artists[0].name}
+						target="_blank"
+						href={song.artists[0].external_urls.spotify}
+					>
+						{song.artists[0].name}
+					</motion.a>
+				</AnimatePresence>
+			</motion.span>
+		</AnimatePresence>
 	);
 };
 
-const AlbumLine: React.FC<{ colors: Colors; song: Track }> = ({
-	song,
-	colors,
-}) => {
+const AlbumLine: React.FC<{
+	colors: Colors;
+	song: Track;
+	isExpanded: boolean;
+}> = ({ song, colors, isExpanded }) => {
 	return (
-		<span className="overflow-hidden text-xs font-semibold whitespace-nowrap text-ellipsis">
-			on{" "}
-			<AnimatePresence mode="popLayout">
-				<motion.a
-					key={song.album.name}
-					initial={{
-						x: -10,
-						opacity: 0,
-					}}
-					animate={{
-						x: 0,
-						color: colors.primary,
-						opacity: 1,
-					}}
-					exit={{
-						x: 10,
-						opacity: 0,
-					}}
-					title={song.album.name}
-					target="_blank"
-					href={song.album.external_urls.spotify}
-				>
-					{song.album.name}
-				</motion.a>
-			</AnimatePresence>
-		</span>
+		<AnimatePresence>
+			<motion.span
+				animate={{
+					opacity: isExpanded ? 1 : 0,
+					height: isExpanded ? "auto" : 0,
+					y: isExpanded ? 0 : "1rem",
+					transition: TRANSITION_CONFIG,
+				}}
+				className="overflow-visible text-xs font-semibold whitespace-nowrap text-ellipsis"
+			>
+				on{" "}
+				<AnimatePresence mode="wait">
+					<motion.a
+						key={song.album.name}
+						initial={{
+							x: -10,
+							opacity: 0,
+						}}
+						animate={{
+							x: 0,
+							color: colors.primary,
+							opacity: 1,
+						}}
+						exit={{
+							x: 10,
+							opacity: 0,
+							transition: SWAP_TRANSITION_CONFIG,
+						}}
+						title={song.album.name}
+						target="_blank"
+						href={song.album.external_urls.spotify}
+					>
+						{song.album.name}
+					</motion.a>
+				</AnimatePresence>
+			</motion.span>
+		</AnimatePresence>
 	);
 };
 
@@ -234,7 +319,8 @@ const ProgressBar: React.FC<{
 	colors: Colors;
 	song: Track;
 	status: StatusResponse;
-}> = ({ song, status, colors }) => {
+	isExpanded: boolean;
+}> = ({ song, status, colors, isExpanded }) => {
 	const total = status.timestamps.end - status.timestamps.start;
 	const elapsed = Math.max(
 		Math.min(Date.now() - status.timestamps.start, total),
@@ -253,7 +339,13 @@ const ProgressBar: React.FC<{
 	return (
 		<div className="flex flex-col justify-end w-full grow">
 			<div className="relative overflow-hidden rounded-full">
-				<div className="relative w-full h-2 overflow-hidden bg-black rounded-full opacity-40"></div>
+				<motion.div
+					animate={{
+						height: isExpanded ? "0.5rem" : "0.325rem",
+						transition: TRANSITION_CONFIG,
+					}}
+					className="relative w-full overflow-hidden bg-black rounded-full opacity-40"
+				></motion.div>
 				<AnimatePresence>
 					<motion.div
 						key={song.id}
