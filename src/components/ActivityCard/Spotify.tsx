@@ -234,10 +234,10 @@ const ArtistLine: React.FC<{
 			<motion.span
 				animate={{
 					opacity: isExpanded ? 1 : 0,
-					height: isExpanded ? "auto" : 0,
+					height: isExpanded ? "1rem" : 0,
 					transition: TRANSITION_CONFIG,
 				}}
-				className="overflow-visible text-xs font-semibold whitespace-nowrap text-ellipsis"
+				className="overflow-visible text-xs font-semibold overflow-x-clip whitespace-nowrap text-ellipsis"
 			>
 				by{" "}
 				<AnimatePresence mode="wait">
@@ -283,7 +283,7 @@ const AlbumLine: React.FC<{
 					y: isExpanded ? 0 : "1rem",
 					transition: TRANSITION_CONFIG,
 				}}
-				className="overflow-visible text-xs font-semibold whitespace-nowrap text-ellipsis"
+				className="overflow-y-visible text-xs font-semibold overflow-x-clip whitespace-nowrap text-ellipsis"
 			>
 				on{" "}
 				<AnimatePresence mode="wait">
