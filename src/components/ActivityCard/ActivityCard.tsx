@@ -2,7 +2,7 @@ import { Track } from "@spotify/web-api-ts-sdk";
 import Color from "color";
 import { AnimatePresence } from "framer-motion";
 import { useAchievementStore } from "hooks/useAchievementStore";
-import React from "react";
+import React, { useEffect } from "react";
 import { GameStatus } from "./Game";
 import { SpotifyStatus } from "./Spotify";
 import { WatchDisStatus } from "./WatchDis";
@@ -52,6 +52,57 @@ export const ActivityCard: React.FC = () => {
 		React.useState<StatusResponse | null>(null);
 	const [song, setSong] = React.useState<Track | null>(null);
 	const songId = React.useRef<string | null>(null);
+	const isTabVisible = React.useRef(true);
+	const queuedMessage = React.useRef<{ d: any; t: string; op: number } | null>(
+		null
+	);
+
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			isTabVisible.current = document.visibilityState === "visible";
+			// Handle queued status update
+			if (isTabVisible.current && queuedMessage.current) {
+				handleMessage(queuedMessage.current);
+				queuedMessage.current = null;
+			}
+		};
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		return () => {
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
+		};
+	}, []);
+
+	const handleMessage = React.useCallback((data: any) => {
+		const { t, d } = data;
+		// Event
+		if (t === "INIT_STATE" || t === "PRESENCE_UPDATE") {
+			// Get status with spotify status first
+			const spotifyStatus = d.activities.find(
+				(activity: any) => activity.type === 2
+			);
+			if (spotifyStatus) {
+				setStatusAndFetchSong(spotifyStatus);
+			} else {
+				setSpotifyStatus(null);
+			}
+			const gameStatus = d.activities.find(
+				(activity: any) => activity.type === 0
+			);
+			if (gameStatus) {
+				setStatus(gameStatus);
+			} else {
+				setStatus(null);
+			}
+			const watchDisStatus = d.activities.find(
+				(activity: any) => activity.application_id === "1028036359803375717"
+			);
+			if (watchDisStatus) {
+				setWatchDisStatus(watchDisStatus);
+			} else {
+				setWatchDisStatus(null);
+			}
+		}
+	}, []);
 
 	const achievementStore = useAchievementStore();
 
@@ -108,34 +159,10 @@ export const ActivityCard: React.FC = () => {
 					}, heartbeat_interval);
 					break;
 				case 0:
-					// Event
-					if (t === "INIT_STATE" || t === "PRESENCE_UPDATE") {
-						// Get status with spotify status first
-						const spotifyStatus = d.activities.find(
-							(activity: any) => activity.type === 2
-						);
-						if (spotifyStatus) {
-							setStatusAndFetchSong(spotifyStatus);
-						} else {
-							setSpotifyStatus(null);
-						}
-						const gameStatus = d.activities.find(
-							(activity: any) => activity.type === 0
-						);
-						if (gameStatus) {
-							setStatus(gameStatus);
-						} else {
-							setStatus(null);
-						}
-						const watchDisStatus = d.activities.find(
-							(activity: any) =>
-								activity.application_id === "1028036359803375717"
-						);
-						if (watchDisStatus) {
-							setWatchDisStatus(watchDisStatus);
-						} else {
-							setWatchDisStatus(null);
-						}
+					if (isTabVisible.current) {
+						handleMessage({ t, d, op });
+					} else {
+						queuedMessage.current = { d, t, op };
 					}
 					break;
 			}
