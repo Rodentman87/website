@@ -47,9 +47,13 @@ export async function getAchievementProgress(id: string) {
 				total,
 				achieved,
 			};
-			await kv.set(cacheKey, data);
+			await kv.set(cacheKey, data, {
+				ex: 600,
+			});
 		} catch (e) {
-			await kv.set(cacheKey, null);
+			await kv.set(cacheKey, null, {
+				ex: 600,
+			});
 			console.error(e);
 			return null;
 		}
