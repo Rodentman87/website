@@ -2,6 +2,7 @@ import { Tooltip } from "@components/Tooltip";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
+import { Data } from "pages/api/achievements/[id]";
 import React, { useEffect } from "react";
 import {
 	COLOR_CONRTAST_MINIMUM,
@@ -788,11 +789,29 @@ export const GameStatus: React.FC<{
 		}
 	}, [containerRef]);
 
+	const [achievementProgress, setAchievementProgress] =
+		React.useState<Data | null>(null);
+
 	if (!gameId) return null; // Not a game we have info for, add simplified card later
 
 	const steamLink = `https://store.steampowered.com/app/${gameId}/`;
 	const coverImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/library_600x900_2x.jpg`;
 	const largeImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
+
+	useEffect(() => {
+		let cancel = false;
+		(async () => {
+			// Fetch the data
+			const res = await fetch(`/api/achievements/${gameId}`);
+			if (cancel) return;
+			const data = (await res.json()) as Data | null;
+			if (cancel) return;
+			setAchievementProgress(data);
+		})();
+		return () => {
+			cancel = true;
+		};
+	}, [gameId]);
 
 	return (
 		<motion.div
@@ -943,7 +962,16 @@ export const GameStatus: React.FC<{
 							</motion.span>
 						)}
 					</AnimatePresence>
-					{status.timestamps && <Timer status={status} />}
+					{achievementProgress && (
+						<ProgressBar
+							colors={colors}
+							total={achievementProgress.total}
+							achieved={achievementProgress.achieved}
+						/>
+					)}
+					{status.timestamps && !achievementProgress && (
+						<Timer status={status} />
+					)}
 				</div>
 			</div>
 		</motion.div>
@@ -1070,6 +1098,52 @@ const Timer: React.FC<{
 		<div className="flex flex-col justify-end grow">
 			<div className="flex flex-row justify-between">
 				<span className="text-xs">{msToMinutesAndSeconds(elapsed)}</span>
+			</div>
+		</div>
+	);
+};
+
+const ProgressBar: React.FC<{
+	colors: Colors;
+	total: number;
+	achieved: number;
+}> = ({ total, achieved, colors }) => {
+	const [_, setRerender] = React.useState(0);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setRerender((old) => old + 1);
+		}, 20);
+		return () => clearInterval(interval);
+	}, []);
+
+	return (
+		<div className="flex flex-col justify-end w-full grow">
+			<div className="relative overflow-hidden rounded-full">
+				<div className="relative w-full h-2 overflow-hidden bg-black rounded-full opacity-40"></div>
+				<motion.div
+					initial={{
+						opacity: 1,
+					}}
+					animate={{
+						width: `${(achieved / total) * 100}%`,
+						backgroundColor: colors.secondary,
+						opacity: 1,
+					}}
+					exit={{
+						opacity: 0,
+						transition: {
+							duration: 1.5,
+						},
+					}}
+					className="absolute top-0 left-0 h-full rounded-full"
+				></motion.div>
+			</div>
+			<div className="flex flex-row justify-between">
+				<span className="text-xs">Achievements</span>
+				<span className="text-xs">
+					{achieved}/{total}
+				</span>
 			</div>
 		</div>
 	);
