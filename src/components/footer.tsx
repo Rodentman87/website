@@ -35,7 +35,7 @@ const Footer = () => {
 				onAnimationComplete={() => setRenderedOnce(true)}
 			>
 				<motion.div layoutId="twitter" variants={item} custom={{ i: 0 }}>
-					<SocialIcon url="https://twitter.com/rodentman87" />
+					<SocialIcon url="https://twitter.com/maisydinosaur" />
 				</motion.div>
 				<motion.div layoutId="gh" variants={item} custom={{ i: 1 }}>
 					<SocialIcon url="https://github.com/Rodentman87" />
