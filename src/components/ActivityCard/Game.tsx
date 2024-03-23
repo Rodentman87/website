@@ -11,6 +11,8 @@ import {
 } from "./ActivityCard";
 
 const GAME_MAP = {
+	// Horizon: FW
+	"1220416685694255265": "2420110",
 	// Overwatch
 	"356875221078245376": "2357570",
 	// Terraria
