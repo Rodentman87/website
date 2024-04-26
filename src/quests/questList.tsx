@@ -1,5 +1,3 @@
-import { Quest } from "./QuestStore";
-
 export const QUESTS = [
 	{
 		id: "test",
@@ -20,4 +18,4 @@ export const QUESTS = [
 			},
 		],
 	},
-] as const satisfies Quest[];
+] as const;

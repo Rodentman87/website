@@ -11,7 +11,7 @@ type QuestFromID<QuestID extends (typeof QUESTS)[number]["id"]> = Extract<
 >;
 
 type RequirementFromID<
-	Q extends Quest,
+	Q extends ActualQuest,
 	RequirementID extends Q["requirements"][number]["id"]
 > = Extract<Q["requirements"][number], { id: RequirementID }>;
 
