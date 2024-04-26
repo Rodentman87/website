@@ -87,7 +87,7 @@ type QuestStoreEvents = {
 };
 
 export class QuestStore extends EventEmitter<QuestStoreEvents> {
-	quests: Quest[];
+	quests: ActualQuest[];
 	private privateQuestsProgress: Record<string, QuestProgress>;
 	set questsProgress(value: Record<string, QuestProgress>) {
 		this.privateQuestsProgress = value;
@@ -106,7 +106,7 @@ export class QuestStore extends EventEmitter<QuestStoreEvents> {
 				...a,
 				completed: false,
 			};
-		}) as unknown as Quest[];
+		}) as unknown as ActualQuest[];
 
 		this.questsProgress = {};
 		this.subscribeToQuestsProgress = this.subscribeToQuestsProgress.bind(this);
@@ -154,7 +154,9 @@ export class QuestStore extends EventEmitter<QuestStoreEvents> {
 		localStorage.setItem(QUESTS_VERSION_KEY, QUESTS_VERSION);
 	}
 
-	getQuest<QuestID extends (typeof QUESTS)[number]["id"]>(questId: QuestID) {
+	getQuest<QuestID extends (typeof QUESTS)[number]["id"]>(
+		questId: QuestID
+	): ActualQuest | undefined {
 		return this.quests.find((q) => q.id === questId);
 	}
 
@@ -164,9 +166,7 @@ export class QuestStore extends EventEmitter<QuestStoreEvents> {
 			(q) => q.active
 		);
 		if (!activeQuest) return null;
-		return this.getQuest(
-			activeQuest.id as (typeof QUESTS)[number]["id"]
-		) as ActualQuest;
+		return this.getQuest(activeQuest.id as (typeof QUESTS)[number]["id"]);
 	}
 
 	getQuestProgress<QuestID extends (typeof QUESTS)[number]["id"]>(
