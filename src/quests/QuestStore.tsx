@@ -106,7 +106,7 @@ export class QuestStore extends EventEmitter<QuestStoreEvents> {
 				...a,
 				completed: false,
 			};
-		}) as unknown as ActualQuest[];
+		}) as unknown as Quest[];
 
 		this.questsProgress = {};
 		this.subscribeToQuestsProgress = this.subscribeToQuestsProgress.bind(this);
