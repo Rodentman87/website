@@ -9,6 +9,7 @@ import {
 	CONTRAST_AGAINST,
 	StatusResponse,
 } from "./ActivityCard";
+import { RocketLeagueStatus } from "./GameSpecificCards.tsx/RocketLeague";
 
 const GAME_MAP = {
 	// Horizon: FW
@@ -776,6 +777,17 @@ interface Colors {
 }
 
 export const GameStatus: React.FC<{
+	status: StatusResponse;
+}> = ({ status }) => {
+	switch (status.application_id!) {
+		case "356877880938070016":
+			return <RocketLeagueStatus status={status} />;
+		default:
+			return <GameStatusInner status={status} />;
+	}
+};
+
+const GameStatusInner: React.FC<{
 	status: StatusResponse;
 }> = ({ status }) => {
 	const gameId = GAME_MAP[status.application_id!];

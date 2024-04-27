@@ -5,6 +5,7 @@ import { useAchievementStore } from "hooks/useAchievementStore";
 import React, { useEffect } from "react";
 import { GameStatus } from "./Game";
 import { SpotifyStatus } from "./Spotify";
+import { StatusKVProvider } from "./StatusKVContext";
 import { WatchDisStatus } from "./WatchDis";
 
 const ME = "152566937442975744";
@@ -51,6 +52,7 @@ export const ActivityCard: React.FC = () => {
 	const [spotifyStatus, setSpotifyStatus] =
 		React.useState<StatusResponse | null>(null);
 	const [song, setSong] = React.useState<Track | null>(null);
+	const [kv, setKv] = React.useState<Record<string, string>>({});
 	const songId = React.useRef<string | null>(null);
 	const isTabVisible = React.useRef(true);
 	const queuedMessage = React.useRef<{ d: any; t: string; op: number } | null>(
@@ -101,6 +103,7 @@ export const ActivityCard: React.FC = () => {
 			} else {
 				setWatchDisStatus(null);
 			}
+			setKv(d.kv);
 		}
 	}, []);
 
@@ -172,18 +175,20 @@ export const ActivityCard: React.FC = () => {
 	}, []);
 
 	return (
-		<AnimatePresence>
-			{status && <GameStatus key={status.id} status={status} />}
-			{spotifyStatus && (
-				<SpotifyStatus
-					key={spotifyStatus.id}
-					song={song}
-					status={spotifyStatus}
-				/>
-			)}
-			{watchDisStatus && (
-				<WatchDisStatus key={watchDisStatus.name} status={watchDisStatus} />
-			)}
-		</AnimatePresence>
+		<StatusKVProvider kv={kv}>
+			<AnimatePresence>
+				{status && <GameStatus key={status.id} status={status} />}
+				{spotifyStatus && (
+					<SpotifyStatus
+						key={spotifyStatus.id}
+						song={song}
+						status={spotifyStatus}
+					/>
+				)}
+				{watchDisStatus && (
+					<WatchDisStatus key={watchDisStatus.name} status={watchDisStatus} />
+				)}
+			</AnimatePresence>
+		</StatusKVProvider>
 	);
 };
