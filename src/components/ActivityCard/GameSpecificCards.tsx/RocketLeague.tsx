@@ -206,6 +206,7 @@ const LiveEventDisplay: React.FC = () => {
 	const kv = useStatusKV();
 	const lastEvent = React.useRef<string>(kv["lastRlStat"]);
 	const [events, setEvents] = React.useState<string[]>([]);
+	const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	useEffect(() => {
 		if (kv["lastRlStat"] !== lastEvent.current) {
@@ -215,22 +216,29 @@ const LiveEventDisplay: React.FC = () => {
 			setEvents((prev) =>
 				[kv["lastRlStat"].split(";")[0] + ";" + mappedName, ...prev].slice(0, 3)
 			);
+			// Reset the timer to start clearing the events
+			if (timer.current) clearInterval(timer.current);
+			timer.current = setInterval(() => {
+				setEvents((prev) => prev.slice(0, prev.length - 1));
+			}, 10_000);
 		}
 	}, [kv]);
 
 	return (
 		<div className="flex flex-col-reverse justify-start gap-0.25 grow">
-			{events.map((event, i) => (
-				<motion.div
-					key={event.split(";")[0]}
-					initial={{ opacity: 0, x: -10 }}
-					animate={{ opacity: 1 - i * 0.25, x: 0 }}
-					exit={{ opacity: 0, x: -10 }}
-					className="flex flex-row items-center gap-1 text-xs"
-				>
-					{event.split(";")[1]}
-				</motion.div>
-			))}
+			<AnimatePresence mode="popLayout">
+				{events.map((event, i) => (
+					<motion.div
+						key={event.split(";")[0]}
+						initial={{ opacity: 0, y: 8 }}
+						animate={{ opacity: 1 - i * 0.25, y: 0 }}
+						exit={{ opacity: 0, y: -8 }}
+						className="flex flex-row items-center gap-1 text-xs"
+					>
+						{event.split(";")[1]}
+					</motion.div>
+				))}
+			</AnimatePresence>
 		</div>
 	);
 };
