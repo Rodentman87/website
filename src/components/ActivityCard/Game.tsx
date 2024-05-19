@@ -841,7 +841,7 @@ const GameStatusInner: React.FC<{
 			className="relative mt-8 border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
 		>
 			<motion.span
-				className="absolute text-sm -top-6 left-2"
+				className="absolute text-sm rounded-md -top-6 left-2 backdrop-blur-sm"
 				initial={{ y: 15, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ delay: 1 }}

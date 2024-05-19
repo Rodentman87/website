@@ -174,7 +174,7 @@ export default function Home({
 	}, []);
 
 	const showSpotifyWidget =
-		typeof window !== "undefined" && window.innerWidth > 1500;
+		typeof window !== "undefined" && window.innerWidth > 800;
 
 	const items = React.useRef<Record<string, MutableRefObject<HTMLElement>>>({});
 	useEffect(() => {
@@ -255,7 +255,7 @@ export default function Home({
 				) : (
 					<SquareReveal onClick={() => setShowSquare(true)} />
 				)}
-				<div className="fixed bottom-2 left-2">
+				<div className="fixed z-10 bottom-2 left-2">
 					{showSpotifyWidget && <ActivityCard />}
 				</div>
 				<section className="flex flex-col items-center justify-between text-xl md:flex-row">
