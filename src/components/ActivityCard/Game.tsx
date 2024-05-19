@@ -9,6 +9,7 @@ import {
 	CONTRAST_AGAINST,
 	StatusResponse,
 } from "./ActivityCard";
+import { HelldiversStatus } from "./GameSpecificCards.tsx/Helldivers";
 import { RocketLeagueStatus } from "./GameSpecificCards.tsx/RocketLeague";
 
 const GAME_MAP = {
@@ -782,6 +783,8 @@ export const GameStatus: React.FC<{
 	switch (status.application_id!) {
 		case "356877880938070016":
 			return <RocketLeagueStatus status={status} />;
+		case "1205090671527071784":
+			return <HelldiversStatus status={status} />;
 		default:
 			return <GameStatusInner status={status} />;
 	}
