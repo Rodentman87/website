@@ -8,6 +8,7 @@ import distanceFrom from "distance-from";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { useAchievementStore } from "hooks/useAchievementStore";
 import { useFancyEffects } from "hooks/useFancyEffect";
+import { useQuestStore } from "hooks/useQuestStore";
 import Head from "next/head";
 import Link from "next/link";
 import React, { MutableRefObject, useEffect, useState } from "react";
@@ -176,6 +177,8 @@ export default function Home({
 	const showSpotifyWidget =
 		typeof window !== "undefined" && window.innerWidth > 800;
 
+	const questStore = useQuestStore();
+
 	const items = React.useRef<Record<string, MutableRefObject<HTMLElement>>>({});
 	useEffect(() => {
 		let cancel = false;
@@ -268,6 +271,13 @@ export default function Home({
 							}}
 						>
 							🔎
+						</button>
+						<button
+							onClick={() => {
+								questStore.acceptQuest("test");
+							}}
+						>
+							📜
 						</button>
 					</p>
 					<label className="text-sm">
