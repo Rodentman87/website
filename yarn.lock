@@ -330,6 +330,18 @@
   resolved "https://registry.yarnpkg.com/@resvg/resvg-wasm/-/resvg-wasm-2.0.0-alpha.4.tgz#fc2f86186a9641df030d8f9f3f9d995899cd1ecb"
   integrity sha512-pWIG9a/x1ky8gXKRhPH1OPKpHFoMN1ISLbJ+O+gPXQHIAKhNd5I28RlWf7q576hAOQA9JZTlo3p/M2uyLzJmmw==
 
+"@rive-app/canvas@2.15.6":
+  version "2.15.6"
+  resolved "https://registry.yarnpkg.com/@rive-app/canvas/-/canvas-2.15.6.tgz#98250996090ad5cda5bde0daf41fe5050c4d592d"
+  integrity sha512-xv3mAeT2+nrGNDUGmFxTHfOw6QV82oqM0Bipau5UGjiMh4xo8VD79Rwn8DhA5C7aSuMt6Ga6EWuZyVdXVEoTrw==
+
+"@rive-app/react-canvas@^4.9.5":
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/@rive-app/react-canvas/-/react-canvas-4.9.5.tgz#cc04555e8b13531fe8a2fdd4b8be177bb0957600"
+  integrity sha512-DBX0y1ZUv/tPx+cnu3u7B26xahp5zijMmgjvvO9rsHVJo6I0NJQzv1462k7aOhx9kYUnhscsuh9mhav4RPPDEQ==
+  dependencies:
+    "@rive-app/canvas" "2.15.6"
+
 "@shikijs/core@1.1.7":
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.1.7.tgz#560de8d503ace894e36934f1e680762ed51ea394"

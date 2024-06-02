@@ -1,7 +1,12 @@
+import {
+	EventType,
+	useRive,
+	useStateMachineInput,
+} from "@rive-app/react-canvas";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
 import Image from "next/image";
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import {
 	COLOR_CONRTAST_MINIMUM,
 	CONTRAST_AGAINST,
@@ -30,6 +35,29 @@ export const HelldiversStatus: React.FC<{
 		}
 	}, [containerRef]);
 
+	const onShake = useCallback(() => {
+		containerRef.current.animate(
+			[
+				{
+					transform: "translateX(0)",
+				},
+				{
+					transform: "translateX(-5px)",
+				},
+				{
+					transform: "translateX(5px)",
+				},
+				{
+					transform: "translateX(0)",
+				},
+			],
+			{
+				duration: 250,
+				iterations: 3,
+			}
+		);
+	}, [containerRef]);
+
 	if (!gameId) return null; // Not a game we have info for, add simplified card later
 
 	const steamLink = `https://store.steampowered.com/app/${gameId}/`;
@@ -54,6 +82,7 @@ export const HelldiversStatus: React.FC<{
 			>
 				I'm currently playing:
 			</motion.span>
+			<StratagemDisplay onShake={onShake} />
 			<motion.div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
 				<div className="absolute top-0 left-0 translate-x-1">
 					<SmoothSwapImage
@@ -114,72 +143,6 @@ export const HelldiversStatus: React.FC<{
 						>
 							{status.name}
 						</motion.a>
-						{status.details && (
-							<motion.span
-								initial={{
-									x: -10,
-									opacity: 0,
-								}}
-								animate={{
-									x: 0,
-									color: colors.primary,
-									opacity: 1,
-								}}
-								exit={{
-									x: 10,
-									opacity: 0,
-								}}
-								className="text-xs"
-							>
-								{status.details}
-							</motion.span>
-						)}
-						{status.state && (
-							<motion.span
-								key={status.state}
-								initial={{
-									x: -10,
-									opacity: 0,
-								}}
-								animate={{
-									x: 0,
-									color: colors.primary,
-									opacity: 1,
-								}}
-								exit={{
-									x: 10,
-									opacity: 0,
-								}}
-								className="text-xs"
-							>
-								{status.state}{" "}
-								<AnimatePresence>
-									{status.party && status.party.size && (
-										<>
-											(
-											<motion.span
-												key="current"
-												initial={{ opacity: 0 }}
-												animate={{ opacity: 1 }}
-												exit={{ opacity: 0 }}
-											>
-												{status.party.size[0]}
-											</motion.span>{" "}
-											of{" "}
-											<motion.span
-												key="max"
-												initial={{ opacity: 0 }}
-												animate={{ opacity: 1 }}
-												exit={{ opacity: 0 }}
-											>
-												{status.party.size[1]}
-											</motion.span>
-											)
-										</>
-									)}
-								</AnimatePresence>
-							</motion.span>
-						)}
 					</AnimatePresence>
 					<LiveEventDisplay />
 				</div>
@@ -261,6 +224,122 @@ const LiveEventDisplay: React.FC = () => {
 					}
 				})}
 			</AnimatePresence>
+		</div>
+	);
+};
+
+const StratagemDisplay: React.FC<{ onShake?: () => void }> = ({ onShake }) => {
+	const kv = useStatusKV();
+
+	const status = useMemo(() => {
+		const raw = kv["helldivers"];
+		if (!raw) return null;
+		const parsed = JSON.parse(raw) as Record<
+			string,
+			{ state: string; time?: number }
+		>;
+		console.log(parsed);
+		return parsed;
+	}, [kv]);
+
+	return (
+		<div className="absolute top-0 right-0">
+			<div className="flex flex-row-reverse -translate-y-full">
+				<AnimatePresence mode="popLayout">
+					{Object.entries(status).map(([strategem, state], i) => {
+						let gemState = state.state;
+						if (
+							gemState === "INBOUND" ||
+							gemState === "IMPACT" ||
+							gemState === "ACTIVATING"
+						) {
+							return (
+								<motion.div
+									className="-m-11"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+									key={strategem}
+								>
+									<Stratagem
+										name={strategem}
+										state={gemState}
+										impactTime={state.time}
+										onShake={onShake}
+									/>
+								</motion.div>
+							);
+						}
+					})}
+				</AnimatePresence>
+			</div>
+		</div>
+	);
+};
+
+const Stratagem: React.FC<{
+	name: string;
+	state: string;
+	impactTime?: number;
+	onShake?: () => void;
+}> = ({ name, state, impactTime, onShake }) => {
+	const isReady = useRef(false);
+	const readyPromise = useRef<() => void>();
+	const { rive, RiveComponent } = useRive({
+		src: "/hellpod.riv",
+		stateMachines: "Main",
+		autoplay: true,
+		onLoad: () => {
+			isReady.current = true;
+			readyPromise.current?.();
+			console.log("Loaded");
+		},
+	});
+
+	useEffect(() => {
+		if (rive)
+			rive.on(EventType.RiveEvent, (e) => {
+				if (
+					e.data &&
+					typeof e.data === "object" &&
+					"name" in e.data &&
+					e.data.name === "Shake"
+				)
+					onShake?.();
+			});
+	}, [rive]);
+
+	const throwBall = useStateMachineInput(rive, "Main", "throw");
+	const hellpod = useStateMachineInput(rive, "Main", "hellpod");
+	const fiveHundred = useStateMachineInput(rive, "Main", "500");
+
+	useEffect(() => {
+		(async () => {
+			if (!isReady.current) {
+				// Wait for the rive to be ready
+				const promise = new Promise<void>((resolve) => {
+					readyPromise.current = resolve;
+				});
+				await promise;
+			}
+			if (state === "INBOUND") {
+				throwBall.fire();
+				setTimeout(() => {
+					switch (name) {
+						// case "EAGLE 500KG BOMB":
+						// 	fiveHundred.fire();
+						// 	break;
+						default:
+							hellpod.fire();
+					}
+				}, impactTime! - Date.now());
+			}
+		})();
+	}, [throwBall, hellpod, state]);
+
+	return (
+		<div style={{ width: 128, height: 512 }}>
+			<RiveComponent />
 		</div>
 	);
 };
