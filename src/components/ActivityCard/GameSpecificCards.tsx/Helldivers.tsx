@@ -255,7 +255,7 @@ const StratagemDisplay: React.FC<{ onShake?: () => void }> = ({ onShake }) => {
 						) {
 							return (
 								<motion.div
-									className="-m-11"
+									className="-mx-11"
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}
 									exit={{ opacity: 0 }}
