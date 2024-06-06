@@ -11,6 +11,7 @@ import {
 } from "./ActivityCard";
 import { HelldiversStatus } from "./GameSpecificCards.tsx/Helldivers";
 import { RocketLeagueStatus } from "./GameSpecificCards.tsx/RocketLeague";
+import { StardewStatus } from "./GameSpecificCards.tsx/Stardew";
 
 const GAME_MAP = {
 	// Horizon: FW
@@ -785,6 +786,8 @@ export const GameStatus: React.FC<{
 			return <RocketLeagueStatus status={status} />;
 		case "1205090671527071784":
 			return <HelldiversStatus status={status} />;
+		case "359509387670192128":
+			return <StardewStatus status={status} />;
 		default:
 			return <GameStatusInner status={status} />;
 	}
