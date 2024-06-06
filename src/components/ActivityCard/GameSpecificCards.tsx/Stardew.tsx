@@ -175,7 +175,7 @@ const GameStateDisplay: React.FC = () => {
 	}, [kv]);
 
 	const parsedTime = useMemo(() => {
-		if (!Object.keys(stardewInfo)) return null;
+		if (!stardewInfo) return null;
 		const [hours, minutes] = stardewInfo.time
 			.toString()
 			.padStart(4, "0")
