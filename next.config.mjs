@@ -1,5 +1,6 @@
 import remarkGfm from "remark-gfm";
 import nextmdx from "@next/mdx";
+import MillionLint from "@million/lint";
 
 const withMDX = nextmdx({
 	extension: /\.mdx?$/,
@@ -12,45 +13,47 @@ const withMDX = nextmdx({
 		providerImportSource: "@mdx-js/react",
 	},
 });
-export default withMDX({
-	images: {
-		remotePatterns: [
-			{
-				protocol: "https",
-				hostname: "i.scdn.co",
-				port: "",
-				pathname: "/image/**",
-			},
-			{
-				protocol: "https",
-				hostname: "cdn.cloudflare.steamstatic.com",
-				port: "",
-				pathname: "/**",
-			},
-			{
-				protocol: "https",
-				hostname: "cdn.akamai.steamstatic.com",
-				port: "",
-				pathname: "/**",
-			},
-			{
-				protocol: "https",
-				hostname: "*.watchdis.tv",
-				port: "",
-				pathname: "/**",
-			},
-			{
-				protocol: "https",
-				hostname: "i.ytimg.com",
-				port: "",
-				pathname: "/**",
-			},
-			{
-				protocol: "https",
-				hostname: "cdn.discordapp.com",
-				port: "",
-				pathname: "/**",
-			},
-		],
-	},
-});
+export default MillionLint.next()(
+	withMDX({
+		images: {
+			remotePatterns: [
+				{
+					protocol: "https",
+					hostname: "i.scdn.co",
+					port: "",
+					pathname: "/image/**",
+				},
+				{
+					protocol: "https",
+					hostname: "cdn.cloudflare.steamstatic.com",
+					port: "",
+					pathname: "/**",
+				},
+				{
+					protocol: "https",
+					hostname: "cdn.akamai.steamstatic.com",
+					port: "",
+					pathname: "/**",
+				},
+				{
+					protocol: "https",
+					hostname: "*.watchdis.tv",
+					port: "",
+					pathname: "/**",
+				},
+				{
+					protocol: "https",
+					hostname: "i.ytimg.com",
+					port: "",
+					pathname: "/**",
+				},
+				{
+					protocol: "https",
+					hostname: "cdn.discordapp.com",
+					port: "",
+					pathname: "/**",
+				},
+			],
+		},
+	})
+);

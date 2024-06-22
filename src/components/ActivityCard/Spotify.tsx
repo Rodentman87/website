@@ -1,6 +1,14 @@
 import { Track } from "@spotify/web-api-ts-sdk";
-import { AnimatePresence, Transition, motion } from "framer-motion";
+import {
+	AnimatePresence,
+	Transition,
+	animate,
+	motion,
+	useMotionValue,
+	useTransform,
+} from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
+import memoize from "lodash.memoize";
 import Image from "next/image";
 import React, { useEffect, useLayoutEffect } from "react";
 import { BsSpotify } from "react-icons/bs";
@@ -21,6 +29,21 @@ const TRANSITION_CONFIG: Transition = {
 };
 const SWAP_TRANSITION_CONFIG: Transition = {
 	delay: TRANSITION_CONFIG.duration + 0.1,
+};
+
+const SongNameAnimationInitial = {
+	x: -10,
+	opacity: 0,
+};
+const SongNameAnimationAnimate = memoize((color: string) => ({
+	x: 0,
+	color: color,
+	opacity: 1,
+}));
+const SongNameAnimationExit = {
+	x: 10,
+	opacity: 0,
+	transition: SWAP_TRANSITION_CONFIG,
 };
 
 export const SpotifyStatus: React.FC<{
@@ -83,7 +106,7 @@ export const SpotifyStatus: React.FC<{
 			<motion.div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
 				<div className="absolute top-0 left-0 -translate-y-1/4">
 					<SmoothSwapImage
-						key={imageWidth}
+						key={song.album.images[0].url}
 						width={imageWidth}
 						height={imageWidth}
 						alt={song.album.name}
@@ -133,20 +156,9 @@ export const SpotifyStatus: React.FC<{
 					<AnimatePresence mode="wait">
 						<motion.a
 							key={song.name}
-							initial={{
-								x: -10,
-								opacity: 0,
-							}}
-							animate={{
-								x: 0,
-								color: colors.secondary,
-								opacity: 1,
-							}}
-							exit={{
-								x: 10,
-								opacity: 0,
-								transition: SWAP_TRANSITION_CONFIG,
-							}}
+							initial={SongNameAnimationInitial}
+							animate={SongNameAnimationAnimate(colors.secondary)}
+							exit={SongNameAnimationExit}
 							title={song.name}
 							className="mr-8 -mb-1 overflow-hidden font-extrabold whitespace-nowrap text-ellipsis"
 							target="_blank"
@@ -315,6 +327,23 @@ const AlbumLine: React.FC<{
 	);
 };
 
+const ProgressBarBGAnimate = memoize((isExpanded: boolean) => {
+	return {
+		height: isExpanded ? "0.5rem" : "0.325rem",
+		transition: TRANSITION_CONFIG,
+	};
+});
+
+const ProgressBarInitial = {
+	opacity: 1,
+};
+const ProgressBarExit = {
+	opacity: 0,
+	transition: {
+		duration: 1.5,
+	},
+};
+
 const ProgressBar: React.FC<{
 	colors: Colors;
 	song: Track;
@@ -322,53 +351,52 @@ const ProgressBar: React.FC<{
 	isExpanded: boolean;
 }> = ({ song, status, colors, isExpanded }) => {
 	const total = status.timestamps.end - status.timestamps.start;
-	const elapsed = Math.max(
-		Math.min(Date.now() - status.timestamps.start, total),
-		0
-	); // Clamp to 0 and total
+	const progressBarBgRef = React.useRef<HTMLDivElement>(null);
 
-	const [_, setRerender] = React.useState(0);
+	const elapsed = useMotionValue(0);
+	const stringElapsed = useTransform(elapsed, (value) =>
+		msToMinutesAndSeconds(value)
+	);
+	const width = useTransform(
+		elapsed,
+		(elapsed) =>
+			(elapsed / total) * (progressBarBgRef.current?.clientWidth ?? 1)
+	);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setRerender((old) => old + 1);
-		}, 20);
-		return () => clearInterval(interval);
-	}, []);
+		const current = Math.max(
+			Math.min(Date.now() - status.timestamps.start, total),
+			0
+		);
+
+		elapsed.jump(current);
+		const controls = animate(elapsed, total, {
+			duration: (total - current) / 1000,
+			ease: "linear",
+		});
+
+		return () => controls.stop();
+	}, [status.timestamps.start, total]);
 
 	return (
 		<div className="flex flex-col justify-end w-full grow">
 			<div className="relative overflow-hidden rounded-full">
 				<motion.div
-					animate={{
-						height: isExpanded ? "0.5rem" : "0.325rem",
-						transition: TRANSITION_CONFIG,
-					}}
+					key="bg"
+					ref={progressBarBgRef}
+					animate={ProgressBarBGAnimate(isExpanded)}
 					className="relative w-full overflow-hidden bg-black rounded-full opacity-40"
-				></motion.div>
-				<AnimatePresence>
-					<motion.div
-						key={song.id}
-						initial={{
-							opacity: 1,
-						}}
-						animate={{
-							width: `${(elapsed / total) * 100}%`,
-							backgroundColor: colors.secondary,
-							opacity: 1,
-						}}
-						exit={{
-							opacity: 0,
-							transition: {
-								duration: 1.5,
-							},
-						}}
-						className="absolute top-0 left-0 h-full rounded-full"
-					></motion.div>
-				</AnimatePresence>
+				/>
+				<motion.div
+					style={{ width }}
+					animate={{
+						backgroundColor: colors.secondary,
+					}}
+					className="absolute top-0 left-0 h-full rounded-full"
+				/>
 			</div>
 			<div className="flex flex-row justify-between">
-				<span className="text-xs">{msToMinutesAndSeconds(elapsed)}</span>
+				<motion.span className="text-xs">{stringElapsed}</motion.span>
 				<span className="text-xs">
 					{msToMinutesAndSeconds(song.duration_ms)}
 				</span>
