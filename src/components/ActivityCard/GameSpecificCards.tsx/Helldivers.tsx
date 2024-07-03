@@ -58,8 +58,6 @@ export const HelldiversStatus: React.FC<{
 		);
 	}, [containerRef]);
 
-	if (!gameId) return null; // Not a game we have info for, add simplified card later
-
 	const steamLink = `https://store.steampowered.com/app/${gameId}/`;
 	const coverImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/library_600x900_2x.jpg`;
 	const largeImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
