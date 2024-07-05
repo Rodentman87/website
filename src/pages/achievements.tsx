@@ -1,3 +1,4 @@
+import { FunnyButtonLol } from "@components/FunnyButtonLol";
 import { Achievement } from "achievements/AchievementStore";
 import { ACHIEVEMENTS } from "achievements/achievementList";
 import clsx from "clsx";
@@ -41,6 +42,10 @@ export default function AchievmentsList() {
 						>
 							Reset Progress
 						</button>
+					</p>
+					<h2>Free Achievement</h2>
+					<p className="m-0 mt-1">
+						<FunnyButtonLol />
 					</p>
 				</div>
 				<div className="flex flex-col gap-2 p-2 bg-gray-100 rounded-md shadow-md">

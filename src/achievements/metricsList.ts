@@ -81,4 +81,9 @@ export const METRICS = [
 		name: "Everything Everything",
 		type: "boolean",
 	},
+	{
+		id: "patient",
+		name: "Patient",
+		type: "boolean",
+	},
 ] as const;

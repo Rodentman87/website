@@ -348,6 +348,19 @@ export const ACHIEVEMENTS = [
 		icon: "/musical-notes_1f3b6.png",
 	},
 	{
+		id: "patient",
+		name: "Here you go",
+		description: "Patience is a virtue",
+		rarity: AchievementRarity.EPIC,
+		requirements: [
+			{
+				metricId: "patient",
+			},
+		],
+		score: 50,
+		icon: "/hourglass-done_231b.png",
+	},
+	{
 		id: "all-achievements",
 		name: "Completionist",
 		description: "You've completed all achievements!",
