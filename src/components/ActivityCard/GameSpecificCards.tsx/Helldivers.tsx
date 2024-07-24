@@ -160,7 +160,6 @@ const LiveEventDisplay: React.FC = () => {
 			string,
 			{ state: string; time?: number }
 		>;
-		console.log(parsed);
 		return parsed;
 	}, [kv]);
 
@@ -236,7 +235,6 @@ const StratagemDisplay: React.FC<{ onShake?: () => void }> = ({ onShake }) => {
 			string,
 			{ state: string; time?: number }
 		>;
-		console.log(parsed);
 		return parsed;
 	}, [kv]);
 
@@ -290,7 +288,6 @@ const Stratagem: React.FC<{
 		onLoad: () => {
 			isReady.current = true;
 			readyPromise.current?.();
-			console.log("Loaded");
 		},
 	});
 

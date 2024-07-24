@@ -158,12 +158,10 @@ export default function Home({
 		};
 		channel.postMessage("echo");
 		setTimeout(() => {
-			console.log("tabs", tabs);
 			if (tabs.length >= 5)
 				achievementStore.markProgress("fiveTabs", true, true);
 			channel.onmessage = (e) => {
 				if (e.data === "echo") {
-					console.log("sending", myId);
 					channel.postMessage(myId);
 				}
 			};

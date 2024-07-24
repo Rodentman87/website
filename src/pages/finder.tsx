@@ -36,7 +36,6 @@ export interface FinderItemData {
 }
 
 function moveWindowSmooth(x: number, y: number, duration: number) {
-	console.log("moving window", x, y);
 	const start = performance.now();
 	const startX = window.screenLeft;
 	const startY = window.screenTop;

@@ -16,7 +16,6 @@ interface Colors {
 export const WatchDisStatus: React.FC<{
 	status: StatusResponse;
 }> = ({ status }) => {
-	console.log(status);
 	const [colors, setColors] = React.useState<Colors>({
 		primary: "#FFFFFF",
 		secondary: "#FFFFFF",
