@@ -17,6 +17,7 @@ import {
 	CONTRAST_AGAINST,
 	StatusResponse,
 } from "./ActivityCard";
+import { CassetteStatus } from "./SpotifyCard/CassetteStatus";
 
 interface Colors {
 	primary: string;
@@ -50,6 +51,12 @@ export const SpotifyStatus: React.FC<{
 	song: Track;
 	status: StatusResponse;
 }> = ({ song, status }) => {
+	if (
+		new URL(window.location.href).searchParams.get("skeuomorphism") === "true"
+	) {
+		return <CassetteStatus song={song} status={status} />;
+	}
+
 	const [colors, setColors] = React.useState<Colors>({
 		primary: "#FFFFFF",
 		secondary: "#FFFFFF",

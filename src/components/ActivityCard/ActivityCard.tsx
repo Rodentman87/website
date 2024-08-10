@@ -13,6 +13,7 @@ const ENDPOINT = "wss://api.lanyard.rest/socket";
 
 export const COLOR_CONRTAST_MINIMUM = 4.5;
 export const CONTRAST_AGAINST = Color("#222222");
+export const WHITE = Color("#FFFFFF");
 
 export interface StatusResponse {
 	id: string;

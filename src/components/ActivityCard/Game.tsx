@@ -9,9 +9,9 @@ import {
 	CONTRAST_AGAINST,
 	StatusResponse,
 } from "./ActivityCard";
-import { HelldiversStatus } from "./GameSpecificCards.tsx/Helldivers";
-import { RocketLeagueStatus } from "./GameSpecificCards.tsx/RocketLeague";
-import { StardewStatus } from "./GameSpecificCards.tsx/Stardew";
+import { HelldiversStatus } from "./GameSpecificCards/Helldivers";
+import { RocketLeagueStatus } from "./GameSpecificCards/RocketLeague";
+import { StardewStatus } from "./GameSpecificCards/Stardew";
 
 const GAME_MAP = {
 	// Horizon: FW
