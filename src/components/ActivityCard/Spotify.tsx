@@ -341,15 +341,22 @@ const ProgressBarBGAnimate = memoize((isExpanded: boolean) => {
 	};
 });
 
-const ProgressBarInitial = {
-	opacity: 1,
-};
-const ProgressBarExit = {
-	opacity: 0,
-	transition: {
-		duration: 1.5,
-	},
-};
+const ReelAnimate = memoize((isExpanded: boolean) => {
+	return {
+		borderWidth: isExpanded ? "0.5rem" : "0.4rem",
+		width: isExpanded ? "1.5rem" : "1.325rem",
+		height: isExpanded ? "1.5rem" : "1.325rem",
+		rotate: "360deg",
+		transition: {
+			...TRANSITION_CONFIG,
+			rotate: {
+				repeat: Infinity,
+				ease: "linear",
+				duration: 2,
+			},
+		},
+	};
+});
 
 const ProgressBar: React.FC<{
 	colors: Colors;
@@ -386,27 +393,99 @@ const ProgressBar: React.FC<{
 	}, [status.timestamps.start, total]);
 
 	return (
-		<div className="flex flex-col justify-end w-full grow">
-			<div className="relative overflow-hidden rounded-full">
+		<div className="flex flex-row grow">
+			<div className="relative flex flex-col justify-end">
 				<motion.div
-					key="bg"
-					ref={progressBarBgRef}
-					animate={ProgressBarBGAnimate(isExpanded)}
-					className="relative w-full overflow-hidden bg-black rounded-full opacity-40"
-				/>
-				<motion.div
-					style={{ width }}
+					initial={{
+						rotate: 0,
+						width: "1.5rem",
+						height: "1.5rem",
+						borderWidth: "0.5rem",
+					}}
 					animate={{
+						...ReelAnimate(isExpanded),
+						borderColor: colors.secondary,
+					}}
+					className="relative z-10 mr-1 rounded-full"
+				>
+					<div className="absolute top-0 w-[2px] h-1 bg-white -translate-x-1/2 left-1/2" />
+				</motion.div>
+				<motion.div
+					initial={{ height: "0.5rem" }}
+					animate={{
+						...ProgressBarBGAnimate(isExpanded),
 						backgroundColor: colors.secondary,
 					}}
-					className="absolute top-0 left-0 h-full rounded-full"
+					className="absolute right-0 bottom-4"
+					style={{
+						width: "calc(50% + 0.125rem)",
+					}}
 				/>
 			</div>
-			<div className="flex flex-row justify-between">
-				<motion.span className="text-xs">{stringElapsed}</motion.span>
-				<span className="text-xs">
-					{msToMinutesAndSeconds(song.duration_ms)}
-				</span>
+			<div className="flex flex-col justify-end w-full">
+				<div className="relative overflow-hidden">
+					<motion.div
+						key="bg"
+						ref={progressBarBgRef}
+						initial={{ height: "0.5rem" }}
+						animate={ProgressBarBGAnimate(isExpanded)}
+						className="relative w-full overflow-hidden bg-black opacity-40"
+					/>
+					<motion.div
+						style={{ width }}
+						initial={{ height: "0.5rem" }}
+						animate={{
+							backgroundColor: colors.secondary,
+							transition: TRANSITION_CONFIG,
+						}}
+						className="absolute top-0 left-0 h-full"
+					/>
+				</div>
+				<div className="flex flex-row justify-between">
+					<motion.span
+						animate={{
+							color: colors.primary,
+							transition: TRANSITION_CONFIG,
+						}}
+						className="text-xs font-semibold"
+					>
+						{stringElapsed}
+					</motion.span>
+					<motion.span
+						animate={{
+							color: colors.primary,
+							transition: TRANSITION_CONFIG,
+						}}
+						className="text-xs font-semibold"
+					>
+						{msToMinutesAndSeconds(song.duration_ms)}
+					</motion.span>
+				</div>
+			</div>
+			<div className="relative flex flex-col justify-end">
+				<motion.div
+					initial={{
+						rotate: 0,
+						width: "1.5rem",
+						height: "1.5rem",
+						borderWidth: "0.5rem",
+					}}
+					animate={{
+						...ReelAnimate(isExpanded),
+						borderColor: colors.secondary,
+					}}
+					className="relative z-10 ml-1 rounded-full"
+				>
+					<div className="absolute top-0 w-[2px] h-1 bg-white -translate-x-1/2 left-1/2" />
+				</motion.div>
+				<motion.div
+					initial={{ height: "0.5rem" }}
+					animate={ProgressBarBGAnimate(isExpanded)}
+					className="absolute left-0 bg-black opacity-40 bottom-4"
+					style={{
+						width: "calc(50% + 0.125rem)",
+					}}
+				/>
 			</div>
 		</div>
 	);
