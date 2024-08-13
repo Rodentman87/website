@@ -1,4 +1,5 @@
 import { Track } from "@spotify/web-api-ts-sdk";
+import clsx from "clsx";
 import {
 	AnimatePresence,
 	Transition,
@@ -17,6 +18,7 @@ import {
 	CONTRAST_AGAINST,
 	StatusResponse,
 } from "./ActivityCard";
+import styles from "./Spotify.module.css";
 import { CassetteStatus } from "./SpotifyCard/CassetteStatus";
 
 interface Colors {
@@ -176,12 +178,7 @@ export const SpotifyStatus: React.FC<{
 					</AnimatePresence>
 					<ArtistLine isExpanded={isExpanded} colors={colors} song={song} />
 					<AlbumLine isExpanded={isExpanded} colors={colors} song={song} />
-					<ProgressBar
-						isExpanded={isExpanded}
-						colors={colors}
-						status={status}
-						song={song}
-					/>
+					<ProgressBar colors={colors} status={status} song={song} />
 				</div>
 			</motion.div>
 		</motion.div>
@@ -346,14 +343,8 @@ const ReelAnimate = memoize((isExpanded: boolean) => {
 		borderWidth: isExpanded ? "0.5rem" : "0.4rem",
 		width: isExpanded ? "1.5rem" : "1.325rem",
 		height: isExpanded ? "1.5rem" : "1.325rem",
-		rotate: "360deg",
 		transition: {
 			...TRANSITION_CONFIG,
-			rotate: {
-				repeat: Infinity,
-				ease: "linear",
-				duration: 2,
-			},
 		},
 	};
 });
@@ -362,20 +353,21 @@ const ProgressBar: React.FC<{
 	colors: Colors;
 	song: Track;
 	status: StatusResponse;
-	isExpanded: boolean;
-}> = ({ song, status, colors, isExpanded }) => {
+}> = ({ song, status, colors }) => {
 	const total = status.timestamps.end - status.timestamps.start;
 	const progressBarBgRef = React.useRef<HTMLDivElement>(null);
+	const progressBarEndCapRef = React.useRef<HTMLDivElement>(null);
 
 	const elapsed = useMotionValue(0);
 	const stringElapsed = useTransform(elapsed, (value) =>
 		msToMinutesAndSeconds(value)
 	);
-	const width = useTransform(
-		elapsed,
-		(elapsed) =>
-			(elapsed / total) * (progressBarBgRef.current?.clientWidth ?? 1)
-	);
+	const width = useTransform(elapsed, (elapsed) => {
+		const middleLength = progressBarBgRef.current?.clientWidth ?? 1;
+		const endCapLenth = progressBarEndCapRef.current?.clientWidth ?? 1;
+		const totalLength = middleLength + endCapLenth * 2;
+		return (elapsed / total) * totalLength;
+	});
 
 	useEffect(() => {
 		const current = Math.max(
@@ -392,55 +384,37 @@ const ProgressBar: React.FC<{
 		return () => controls.stop();
 	}, [status.timestamps.start, total]);
 
+	const speedUpReels = song.name
+		.toLowerCase()
+		.includes("in the hall of the mountain king");
+
 	return (
 		<div className="flex flex-row grow">
 			<div className="relative flex flex-col justify-end">
 				<motion.div
-					initial={{
-						rotate: 0,
-						width: "1.5rem",
-						height: "1.5rem",
-						borderWidth: "0.5rem",
-					}}
 					animate={{
-						...ReelAnimate(isExpanded),
 						borderColor: colors.secondary,
 					}}
-					className="relative z-10 mr-1 rounded-full"
+					className={clsx("relative z-10 mr-1 rounded-full", styles.reel)}
+					style={{
+						animationDuration: speedUpReels ? "0.5s" : "2s",
+						height: "1.325rem",
+						width: "1.325rem",
+						borderWidth: "0.4rem",
+					}}
 				>
 					<div className="absolute top-0 w-[2px] h-1 bg-white -translate-x-1/2 left-1/2" />
 				</motion.div>
-				<motion.div
-					initial={{ height: "0.5rem" }}
-					animate={{
-						...ProgressBarBGAnimate(isExpanded),
-						backgroundColor: colors.secondary,
-					}}
-					className="absolute right-0 bottom-4"
+				<div
+					ref={progressBarEndCapRef}
+					className="absolute bottom-0 right-0 bg-black opacity-40"
 					style={{
 						width: "calc(50% + 0.125rem)",
+						height: "0.325rem",
 					}}
 				/>
 			</div>
-			<div className="flex flex-col justify-end w-full">
-				<div className="relative overflow-hidden">
-					<motion.div
-						key="bg"
-						ref={progressBarBgRef}
-						initial={{ height: "0.5rem" }}
-						animate={ProgressBarBGAnimate(isExpanded)}
-						className="relative w-full overflow-hidden bg-black opacity-40"
-					/>
-					<motion.div
-						style={{ width }}
-						initial={{ height: "0.5rem" }}
-						animate={{
-							backgroundColor: colors.secondary,
-							transition: TRANSITION_CONFIG,
-						}}
-						className="absolute top-0 left-0 h-full"
-					/>
-				</div>
+			<div className="flex flex-col justify-end w-full gap-0.5">
 				<div className="flex flex-row justify-between">
 					<motion.span
 						animate={{
@@ -461,29 +435,43 @@ const ProgressBar: React.FC<{
 						{msToMinutesAndSeconds(song.duration_ms)}
 					</motion.span>
 				</div>
+				<div className="relative">
+					<div
+						key="bg"
+						ref={progressBarBgRef}
+						className="relative w-full overflow-hidden bg-black opacity-40"
+						style={{ height: "0.325rem" }}
+					/>
+					<motion.div
+						style={{ width, height: "0.325rem" }}
+						animate={{
+							backgroundColor: colors.secondary,
+							transition: TRANSITION_CONFIG,
+						}}
+						className="absolute top-0 z-10 -left-4"
+					/>
+				</div>
 			</div>
 			<div className="relative flex flex-col justify-end">
 				<motion.div
-					initial={{
-						rotate: 0,
-						width: "1.5rem",
-						height: "1.5rem",
-						borderWidth: "0.5rem",
-					}}
 					animate={{
-						...ReelAnimate(isExpanded),
 						borderColor: colors.secondary,
 					}}
-					className="relative z-10 ml-1 rounded-full"
+					className={clsx("relative z-10 ml-1 rounded-full", styles.reel)}
+					style={{
+						animationDuration: speedUpReels ? "0.5s" : "2s",
+						height: "1.325rem",
+						width: "1.325rem",
+						borderWidth: "0.4rem",
+					}}
 				>
 					<div className="absolute top-0 w-[2px] h-1 bg-white -translate-x-1/2 left-1/2" />
 				</motion.div>
-				<motion.div
-					initial={{ height: "0.5rem" }}
-					animate={ProgressBarBGAnimate(isExpanded)}
-					className="absolute left-0 bg-black opacity-40 bottom-4"
+				<div
+					className="absolute bottom-0 left-0 bg-black opacity-40"
 					style={{
 						width: "calc(50% + 0.125rem)",
+						height: "0.325rem",
 					}}
 				/>
 			</div>
