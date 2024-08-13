@@ -331,24 +331,6 @@ const AlbumLine: React.FC<{
 	);
 };
 
-const ProgressBarBGAnimate = memoize((isExpanded: boolean) => {
-	return {
-		height: isExpanded ? "0.5rem" : "0.325rem",
-		transition: TRANSITION_CONFIG,
-	};
-});
-
-const ReelAnimate = memoize((isExpanded: boolean) => {
-	return {
-		borderWidth: isExpanded ? "0.5rem" : "0.4rem",
-		width: isExpanded ? "1.5rem" : "1.325rem",
-		height: isExpanded ? "1.5rem" : "1.325rem",
-		transition: {
-			...TRANSITION_CONFIG,
-		},
-	};
-});
-
 const ProgressBar: React.FC<{
 	colors: Colors;
 	song: Track;
@@ -407,7 +389,7 @@ const ProgressBar: React.FC<{
 				</motion.div>
 				<div
 					ref={progressBarEndCapRef}
-					className="absolute bottom-0 right-0 bg-black opacity-40"
+					className="absolute bottom-0 right-0 bg-black opacity-50"
 					style={{
 						width: "calc(50% + 0.125rem)",
 						height: "0.325rem",
@@ -439,7 +421,7 @@ const ProgressBar: React.FC<{
 					<div
 						key="bg"
 						ref={progressBarBgRef}
-						className="relative w-full overflow-hidden bg-black opacity-40"
+						className="relative w-full overflow-hidden bg-black opacity-50"
 						style={{ height: "0.325rem" }}
 					/>
 					<motion.div
@@ -452,12 +434,12 @@ const ProgressBar: React.FC<{
 					/>
 				</div>
 			</div>
-			<div className="relative flex flex-col justify-end">
-				<motion.div
-					animate={{
-						borderColor: colors.secondary,
-					}}
-					className={clsx("relative z-10 ml-1 rounded-full", styles.reel)}
+			<div className="relative flex flex-col justify-end opacity-50">
+				<div
+					className={clsx(
+						"relative z-10 ml-1 rounded-full border-black",
+						styles.reel
+					)}
 					style={{
 						animationDuration: speedUpReels ? "0.5s" : "2s",
 						height: "1.325rem",
@@ -466,9 +448,9 @@ const ProgressBar: React.FC<{
 					}}
 				>
 					<div className="absolute top-0 w-[2px] h-1 bg-white -translate-x-1/2 left-1/2" />
-				</motion.div>
+				</div>
 				<div
-					className="absolute bottom-0 left-0 bg-black opacity-40"
+					className="absolute bottom-0 left-0 bg-black"
 					style={{
 						width: "calc(50% + 0.125rem)",
 						height: "0.325rem",
