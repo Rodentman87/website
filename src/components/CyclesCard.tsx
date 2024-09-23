@@ -72,8 +72,7 @@ export const CyclesCard: React.FC<{
 						className={clsx(
 							"fixed top-0 left-0 z-20 w-screen h-screen transition-all duration-300 pointer-events-none bg-opacity-80",
 							{
-								"backdrop-blur-none": !isHovered,
-								"backdrop-blur-sm bg-black bg-transition-one-way": isHovered,
+								"bg-black bg-transition-one-way": isHovered,
 							}
 						)}
 					></div>

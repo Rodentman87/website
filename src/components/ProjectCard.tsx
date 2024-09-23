@@ -74,7 +74,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 					/>
 					<div
 						onClick={() => setIsExpanded(false)}
-						className="fixed top-0 left-0 z-50 flex flex-row items-center justify-center w-screen h-screen p-2 bg-black bg-opacity-25 backdrop-blur-sm"
+						className="fixed top-0 left-0 z-50 flex flex-row items-center justify-center w-screen h-screen p-2 bg-black bg-opacity-25"
 					>
 						<motion.div
 							onClick={(e) => e.stopPropagation()}
