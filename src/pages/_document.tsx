@@ -11,6 +11,7 @@ class MyDocument extends Document {
 			<Html lang={"en"}>
 				<Head>
 					<meta name="theme-color" content="#fdf6e3" />
+					<meta name="darkreader-lock" />
 				</Head>
 				<body>
 					<Main />
