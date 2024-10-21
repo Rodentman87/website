@@ -320,7 +320,7 @@ export const SquareReveal: React.FC<{ onClick: () => void }> = ({
 			}}
 			initial={"hidden"}
 			whileHover={"visible"}
-			className="fixed w-8 h-8 select-none bottom-2 right-2"
+			className="fixed w-8 h-8 text-black select-none bottom-2 right-2"
 			onClick={onClick}
 		>
 			<motion.div

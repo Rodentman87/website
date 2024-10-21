@@ -22,7 +22,7 @@ export default function AchievmentsList() {
 				<title>Achievments</title>
 			</Head>
 			<section>
-				<div className="p-2 mb-2 bg-gray-100 rounded-md shadow-md">
+				<div className="p-2 mb-2 bg-gray-100 rounded-md shadow-md dark:bg-gray-700">
 					<h2>Reset Progress</h2>
 					<p className="m-0 mt-1">
 						<button
@@ -48,7 +48,7 @@ export default function AchievmentsList() {
 						<FunnyButtonLol />
 					</p>
 				</div>
-				<div className="flex flex-col gap-2 p-2 bg-gray-100 rounded-md shadow-md">
+				<div className="flex flex-col gap-2 p-2 bg-gray-100 rounded-md shadow-md dark:bg-gray-700">
 					<h2>Achievements</h2>
 					{(ACHIEVEMENTS as unknown as Achievement[]).map((achievement) => {
 						const [primaryColorRGB, setPrimaryColorRGB] =

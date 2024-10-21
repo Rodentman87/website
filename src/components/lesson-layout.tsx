@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Link from "next/link";
@@ -16,7 +17,7 @@ export default function LessonLayout({
 	nextLesson?: string;
 }) {
 	return (
-		<div className={styles.container}>
+		<div className={clsx(styles.container, "text-black dark:text-white")}>
 			<Head>
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="og:color" content="#FDF6E3" />

@@ -76,11 +76,11 @@ export function getScriptFromText(text: string) {
 			const lengthOfBlock = findLengthOfBlock(lines, currentLine);
 			if (evaluateCondition(condition, currentVariables)) {
 				stepInfo.replacePointer = "👍";
-				stepInfo.backgroundColor = "rgb(187 247 208)";
+				stepInfo.backgroundColor = "green";
 			} else {
 				currentLine += lengthOfBlock;
 				stepInfo.replacePointer = "👎";
-				stepInfo.backgroundColor = "rgb(254 202 202)";
+				stepInfo.backgroundColor = "red";
 			}
 		} else if (currentCodeLine.startsWith("While")) {
 			const condition = currentCodeLine.replace(/While (.+?),/, "$1");
@@ -88,13 +88,13 @@ export function getScriptFromText(text: string) {
 			const lengthOfBlock = findLengthOfBlock(lines, currentLine);
 			if (evaluateCondition(condition, currentVariables)) {
 				stepInfo.replacePointer = "👍";
-				stepInfo.backgroundColor = "rgb(187 247 208)";
+				stepInfo.backgroundColor = "green";
 				returnToLine = currentLine;
 				returnAfterLine = currentLine + findLengthOfBlock(lines, currentLine);
 			} else {
 				currentLine += lengthOfBlock;
 				stepInfo.replacePointer = "👎";
-				stepInfo.backgroundColor = "rgb(254 202 202)";
+				stepInfo.backgroundColor = "red";
 			}
 		}
 

@@ -56,7 +56,12 @@ export default function Layout({
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="og:color" content="#FDF6E3" />
 			</Head>
-			<header className={centeredHeader ? styles.header : styles.headerPost}>
+			<header
+				className={clsx(
+					centeredHeader ? styles.header : styles.headerPost,
+					"dark:text-white"
+				)}
+			>
 				{isMounted && allowLmao && (
 					<Portal>
 						<div
@@ -103,9 +108,9 @@ export default function Layout({
 							<motion.span
 								onClick={() => setShowHandwrittenName(true)}
 								className={clsx(
-									"relative text-black transition-all duration-1000 inline-block",
+									"relative text-black transition-all duration-1000 inline-block dark:text-white",
 									{
-										"text-opacity-0": showHandwrittenName,
+										"text-opacity-0 dark:text-opacity-0": showHandwrittenName,
 									}
 								)}
 							>
@@ -142,7 +147,7 @@ export default function Layout({
 					</>
 				)}
 			</header>
-			<main>{children}</main>
+			<main className="text-black dark:text-white">{children}</main>
 			{!hideBackToHome && (
 				<div className={styles.backToHome}>
 					<Link href={backButtonLink ?? "/"}>

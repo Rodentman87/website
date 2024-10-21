@@ -20,7 +20,7 @@ export default function AchievmentsDebug() {
 				<title>Achievment Debugging Page</title>
 			</Head>
 			<section>
-				<div className="p-2 mb-2 bg-gray-100 rounded-md shadow-md">
+				<div className="p-2 mb-2 bg-gray-100 rounded-md shadow-md dark:bg-gray-700">
 					<h2>Reset Progress</h2>
 					<p className="m-0 mt-1">
 						<button
@@ -38,7 +38,7 @@ export default function AchievmentsDebug() {
 						</button>
 					</p>
 				</div>
-				<div className="flex flex-col gap-2 p-2 mb-2 bg-gray-100 rounded-md shadow-md">
+				<div className="flex flex-col gap-2 p-2 mb-2 bg-gray-100 rounded-md shadow-md dark:bg-gray-700">
 					<h2>Metrics</h2>
 					{(METRICS as unknown as AchievementMetric[]).map((metric) => {
 						const progress = metricsProgress[metric.id];
@@ -46,7 +46,7 @@ export default function AchievmentsDebug() {
 						return (
 							<div
 								key={metric.id}
-								className="relative p-2 bg-white rounded-md shadow-md"
+								className="relative p-2 bg-white rounded-md shadow-md dark:bg-black"
 							>
 								<div className="flex flex-row justify-between">
 									<h3 className="text-2xl font-semibold">
@@ -57,7 +57,7 @@ export default function AchievmentsDebug() {
 										<input
 											disabled={metric.isMetaMetric}
 											aria-label={metric.name}
-											className="w-6 h-6 p-2 mt-1 mr-1 bg-gray-100 rounded-md accent-purple-400 disabled:accent-slate-300"
+											className="w-6 h-6 p-2 mt-1 mr-1 bg-gray-100 rounded-md dark:bg-gray-700 accent-purple-400 disabled:accent-slate-300"
 											type="checkbox"
 											checked={progress?.value ?? false}
 											onChange={(e) =>
@@ -74,7 +74,7 @@ export default function AchievmentsDebug() {
 									<input
 										disabled={metric.isMetaMetric}
 										aria-label={metric.name}
-										className="w-full p-2 mt-1 bg-gray-100 rounded-md disabled:bg-gray-300"
+										className="w-full p-2 mt-1 bg-gray-100 rounded-md dark:bg-gray-700 disabled:bg-gray-300"
 										type="number"
 										value={progress?.value ?? 0}
 										min={0}
@@ -92,7 +92,7 @@ export default function AchievmentsDebug() {
 						);
 					})}
 				</div>
-				<div className="flex flex-col gap-2 p-2 bg-gray-100 rounded-md shadow-md">
+				<div className="flex flex-col gap-2 p-2 bg-gray-100 rounded-md shadow-md dark:bg-gray-700">
 					<h2>Achievements</h2>
 					{(ACHIEVEMENTS as unknown as Achievement[]).map((achievement) => {
 						const [confettiPalette, setConfettiPalette] = useState<
@@ -109,7 +109,7 @@ export default function AchievmentsDebug() {
 								style={{
 									borderColor: `rgb(${primaryColorRGB})`,
 								}}
-								className="relative p-2 bg-white border-2 border-solid rounded-md shadow-md"
+								className="relative p-2 bg-white border-2 border-solid rounded-md shadow-md dark:bg-black"
 							>
 								<h3 className="text-2xl font-semibold">
 									{achievement.name}{" "}

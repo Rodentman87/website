@@ -67,7 +67,7 @@ export default function Post({
 				/>
 				<meta name="theme-color" content="#000000" />
 			</Head>
-			<div className="px-4 pb-1 rounded-lg indent-8 bg-yellow-50 pt-7">
+			<div className="px-4 pb-1 mt-4 rounded-lg indent-8 bg-yellow-50 dark:bg-slate-800 pt-7">
 				<Component />
 			</div>
 		</Layout>

@@ -1,7 +1,7 @@
 import Head from "next/head";
-import LessonLayout from "./lesson-layout";
-import utilStyles from "../styles/utils.module.css";
 import React from "react";
+import utilStyles from "../styles/utils.module.css";
+import LessonLayout from "./lesson-layout";
 
 interface Props {
 	children: React.ReactNode;

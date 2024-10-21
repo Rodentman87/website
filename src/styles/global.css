@@ -60,6 +60,10 @@ pre:not(.shiki) {
 	padding: 8px;
 }
 
+.dark pre:not(.shiki) {
+	background-color: #002b36;
+}
+
 html,
 body {
 	padding: 0;
@@ -68,6 +72,7 @@ body {
 		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	line-height: 1.6;
 	font-size: 18px;
+	transition: background-color 0.3s ease-in-out;
 }
 
 * {
@@ -96,4 +101,8 @@ blockquote {
 
 .bg-transition-one-way {
 	transition: backdrop-filter 0.3s ease-in-out, background-color 10s ease-in-out;
+}
+
+html.dark {
+	background-color: #260131;
 }

@@ -105,7 +105,7 @@ export const SpotifyStatus: React.FC<{
 			className="relative mt-8 text-white border border-gray-500 border-solid shadow-md rounded-2xl w-96 group"
 		>
 			<motion.span
-				className="absolute px-2 text-sm text-black rounded-md backdrop-blur-sm -top-6"
+				className="absolute px-2 text-sm text-black rounded-md dark:text-white backdrop-blur-sm -top-6"
 				initial={{ y: 15, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ delay: 1 }}

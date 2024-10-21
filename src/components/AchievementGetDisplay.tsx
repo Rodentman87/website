@@ -104,7 +104,7 @@ export const AchievementGetDisplay: React.FC = () => {
 
 	return (
 		<div
-			className="fixed top-0 left-0 flex flex-row justify-center w-screen"
+			className="fixed top-0 left-0 flex flex-row justify-center w-screen pointer-events-none"
 			style={{ zIndex: 100000 }}
 		>
 			<div className="flex flex-col gap-2 pt-2">

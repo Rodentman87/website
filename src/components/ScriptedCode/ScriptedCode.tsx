@@ -1,6 +1,7 @@
+import { ThemeContext } from "@components/ThemeToggle";
 import clsx from "clsx";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useContext, useEffect, useMemo, useRef } from "react";
 import {
 	IoMdArrowRoundBack,
 	IoMdArrowRoundForward,
@@ -62,11 +63,13 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 
 	const currentScriptLine = script[currentScriptLineNumber];
 
+	const theme = useContext(ThemeContext);
+
 	const renderedCode = useMemo(() => {
 		if (!highlighter) return;
 		return highlighter.codeToHtml(code, {
 			lang: language,
-			theme: "solarized-light",
+			theme: theme.dark ? "solarized-dark" : "solarized-light",
 		});
 	}, [highlighter, code, language]);
 
@@ -75,12 +78,12 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 	}, [code]);
 
 	return (
-		<div className="relative flex flex-col mb-10">
+		<div className="relative flex flex-col mb-10 text-black dark:text-white">
 			<LayoutGroup id={id}>
 				<div
 					className="z-10 flex flex-row"
 					style={{
-						backgroundColor: "#fdf6e3",
+						backgroundColor: theme.dark ? "#073642" : "#fdf6e3",
 					}}
 				>
 					<div className="flex flex-col">
@@ -97,9 +100,10 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 										<motion.span
 											layoutId="line-indicator-bg"
 											className={clsx(
-												"absolute h-full font-mono from-blue-100 bg-gradient-to-r",
+												"absolute h-full font-mono from-blue-100 dark:from-blue-800 bg-gradient-to-r",
 												{
-													"to-blue-100": currentScriptLine.indicateRange,
+													"to-blue-100 dark:to-blue-800":
+														currentScriptLine.indicateRange,
 												}
 											)}
 											style={{
@@ -112,7 +116,10 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 													  currentScriptLine.indicateRange[0] +
 													  "ch"
 													: "24rem",
-												background: currentScriptLine.backgroundColor,
+												background: colorNameToColor(
+													currentScriptLine.backgroundColor,
+													theme.dark
+												),
 											}}
 										/>
 									</>
@@ -143,6 +150,17 @@ export const ScriptedCode: React.FC<ScriptedCodeProps> = ({
 	);
 };
 
+function colorNameToColor(color: string, dark: boolean) {
+	switch (color) {
+		case "green":
+			return dark ? "rgb(34, 106, 60)" : "rgb(187 247 208)";
+		case "red":
+			return dark ? "rgb(145, 68, 68)" : "rgb(254 202 202)";
+		default:
+			return undefined;
+	}
+}
+
 interface ControlsProps {
 	isPlaying: boolean;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
@@ -158,16 +176,18 @@ const Controls: React.FC<ControlsProps> = ({
 	isPlaying,
 	setIsPlaying,
 }) => {
+	const theme = useContext(ThemeContext);
+
 	return (
 		<div
 			className="z-10 flex flex-row justify-between px-2"
-			style={{ backgroundColor: "#eee8d5" }}
+			style={{ backgroundColor: theme.dark ? "#002b36" : "#eee8d5" }}
 		>
 			<div className="flex flex-row justify-center gap-1 px-2 grow">
 				<button
 					aria-label="Previous step"
 					disabled={currentScriptLineNumber === 0}
-					className="disabled:cursor-not-allowed disabled:text-gray-500"
+					className="disabled:cursor-not-allowed disabled:text-gray-500 dark:disabled:text-gray-400"
 					onClick={() =>
 						setCurrentScriptLinenumber(currentScriptLineNumber - 1)
 					}
@@ -220,6 +240,8 @@ interface VariablesPanelProps {
 }
 
 const VariablesPanel: React.FC<VariablesPanelProps> = ({ variables }) => {
+	const theme = useContext(ThemeContext);
+
 	return (
 		<div className="absolute flex flex-col items-start gap-2 pl-2 left-full">
 			<AnimatePresence>
@@ -244,10 +266,13 @@ const VariablesPanel: React.FC<VariablesPanelProps> = ({ variables }) => {
 						layoutId={key}
 						key={key}
 						className="flex flex-row justify-between gap-2 rounded-md overflow-clip w-max"
-						style={{ backgroundColor: "#eee8d5" }}
+						style={{ backgroundColor: theme.dark ? "#002b36" : "#eee8d5" }}
 					>
 						<span className="pl-2">{key}</span>
-						<span className="px-2 grow" style={{ backgroundColor: "#fdf6e3" }}>
+						<span
+							className="px-2 grow"
+							style={{ backgroundColor: theme.dark ? "#073642" : "#fdf6e3" }}
+						>
 							{valueToText(value)}
 						</span>
 					</motion.div>
@@ -266,6 +291,8 @@ const ConsoleLinesPanel: React.FC<ConsoleLinesProps> = ({
 	consoleLine,
 	index,
 }) => {
+	const theme = useContext(ThemeContext);
+
 	return (
 		<div className="absolute flex flex-row items-start gap-2 top-full">
 			<AnimatePresence mode="wait">
@@ -277,7 +304,7 @@ const ConsoleLinesPanel: React.FC<ConsoleLinesProps> = ({
 					layoutId={`console-line-${index}`}
 					key={index}
 					className="flex flex-row justify-between gap-2 rounded-sm"
-					style={{ backgroundColor: "#fdf6e3" }}
+					style={{ backgroundColor: theme.dark ? "#073642" : "#fdf6e3" }}
 				>
 					<span className="px-2">{consoleLine}</span>
 				</motion.div>
