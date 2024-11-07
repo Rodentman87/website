@@ -1,6 +1,6 @@
-import { kv } from "@vercel/kv";
 import { XMLParser } from "fast-xml-parser";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getClient } from "redisClient";
 
 const parser = new XMLParser({
 	isArray: (name) => name === "achievement",
@@ -26,8 +26,9 @@ export interface Data {
 }
 
 export async function getAchievementProgress(id: string) {
+	const client = await getClient();
 	const cacheKey = `achievement-${id}`;
-	let data = (await kv.get(cacheKey)) as Data | null;
+	let data = JSON.parse(await client.get(cacheKey)) as Data | null;
 	if (data === null) {
 		try {
 			const url = `https://steamcommunity.com/profiles/76561198043214302/stats/${id}/?xml=1`;
@@ -47,12 +48,12 @@ export async function getAchievementProgress(id: string) {
 				total,
 				achieved,
 			};
-			await kv.set(cacheKey, data, {
-				ex: 600,
+			await client.set(cacheKey, JSON.stringify(data), {
+				EX: 600,
 			});
 		} catch (e) {
-			await kv.set(cacheKey, null, {
-				ex: 600,
+			await client.set(cacheKey, null, {
+				EX: 600,
 			});
 			console.error(e);
 			return null;

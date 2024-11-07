@@ -769,6 +769,40 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
+"@redis/bloom@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@redis/bloom/-/bloom-1.2.0.tgz#d3fd6d3c0af3ef92f26767b56414a370c7b63b71"
+  integrity sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==
+
+"@redis/client@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.6.0.tgz#dcf4ae1319763db6fdddd6de7f0af68a352c30ea"
+  integrity sha512-aR0uffYI700OEEH4gYnitAnv3vzVGXCFvYfdpu/CJKvk4pHfLPEy/JSZyrpQ+15WhXe1yJRXLtfQ84s4mEXnPg==
+  dependencies:
+    cluster-key-slot "1.1.2"
+    generic-pool "3.9.0"
+    yallist "4.0.0"
+
+"@redis/graph@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@redis/graph/-/graph-1.1.1.tgz#8c10df2df7f7d02741866751764031a957a170ea"
+  integrity sha512-FEMTcTHZozZciLRl6GiiIB4zGm5z5F3F6a6FZCyrfxdKOhFlGkiAqlexWMBzCi4DcRoyiOsuLfW+cjlGWyExOw==
+
+"@redis/json@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@redis/json/-/json-1.0.7.tgz#016257fcd933c4cbcb9c49cde8a0961375c6893b"
+  integrity sha512-6UyXfjVaTBTJtKNG4/9Z8PSpKE6XgSyEb8iwaqDcy+uKrd/DGYHTWkUdnQDyzm727V7p21WUMhsqz5oy65kPcQ==
+
+"@redis/search@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@redis/search/-/search-1.2.0.tgz#50976fd3f31168f585666f7922dde111c74567b8"
+  integrity sha512-tYoDBbtqOVigEDMAcTGsRlMycIIjwMCgD8eR2t0NANeQmgK/lvxNAvYyb6bZDD4frHRhIHkJu2TBRvB0ERkOmw==
+
+"@redis/time-series@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@redis/time-series/-/time-series-1.1.0.tgz#cba454c05ec201bd5547aaf55286d44682ac8eb5"
+  integrity sha512-c1Q99M5ljsIuc4YdaCwfUEXsofakb9c8+Zse2qxTadu8TalLXuAESzLvFAvNVbkmSlvlzIQOLpBCmWI9wTOt+g==
+
 "@resvg/resvg-wasm@2.0.0-alpha.4":
   version "2.0.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@resvg/resvg-wasm/-/resvg-wasm-2.0.0-alpha.4.tgz#fc2f86186a9641df030d8f9f3f9d995899cd1ecb"
@@ -1090,25 +1124,6 @@
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@uidotdev/usehooks/-/usehooks-2.4.1.tgz#4b733eaeae09a7be143c6c9ca158b56cc1ea75bf"
   integrity sha512-1I+RwWyS+kdv3Mv0Vmc+p0dPYH0DTRAo04HLyXReYBL9AeseDWUJyi4THuksBJcu9F0Pih69Ak150VDnqbVnXg==
-
-"@upstash/redis@1.22.0":
-  version "1.22.0"
-  resolved "https://registry.yarnpkg.com/@upstash/redis/-/redis-1.22.0.tgz#3ae3ef056608c8598f46e8bc3b3f405a94781142"
-  integrity sha512-sXoJDoEqqik0HbrNE7yRWckOySEFsoBxfRdCgOqkc0w6py19ZZG50SpGkDDEUXSnBqP8VgGYXhWAiBpqxrt5oA==
-  dependencies:
-    isomorphic-fetch "^3.0.0"
-
-"@vercel/analytics@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-1.0.2.tgz#7af719a1bf33734840aee6f04eb548d2cedab9ec"
-  integrity sha512-BZFxVrv24VbNNl5xMxqUojQIegEeXMI6rX3rg1uVLYUEXsuKNBSAEQf4BWEcjQDp/8aYJOj6m8V4PUA3x/cxgg==
-
-"@vercel/kv@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@vercel/kv/-/kv-0.2.3.tgz#182419a8e44fcc7ff1638522f8d79a1846d99795"
-  integrity sha512-Wq1+EsRBQmvLlcqCZeYVg1MAARWrnETgLe3Sy3UCqG+zg7LThpkt0YHZe1NN3Aj4IRmCKQamotWrLDdEx+ZB3w==
-  dependencies:
-    "@upstash/redis" "1.22.0"
 
 "@vercel/og@^0.0.20":
   version "0.0.20"
@@ -1534,6 +1549,11 @@ clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
+
+cluster-key-slot@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/cluster-key-slot/-/cluster-key-slot-1.1.2.tgz#88ddaa46906e303b5de30d3153b7d9fe0a0c19ac"
+  integrity sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -2495,6 +2515,11 @@ generic-names@^1.0.2:
   integrity sha512-b6OHfQuKasIKM9b6YPkX+KUj/TLBTx3B/1aT1T5F12FEuEqyFMdr59OMS53aoaSw8eVtapdqieX6lbg5opaOhA==
   dependencies:
     loader-utils "^0.2.16"
+
+generic-pool@3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.9.0.tgz#36f4a678e963f4fdb8707eab050823abc4e8f5e4"
+  integrity sha512-hymDOu5B53XvN4QT9dBmZxPX4CWhBPPLguTZ9MMFeFa/Kg0xWVfylOVNlJji/E7yTZWFd/q9GO5TxDLq156D7g==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -5079,6 +5104,18 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
+redis@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/redis/-/redis-4.7.0.tgz#b401787514d25dd0cfc22406d767937ba3be55d6"
+  integrity sha512-zvmkHEAdGMn+hMRXuMBtu4Vo5P6rHQjLoHftu+lBqq8ZTA3RCVC/WzD790bkKKiNFp7d5/9PcSD19fJyyRvOdQ==
+  dependencies:
+    "@redis/bloom" "1.2.0"
+    "@redis/client" "1.6.0"
+    "@redis/graph" "1.1.1"
+    "@redis/json" "1.0.7"
+    "@redis/search" "1.2.0"
+    "@redis/time-series" "1.1.0"
+
 regenerator-runtime@^0.13.11:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
@@ -6310,15 +6347,15 @@ y18n@^5.0.5:
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
   integrity sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==
 
+yallist@4.0.0, yallist@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
+  integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
+
 yallist@^3.0.2:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
   integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
-
-yallist@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
-  integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
 yaml@^1.10.0, yaml@^1.10.2:
   version "1.10.2"

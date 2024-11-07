@@ -2,7 +2,6 @@ import { AchievementGetDisplay } from "@components/AchievementGetDisplay";
 import { AudioSystem } from "@components/AudioLink";
 import { ThemeContext, ThemeToggle } from "@components/ThemeToggle";
 import { MDXProvider } from "@mdx-js/react";
-import { Analytics } from "@vercel/analytics/react";
 import { AchievementStore } from "achievements/AchievementStore";
 import { AchievementStoreContext } from "hooks/useAchievementStore";
 import { AppProps } from "next/app";
@@ -75,7 +74,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
 							<ThemeToggle dark={darkMode} setDarkMode={setDarkMode} />
 							<AchievementGetDisplay />
 							<Component {...pageProps} />
-							<Analytics />
 						</ThemeContext.Provider>
 					</AchievementStoreContext.Provider>
 				</AudioSystem>
