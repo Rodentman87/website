@@ -1,5 +1,3 @@
-import { CursorSkin } from "./CursorSkinStore";
-
 export const CURSOR_SKINS = [
 	{
 		id: "stick",
@@ -31,6 +29,6 @@ export const CURSOR_SKINS = [
 			hotspot: { x: 8, y: 8 },
 		},
 	},
-] as const satisfies CursorSkin[];
+] as const;
 
 export type CursorSkinID = (typeof CURSOR_SKINS)[number]["id"];
