@@ -1,11 +1,11 @@
-import { Achievement } from "achievements/AchievementStore";
-import { AchievementRarity } from "achievements/achievementList";
 import clsx from "clsx";
 import Color from "color";
 import { AnimatePresence, motion } from "framer-motion";
 import { extractColors, getBestColors } from "helpers/colors";
-import { useOnAchievment } from "hooks/useOnAchievment";
 import { Howl } from "howler";
+import { Achievement } from "modules/achievements/AchievementStore";
+import { AchievementRarity } from "modules/achievements/achievementList";
+import { useOnAchievment } from "modules/achievements/hooks/useOnAchievment";
 import Image from "next/image";
 import React, { useCallback, useMemo } from "react";
 import ConfettiExplosion from "react-confetti-explosion";

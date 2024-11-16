@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { useAchievementStore } from "hooks/useAchievementStore";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -150,7 +150,7 @@ export default function Layout({
 			<main className="text-black dark:text-white">{children}</main>
 			{!hideBackToHome && (
 				<div className={styles.backToHome}>
-					<Link href={backButtonLink ?? "/"}>
+					<Link href={backButtonLink ?? "/"} className="select-none">
 						← {backButtonText ?? "Back to home"}
 					</Link>
 				</div>

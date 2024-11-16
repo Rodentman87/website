@@ -1,6 +1,6 @@
 "use client";
 import { cubicBezier, motion } from "framer-motion";
-import { useAchievementStore } from "hooks/useAchievementStore";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import React, { useEffect, useLayoutEffect } from "react";
 
 const squareCode = "⬜ 🟩 🟧 🟨 🟨 🟥 🟥 🟦".split(" ");
@@ -82,7 +82,7 @@ const squareVariants = ({
 		opacity: 1,
 		transition: { delay: 3, duration: 0.5 },
 		transitionEnd: {
-			cursor: "pointer",
+			cursor: "var(--pointer-cursor), pointer",
 		},
 	},
 	shrink2: {
@@ -98,7 +98,7 @@ const squareVariants = ({
 		x: [-25, -28, -32, -35, -38, -42],
 		transition: { duration: 0.5, ease: cubicBezier(0.7, 0, 1, 0.67) },
 		transitionEnd: {
-			cursor: "pointer",
+			cursor: "var(--pointer-cursor), pointer",
 		},
 	},
 	grow: {

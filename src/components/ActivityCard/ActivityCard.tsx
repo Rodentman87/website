@@ -1,7 +1,7 @@
 import { Track } from "@spotify/web-api-ts-sdk";
 import Color from "color";
 import { AnimatePresence } from "framer-motion";
-import { useAchievementStore } from "hooks/useAchievementStore";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import React, { useEffect } from "react";
 import { GameStatus } from "./Game";
 import { SpotifyStatus } from "./Spotify";

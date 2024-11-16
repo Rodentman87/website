@@ -1,4 +1,4 @@
-import { Achievement } from "achievements/AchievementStore";
+import { Achievement } from "modules/achievements/AchievementStore";
 import { useEffect } from "react";
 import { useAchievementStore } from "./useAchievementStore";
 

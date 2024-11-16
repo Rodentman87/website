@@ -1,10 +1,16 @@
-import { Achievement, AchievementMetric } from "achievements/AchievementStore";
-import { ACHIEVEMENTS, AchievementRarity } from "achievements/achievementList";
-import { METRICS } from "achievements/metricsList";
 import Color from "color";
 import { extractColors, getBestColors } from "helpers/colors";
-import { useAchievementMetrics } from "hooks/useAchievementMetrics";
-import { useAchievementStore } from "hooks/useAchievementStore";
+import {
+	Achievement,
+	AchievementMetric,
+} from "modules/achievements/AchievementStore";
+import {
+	ACHIEVEMENTS,
+	AchievementRarity,
+} from "modules/achievements/achievementList";
+import { useAchievementMetrics } from "modules/achievements/hooks/useAchievementMetrics";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
+import { METRICS } from "modules/achievements/metricsList";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";

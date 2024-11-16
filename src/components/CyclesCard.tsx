@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
-import { useAchievementStore } from "hooks/useAchievementStore";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import React, { useCallback, useMemo } from "react";
 import { Portal } from "react-portal";
 import { Starfield } from "./Starfield";

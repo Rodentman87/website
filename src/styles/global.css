@@ -73,6 +73,11 @@ body {
 	line-height: 1.6;
 	font-size: 18px;
 	transition: background-color 0.3s ease-in-out;
+	cursor: var(--default-cursor);
+}
+
+:disabled {
+	cursor: var(--default-cursor);
 }
 
 * {
@@ -82,10 +87,15 @@ body {
 a {
 	color: #0070f3;
 	text-decoration: none;
+	cursor: var(--pointer-cursor);
 }
 
 a:not(.no-underline):hover {
 	text-decoration: underline;
+}
+
+button {
+	cursor: var(--pointer-cursor);
 }
 
 img {

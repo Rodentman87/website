@@ -1,4 +1,4 @@
-import { AchievementStore } from "achievements/AchievementStore";
+import { AchievementStore } from "modules/achievements/AchievementStore";
 import { createContext, useContext } from "react";
 
 export const AchievementStoreContext = createContext(new AchievementStore());

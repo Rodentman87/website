@@ -1,12 +1,12 @@
 import { FunnyButtonLol } from "@components/FunnyButtonLol";
-import { Achievement } from "achievements/AchievementStore";
-import { ACHIEVEMENTS } from "achievements/achievementList";
 import clsx from "clsx";
 import Color from "color";
 import { extractColors, getBestColors } from "helpers/colors";
-import { useAchievementMetrics } from "hooks/useAchievementMetrics";
-import { useAchievementStore } from "hooks/useAchievementStore";
-import { useCompletedAchievements } from "hooks/useCompletedAchievements";
+import { Achievement } from "modules/achievements/AchievementStore";
+import { ACHIEVEMENTS } from "modules/achievements/achievementList";
+import { useAchievementMetrics } from "modules/achievements/hooks/useAchievementMetrics";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
+import { useCompletedAchievements } from "modules/achievements/hooks/useCompletedAchievements";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";

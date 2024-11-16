@@ -1,4 +1,4 @@
-import { useAchievementStore } from "hooks/useAchievementStore";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import Head from "next/head";
 import React, { MutableRefObject, useLayoutEffect } from "react";
 

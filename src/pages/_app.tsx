@@ -3,8 +3,11 @@ import { AudioSystem } from "@components/AudioLink";
 import { ThemeContext, ThemeToggle } from "@components/ThemeToggle";
 import { MDXProvider } from "@mdx-js/react";
 import { Analytics } from "@vercel/analytics/react";
-import { AchievementStore } from "achievements/AchievementStore";
-import { AchievementStoreContext } from "hooks/useAchievementStore";
+import { AchievementStore } from "modules/achievements/AchievementStore";
+import { AchievementStoreContext } from "modules/achievements/hooks/useAchievementStore";
+import useCursorSkin from "modules/cursor-skins/hooks/useCursorSkin";
+import { useCursorSkinStore } from "modules/cursor-skins/hooks/useCursorSkinStore";
+import { sourceToStyle } from "modules/cursor-skins/utils";
 import { AppProps } from "next/app";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { HighlighterGeneric } from "shiki";
@@ -52,6 +55,42 @@ export default function App({ Component, pageProps, router }: AppProps) {
 				});
 		});
 	}, []);
+
+	const { cursorSkin } = useCursorSkin();
+	const cursorSkinStore = useCursorSkinStore();
+
+	useEffect(() => {
+		if (
+			achievementStore.completedAchievements.includes("all-achievements") &&
+			!cursorSkinStore.unlockedCursorSkins.includes("stick-gold")
+		) {
+			cursorSkinStore.unlockedCursorSkins.push("stick-gold");
+		}
+	}, [achievementStore]);
+
+	useEffect(() => {
+		if (cursorSkin === null) {
+			document.documentElement.style.setProperty("--default-cursor", "default");
+			document.documentElement.style.setProperty("--pointer-cursor", "pointer");
+			document.documentElement.style.setProperty(
+				"--not-allowed-cursor",
+				"not-allowed"
+			);
+		} else {
+			document.documentElement.style.setProperty(
+				"--default-cursor",
+				`${sourceToStyle(cursorSkin.defaultSrc)}, default`
+			);
+			document.documentElement.style.setProperty(
+				"--pointer-cursor",
+				`${sourceToStyle(cursorSkin.pointerSrc)}, pointer`
+			);
+			document.documentElement.style.setProperty(
+				"--not-allowed-cursor",
+				`${sourceToStyle(cursorSkin.notAllowedSrc)}, not-allowed`
+			);
+		}
+	}, [cursorSkin]);
 
 	return (
 		<ShikiContext.Provider value={highlighter}>

@@ -6,7 +6,7 @@ import {
 	useMotionValue,
 	useTransform,
 } from "framer-motion";
-import { useAchievementStore } from "hooks/useAchievementStore";
+import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 export const FunnyButtonLol: React.FC = () => {

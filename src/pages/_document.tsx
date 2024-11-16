@@ -1,3 +1,5 @@
+import { CursorSkinStore } from "modules/cursor-skins/CursorSkinStore";
+import { CursorSkinStoreContext } from "modules/cursor-skins/hooks/useCursorSkinStore";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
@@ -14,8 +16,10 @@ class MyDocument extends Document {
 					<meta name="darkreader-lock" />
 				</Head>
 				<body>
-					<Main />
-					<NextScript />
+					<CursorSkinStoreContext.Provider value={new CursorSkinStore()}>
+						<Main />
+						<NextScript />
+					</CursorSkinStoreContext.Provider>
 				</body>
 			</Html>
 		);
