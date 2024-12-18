@@ -16,7 +16,7 @@ export const DieRollStatus: React.FC<{
 			const nextRolls = [...previousRolls];
 
 			nextRolls.unshift({ roll: status.value, id: status.time });
-			if (nextRolls.length > 5) {
+			if (nextRolls.length > 3) {
 				nextRolls.pop();
 			}
 			setPreviousrolls(nextRolls);
@@ -44,7 +44,7 @@ export const DieRollStatus: React.FC<{
 				<div className="absolute top-0 left-0 translate-x-1"></div>
 			</motion.div>
 			<div className="relative flex flex-row items-stretch justify-start gap-2 p-2 text-white transition-colors duration-500 bg-gradient-to-br from-purple-700 to-blue-700 backdrop-blur-xl rounded-2xl">
-				<div className="flex flex-col justify-start min-w-0 grow min-h-[60px]">
+				<div className="flex flex-col justify-start min-w-0 grow min-h-[56px]">
 					<AnimatePresence mode="popLayout">
 						{status.state === "rolling" && (
 							<motion.span
@@ -58,29 +58,31 @@ export const DieRollStatus: React.FC<{
 									opacity: 1,
 								}}
 							>
-								Rolling...
+								Rolling a D20...
 							</motion.span>
 						)}
-						{previousRolls.map(({ roll, id }, index) => (
-							<motion.span
-								className="text-xs"
-								key={id}
-								initial={{
-									x: -5,
-									opacity: 0,
-								}}
-								animate={{
-									x: 0,
-									opacity: 1 - index * 0.2,
-								}}
-								exit={{
-									x: -5,
-									opacity: 0,
-								}}
-							>
-								Rolled {roll}
-							</motion.span>
-						))}
+						{previousRolls
+							.slice(0, status.state === "rolling" ? 2 : 3)
+							.map(({ roll, id }, index) => (
+								<motion.span
+									className="text-xs"
+									key={id}
+									initial={{
+										x: -5,
+										opacity: 0,
+									}}
+									animate={{
+										x: 0,
+										opacity: 1 - index * 0.2,
+									}}
+									exit={{
+										x: -5,
+										opacity: 0,
+									}}
+								>
+									Rolled {roll}
+								</motion.span>
+							))}
 					</AnimatePresence>
 				</div>
 			</div>
