@@ -3,6 +3,7 @@ import Color from "color";
 import { AnimatePresence } from "framer-motion";
 import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import React, { useEffect } from "react";
+import { DieRollStatus } from "./DieRoll";
 import { GameStatus } from "./Game";
 import { SpotifyStatus } from "./Spotify";
 import { StatusKVProvider } from "./StatusKVContext";
@@ -14,6 +15,12 @@ const ENDPOINT = "wss://api.lanyard.rest/socket";
 export const COLOR_CONRTAST_MINIMUM = 4.5;
 export const CONTRAST_AGAINST = Color("#222222");
 export const WHITE = Color("#FFFFFF");
+
+export interface DieRollState {
+	state: "rolled" | "rolling";
+	value: number;
+	time: number;
+}
 
 export interface StatusResponse {
 	id: string;
@@ -57,6 +64,9 @@ export const ActivityCard: React.FC = () => {
 	const songId = React.useRef<string | null>(null);
 	const isTabVisible = React.useRef(true);
 	const queuedMessage = React.useRef<{ d: any; t: string; op: number } | null>(
+		null
+	);
+	const [dieRollState, setDieRollState] = React.useState<DieRollState | null>(
 		null
 	);
 
@@ -105,6 +115,12 @@ export const ActivityCard: React.FC = () => {
 				setWatchDisStatus(null);
 			}
 			setKv(d.kv);
+			// Check for die roll state in KV
+			const dieRollState = d.kv["dieroll"];
+			if (dieRollState) {
+				setDieRollState(JSON.parse(dieRollState));
+				console.log(dieRollState);
+			}
 		}
 	}, []);
 
@@ -175,6 +191,9 @@ export const ActivityCard: React.FC = () => {
 		return () => ws.close();
 	}, []);
 
+	const showDieRollStatus =
+		dieRollState != null && dieRollState.time > Date.now() - 30000;
+
 	return (
 		<StatusKVProvider kv={kv}>
 			<AnimatePresence>
@@ -188,6 +207,9 @@ export const ActivityCard: React.FC = () => {
 				)}
 				{watchDisStatus && (
 					<WatchDisStatus key={watchDisStatus.name} status={watchDisStatus} />
+				)}
+				{showDieRollStatus && (
+					<DieRollStatus key="dieroll" status={dieRollState} />
 				)}
 			</AnimatePresence>
 		</StatusKVProvider>
