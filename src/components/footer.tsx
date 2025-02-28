@@ -50,13 +50,19 @@ const Footer = () => {
 				<motion.div layoutId="gh" variants={item} custom={{ i: 1 }}>
 					<SocialIcon url="https://github.com/Rodentman87" />
 				</motion.div>
-				<motion.div layoutId="email" variants={item} custom={{ i: 2 }}>
+				<motion.div layoutId="discord" variants={item} custom={{ i: 2 }}>
+					<SocialIcon
+						network="discord"
+						url="https://discord.likesdinosaurs.com"
+					/>
+				</motion.div>
+				<motion.div layoutId="email" variants={item} custom={{ i: 3 }}>
 					<SocialIcon url="mailto:maisy@likesdinosaurs.com" />
 				</motion.div>
 				<motion.div
 					layoutId="achievements"
 					variants={item}
-					custom={{ i: 3 }}
+					custom={{ i: 4 }}
 					ref={achievementButtonRef as any}
 				>
 					<Link href="/achievements">
@@ -73,7 +79,7 @@ const Footer = () => {
 				<motion.div
 					layoutId="cursors"
 					variants={item}
-					custom={{ i: 4 }}
+					custom={{ i: 5 }}
 					className={hasPointer ? "visible" : "hidden"}
 				>
 					<Link href="/cursor-skins">
