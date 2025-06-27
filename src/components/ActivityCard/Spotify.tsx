@@ -1,3 +1,4 @@
+import { useRive } from "@rive-app/react-canvas";
 import { Track } from "@spotify/web-api-ts-sdk";
 import clsx from "clsx";
 import {
@@ -112,6 +113,11 @@ export const SpotifyStatus: React.FC<{
 			>
 				I'm currently listening to:
 			</motion.span>
+			{song.album.id === "5JY7hWEvWCpKVbn7aAy76R" && (
+				<div className="absolute right-0 -top-6">
+					<Tumbleweed />
+				</div>
+			)}
 			<motion.div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
 				<div className="absolute top-0 left-0 -translate-y-1/4">
 					<SmoothSwapImage
@@ -472,3 +478,17 @@ function padLeft(str: string, size: number) {
 	while (s.length < size) s = "0" + s;
 	return s;
 }
+
+const Tumbleweed: React.FC = () => {
+	const { rive, RiveComponent } = useRive({
+		src: "/tumbleweed.riv",
+		stateMachines: "Main",
+		autoplay: true,
+	});
+
+	return (
+		<div style={{ width: 242, height: 30 }}>
+			<RiveComponent />
+		</div>
+	);
+};
