@@ -3,6 +3,7 @@ import { createHmac } from "crypto";
 import { readdir } from "fs/promises";
 import { GetStaticProps } from "next";
 import Head from "next/head";
+import blur from "./blur.mdx";
 import destruction from "./destruction.mdx";
 import heat from "./heat.mdx";
 import prologue from "./prologue.mdx";
@@ -11,6 +12,7 @@ const pages = {
 	"prologue.mdx": prologue,
 	"destruction.mdx": destruction,
 	"heat.mdx": heat,
+	"blur.mdx": blur,
 };
 
 type PageProps = {
