@@ -14,6 +14,8 @@ import { RocketLeagueStatus } from "./GameSpecificCards/RocketLeague";
 import { StardewStatus } from "./GameSpecificCards/Stardew";
 
 const GAME_MAP = {
+	// ARC Raiders
+	"1373923512766697512": "1808500",
 	// Horizon: FW
 	"1220416685694255265": "2420110",
 	// Overwatch
