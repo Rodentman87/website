@@ -9,6 +9,7 @@ import {
 	CONTRAST_AGAINST,
 	StatusResponse,
 } from "./ActivityCard";
+import { ARCRaidersStatus } from "./GameSpecificCards/ARCRaiders";
 import { HelldiversStatus } from "./GameSpecificCards/Helldivers";
 import { RocketLeagueStatus } from "./GameSpecificCards/RocketLeague";
 import { StardewStatus } from "./GameSpecificCards/Stardew";
@@ -790,6 +791,8 @@ export const GameStatus: React.FC<{
 			return <HelldiversStatus status={status} />;
 		case "359509387670192128":
 			return <StardewStatus status={status} />;
+		case "1373923512766697512":
+			return <ARCRaidersStatus status={status} />;
 		default:
 			return <GameStatusInner status={status} />;
 	}
