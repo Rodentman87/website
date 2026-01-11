@@ -2,16 +2,52 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
 import { StatusResponse } from "../ActivityCard";
+import { useStatusKV } from "../StatusKVContext";
 
 const colors = {
 	primary: "#ecaa09",
 	secondary: "#ebe6d7",
 };
 
+function mapToMapName(map: string) {
+	switch (map) {
+		case "dam_battlegrounds":
+			return "Dam Battlegrounds";
+		case "buried_city":
+			return "Buried City";
+		case "spaceport":
+			return "The Spaceport";
+		case "blue_gate":
+			return "The Blue Gate";
+		case "stella_montis":
+			return "Stella Montis";
+		default:
+			return null;
+	}
+}
+
+function mapToAsset(map: string) {
+	switch (map) {
+		case "dam_battlegrounds":
+			return "https://arcraiders.wiki/w/images/thumb/a/a6/Dam_Battlegrounds.png/800px-Dam_Battlegrounds.png.webp";
+		case "buried_city":
+			return "https://arcraiders.wiki/w/images/thumb/8/80/Buried_City.png/800px-Buried_City.png.webp";
+		case "spaceport":
+			return "https://arcraiders.wiki/w/images/thumb/a/aa/Spaceport.png/800px-Spaceport.png.webp";
+		case "blue_gate":
+			return "https://arcraiders.wiki/w/images/thumb/4/4f/Blue_Gate.png/800px-Blue_Gate.png.webp";
+		case "stella_montis":
+			return "https://arcraiders.wiki/w/images/thumb/9/93/Stella_Montis.png/800px-Stella_Montis.png.webp";
+		default:
+			return null;
+	}
+}
+
 export const ARCRaidersStatus: React.FC<{
 	status: StatusResponse;
 }> = ({ status }) => {
 	const gameId = "1808500";
+	const kv = useStatusKV();
 
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const [imageWidth, setImageWidth] = React.useState(400);
@@ -23,6 +59,22 @@ export const ARCRaidersStatus: React.FC<{
 
 	const steamLink = `https://store.steampowered.com/app/${gameId}/`;
 	const largeImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
+
+	const map = kv["arcm"];
+
+	const shouldShowMap =
+		status.details === "In Round" || status.details === "Matchmaking";
+
+	const detailsLine = React.useMemo(() => {
+		const mapName = mapToMapName(map);
+		if (shouldShowMap && mapName != null) {
+			return `${status.details} - ${mapName}`;
+		} else {
+			return status.details;
+		}
+	}, [map, status.details, shouldShowMap]);
+
+	const mapImg = mapToAsset(map);
 
 	return (
 		<motion.div
@@ -54,7 +106,7 @@ export const ARCRaidersStatus: React.FC<{
 					/>
 				</div>
 			</motion.div>
-			<div className="flex flex-row items-stretch justify-start gap-2 p-2 text-white transition-colors duration-500 bg-black bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70">
+			<div className="flex flex-row items-stretch justify-start gap-2 p-2 text-white transition-colors duration-500 bg-black bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70 overflow-clip">
 				<img
 					src="/ARC_Logo_Lines.svg"
 					width={120}
@@ -101,7 +153,7 @@ export const ARCRaidersStatus: React.FC<{
 								}}
 								className="ml-2 text-xs"
 							>
-								{status.details}
+								{detailsLine}
 							</motion.span>
 						)}
 						{status.state && (
@@ -153,6 +205,21 @@ export const ARCRaidersStatus: React.FC<{
 					</AnimatePresence>
 					<LiveEventDisplay />
 				</div>
+				{shouldShowMap && mapImg != null && (
+					<motion.div
+						key={map}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						style={{
+							backgroundImage: `url(${mapImg})`,
+							backgroundPosition: "center",
+							backgroundSize: "cover",
+							maskImage: "linear-gradient(to right, transparent, black)",
+						}}
+						className="absolute top-0 bottom-0 right-0 w-40 rounded-r-xl"
+					/>
+				)}
 			</div>
 		</motion.div>
 	);
