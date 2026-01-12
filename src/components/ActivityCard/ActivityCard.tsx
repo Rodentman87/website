@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { useAchievementStore } from "modules/achievements/hooks/useAchievementStore";
 import React, { useEffect } from "react";
 import { DieRollStatus } from "./DieRoll";
-import { GameStatus } from "./Game";
+import { GAME_MAP, GameStatus } from "./Game";
 import { SpotifyStatus } from "./Spotify";
 import { StatusKVProvider } from "./StatusKVContext";
 import { WatchDisStatus } from "./WatchDis";
@@ -99,7 +99,8 @@ export const ActivityCard: React.FC = () => {
 				setSpotifyStatus(null);
 			}
 			const gameStatus = d.activities.find(
-				(activity: any) => activity.type === 0
+				(activity: any) =>
+					activity.type === 0 && activity.application_id in GAME_MAP
 			);
 			if (gameStatus) {
 				setStatus(gameStatus);
