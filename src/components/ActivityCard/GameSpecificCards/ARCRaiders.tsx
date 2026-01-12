@@ -74,7 +74,9 @@ export const ARCRaidersStatus: React.FC<{
 		}
 	}, [map, status.details, shouldShowMap]);
 
-	const mapImg = mapToAsset(map);
+	const mapImg = shouldShowMap
+		? mapToAsset(map)
+		: "https://arcraiders.wiki/w/images/thumb/9/98/Speranza.png/400px-Speranza.png.webp";
 
 	return (
 		<motion.div
@@ -205,9 +207,9 @@ export const ARCRaidersStatus: React.FC<{
 					</AnimatePresence>
 					<LiveEventDisplay />
 				</div>
-				{shouldShowMap && mapImg != null && (
+				{mapImg != null && (
 					<motion.div
-						key={map}
+						key={shouldShowMap ? map : "speranza"}
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
