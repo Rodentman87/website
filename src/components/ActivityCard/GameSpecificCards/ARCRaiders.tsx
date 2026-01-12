@@ -184,9 +184,10 @@ export const ARCRaidersStatus: React.FC<{
 					height={90}
 					className="pl-1 -mt-2 -mb-2 -mr-6"
 				/>
-				<div className="flex flex-col justify-center min-w-0 grow">
+				<div className="z-10 flex flex-col justify-center min-w-0 grow">
 					<AnimatePresence mode="popLayout">
 						<motion.a
+							layout
 							key={status.name}
 							initial={{
 								x: -10,
@@ -210,6 +211,7 @@ export const ARCRaidersStatus: React.FC<{
 						</motion.a>
 						{status.details && (
 							<motion.span
+								layout
 								initial={{
 									x: -10,
 									opacity: 0,
@@ -230,6 +232,7 @@ export const ARCRaidersStatus: React.FC<{
 						)}
 						{status.state && (
 							<motion.span
+								layout
 								key={status.state}
 								initial={{
 									x: -10,
@@ -274,8 +277,9 @@ export const ARCRaidersStatus: React.FC<{
 								</AnimatePresence>
 							</motion.span>
 						)}
-						{modLine && (
+						{modLine && shouldShowMap && (
 							<motion.span
+								layout
 								key={mod}
 								initial={{
 									x: -10,
