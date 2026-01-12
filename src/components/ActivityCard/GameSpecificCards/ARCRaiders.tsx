@@ -43,6 +43,73 @@ function mapToAsset(map: string) {
 	}
 }
 
+function modToModLine(mod: string) {
+	switch (mod) {
+		case "night_raid":
+			return {
+				icon: "https://arcraiders.wiki/w/images/b/b5/Icon_NightRaid.png",
+				name: "Night Raid",
+			};
+		case "electromagnetic-storm":
+			return {
+				icon: "https://arcraiders.wiki/w/images/6/6e/Icon_Electrical.png",
+				name: "Electromagnetic Storm",
+			};
+		case "cold-snap":
+			return {
+				icon: "https://arcraiders.wiki/w/images/6/60/Icon_ColdSnap.png",
+				name: "Cold Snap",
+			};
+		case "locked-gate":
+			return {
+				icon: "https://arcraiders.wiki/w/images/b/b0/Icon_LockedGate.png",
+				name: "Locked Gate",
+			};
+		case "hidden-bunker":
+			return {
+				icon: "https://arcraiders.wiki/w/images/7/79/Icon_HiddenBunker.png",
+				name: "Hidden Bunker",
+			};
+		case "matriach":
+			return {
+				icon: "https://arcraiders.wiki/w/images/2/26/Icon_ARC_Matriarch.png",
+				name: "Matriach",
+			};
+		case "harvester":
+			return {
+				icon: "https://arcraiders.wiki/w/images/5/56/Icon_ARC_Harvester.png",
+				name: "Harvester",
+			};
+		case "lush-blooms":
+			return {
+				icon: "https://arcraiders.wiki/w/images/5/54/Icon_Nature.png",
+				name: "Lush Blooms",
+			};
+		case "prospecting-probes":
+			return {
+				icon: "https://arcraiders.wiki/w/images/2/21/Icon_ProspectingProbes.png",
+				name: "Prospecting Probes",
+			};
+		case "husk-graveyard":
+			return {
+				icon: "https://arcraiders.wiki/w/images/a/a2/Icon_HuskGraveyard.png",
+				name: "Husk Graveyard",
+			};
+		case "uncovered-caches":
+			return {
+				icon: "https://arcraiders.wiki/w/images/b/bf/Icon_RaiderCache.png",
+				name: "Uncovered Caches",
+			};
+		case "launch-tower-loot":
+			return {
+				icon: "https://arcraiders.wiki/w/images/b/b5/Icon_NightRaid.png",
+				name: "Launch Tower Loot",
+			};
+		default:
+			return null;
+	}
+}
+
 export const ARCRaidersStatus: React.FC<{
 	status: StatusResponse;
 }> = ({ status }) => {
@@ -61,6 +128,9 @@ export const ARCRaidersStatus: React.FC<{
 	const largeImage = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
 
 	const map = kv["arcm"];
+	const mod = kv["arcc"];
+
+	const modLine = modToModLine(mod);
 
 	const shouldShowMap =
 		status.details === "In Round" || status.details === "Matchmaking";
@@ -108,13 +178,13 @@ export const ARCRaidersStatus: React.FC<{
 					/>
 				</div>
 			</motion.div>
-			<div className="flex flex-row items-stretch justify-start gap-2 p-2 text-white transition-colors duration-500 bg-black bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70 overflow-clip">
+			<div className="flex flex-row items-stretch justify-start gap-2 pb-2 h-[90px] text-white transition-colors duration-500 bg-black bg-opacity-60 backdrop-blur-xl rounded-2xl group-hover:bg-opacity-70 overflow-clip">
 				<img
 					src="/ARC_Logo_Lines.svg"
-					width={120}
+					height={90}
 					className="pl-1 -mt-2 -mb-2 -mr-6"
 				/>
-				<div className="flex flex-col justify-start min-w-0 grow">
+				<div className="flex flex-col justify-center min-w-0 grow">
 					<AnimatePresence mode="popLayout">
 						<motion.a
 							key={status.name}
@@ -202,6 +272,32 @@ export const ARCRaidersStatus: React.FC<{
 										</>
 									)}
 								</AnimatePresence>
+							</motion.span>
+						)}
+						{modLine && (
+							<motion.span
+								key={mod}
+								initial={{
+									x: -10,
+									opacity: 0,
+								}}
+								animate={{
+									x: 0,
+									color: colors.primary,
+									opacity: 1,
+								}}
+								exit={{
+									x: 10,
+									opacity: 0,
+								}}
+								className="flex flex-row gap-1 ml-6 text-xs align-baseline mt-0.5"
+							>
+								<img
+									src={modLine.icon}
+									style={{ filter: "sepia(100%)" }}
+									className="inline-block h-4"
+								/>{" "}
+								{modLine.name}
 							</motion.span>
 						)}
 					</AnimatePresence>
