@@ -45,7 +45,7 @@ function mapToAsset(map: string) {
 
 function modToModLine(mod: string) {
 	switch (mod) {
-		case "night_raid":
+		case "night-raid":
 			return {
 				icon: "https://arcraiders.wiki/w/images/b/b5/Icon_NightRaid.png",
 				name: "Night Raid",
@@ -70,7 +70,7 @@ function modToModLine(mod: string) {
 				icon: "https://arcraiders.wiki/w/images/7/79/Icon_HiddenBunker.png",
 				name: "Hidden Bunker",
 			};
-		case "matriach":
+		case "matriarch":
 			return {
 				icon: "https://arcraiders.wiki/w/images/2/26/Icon_ARC_Matriarch.png",
 				name: "Matriach",
