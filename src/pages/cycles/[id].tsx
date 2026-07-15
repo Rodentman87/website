@@ -3,6 +3,7 @@ import { createHmac } from "crypto";
 import { readdir } from "fs/promises";
 import { GetStaticProps } from "next";
 import Head from "next/head";
+import adrift from "./adrift.mdx";
 import blur from "./blur.mdx";
 import destruction from "./destruction.mdx";
 import heat from "./heat.mdx";
@@ -13,6 +14,7 @@ const pages = {
 	"destruction.mdx": destruction,
 	"heat.mdx": heat,
 	"blur.mdx": blur,
+	"adrift.mdx": adrift,
 };
 
 type PageProps = {
@@ -85,7 +87,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		JSON.stringify({
 			backgroundColor: "black",
 			textColor: "white",
-		})
+		}),
 	);
 	const hmac = createHmac("sha256", process.env.SIGNING_SECRET);
 	hmac.update(
@@ -93,7 +95,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 			title,
 			description,
 			options,
-		})
+		}),
 	);
 	const token = hmac.digest("hex");
 
